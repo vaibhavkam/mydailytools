@@ -1,0 +1,216 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ToolPage } from "../ToolPage";
+import type { Tool } from "@/lib/tools";
+
+type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
+
+// Date Calculator: add/subtract from a date
+export function DateCalculator({ tool }: Props) {
+  const today = new Date().toISOString().slice(0, 10);
+  const [start, setStart] = useState(today);
+  const [days, setDays] = useState(0); const [months, setMonths] = useState(0); const [years, setYears] = useState(0);
+  const r = useMemo(() => {
+    const d = new Date(start);
+    if (Number.isNaN(d.getTime())) return null;
+    d.setFullYear(d.getFullYear() + Number(years));
+    d.setMonth(d.getMonth() + Number(months));
+    d.setDate(d.getDate() + Number(days));
+    return d.toISOString().slice(0, 10);
+  }, [start, days, months, years]);
+  return (
+    <ToolPage tool={tool} content={{
+      howTo: "Pick a starting date and how many days/months/years to add (use negatives to subtract).",
+      formula: "Adds in this order: years, then months, then days, using JavaScript Date arithmetic which handles month-overflow.",
+      examples: "2024-01-31 + 1 month = 2024-03-02 (Feb has only 29 days in 2024).",
+      faq: [],
+    }}>
+      <div className="grid sm:grid-cols-4 gap-3">
+        <div><label className="label">Start</label><input type="date" className="input" value={start} onChange={(e) => setStart(e.target.value)} /></div>
+        <div><label className="label">+ Years</label><input type="number" className="input" value={years} onChange={(e) => setYears(Number(e.target.value))} /></div>
+        <div><label className="label">+ Months</label><input type="number" className="input" value={months} onChange={(e) => setMonths(Number(e.target.value))} /></div>
+        <div><label className="label">+ Days</label><input type="number" className="input" value={days} onChange={(e) => setDays(Number(e.target.value))} /></div>
+      </div>
+      <div className="mt-4 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-4 text-center">
+        <div className="text-xs uppercase text-brand-700 dark:text-brand-300">Result</div>
+        <div className="text-2xl font-bold tabular-nums">{r ?? "—"}</div>
+      </div>
+    </ToolPage>
+  );
+}
+
+// Timezone Converter
+export function TimezoneConverter({ tool }: Props) {
+  const tzs = ["UTC", "America/New_York", "America/Los_Angeles", "America/Chicago", "Europe/London", "Europe/Paris", "Asia/Tokyo", "Asia/Kolkata", "Asia/Shanghai", "Australia/Sydney"];
+  const [time, setTime] = useState(new Date().toISOString().slice(0, 16));
+  const [from, setFrom] = useState("UTC");
+  const r = useMemo(() => {
+    const d = new Date(`${time}:00${tzOffset(from, time)}`);
+    if (Number.isNaN(d.getTime())) return null;
+    return tzs.map((tz) => ({ tz, fmt: d.toLocaleString("en-GB", { timeZone: tz, dateStyle: "medium", timeStyle: "short" }) }));
+  }, [time, from]);
+  return (
+    <ToolPage tool={tool} content={{
+      howTo: "Pick a date/time and its source timezone. The same instant is shown in 10 common timezones.",
+      formula: "We construct a UTC timestamp from your input + selected source-zone offset, then format it via Intl.DateTimeFormat for each target zone.",
+      examples: "2026-05-02T14:00 in New York is 19:00 in London on the same day.",
+      faq: [{ q: "Does this handle DST?", a: "Yes — the IANA timezone database (built into the browser) accounts for daylight saving rules." }],
+    }}>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div><label className="label">Date & time</label><input type="datetime-local" className="input" value={time} onChange={(e) => setTime(e.target.value)} /></div>
+        <div><label className="label">Source timezone</label>
+          <select className="input" value={from} onChange={(e) => setFrom(e.target.value)}>
+            {tzs.map((t) => <option key={t}>{t}</option>)}
+          </select>
+        </div>
+      </div>
+      <div className="mt-3 grid sm:grid-cols-2 gap-2">
+        {r?.map((row) => (
+          <div key={row.tz} className="rounded-xl border border-[rgb(var(--border))] p-3"><div className="text-xs text-[rgb(var(--fg-muted))]">{row.tz}</div><div className="font-mono text-sm">{row.fmt}</div></div>
+        ))}
+      </div>
+    </ToolPage>
+  );
+}
+function tzOffset(tz: string, isoLocal: string) {
+  // Compute the offset by formatting a reference instant in the target tz.
+  const ref = new Date(isoLocal + "Z");
+  const local = new Date(ref.toLocaleString("en-US", { timeZone: tz }));
+  const diff = (local.getTime() - ref.getTime()) / 60000;
+  const sign = diff >= 0 ? "+" : "-";
+  const a = Math.abs(diff);
+  return `${sign}${String(Math.floor(a / 60)).padStart(2, "0")}:${String(a % 60).padStart(2, "0")}`;
+}
+
+// Countdown Timer
+export function CountdownTimer({ tool }: Props) {
+  const [target, setTarget] = useState(() => {
+    const d = new Date(); d.setHours(d.getHours() + 24); return d.toISOString().slice(0, 16);
+  });
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => { const id = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(id); }, []);
+  const ms = Math.max(0, new Date(target).getTime() - now);
+  const d = Math.floor(ms / 86400000);
+  const h = Math.floor((ms / 3600000) % 24);
+  const m = Math.floor((ms / 60000) % 60);
+  const s = Math.floor((ms / 1000) % 60);
+  return (
+    <ToolPage tool={tool} content={{
+      howTo: "Pick a future date and time. The countdown updates every second; once it hits zero, all values stay at 0.",
+      formula: "Difference between the target timestamp and the current local time, broken into days/hours/minutes/seconds.",
+      examples: "Useful for tracking product launches, exam dates, or holidays.",
+      faq: [],
+    }}>
+      <label className="label">Target date & time</label>
+      <input type="datetime-local" className="input" value={target} onChange={(e) => setTarget(e.target.value)} />
+      <div className="mt-4 grid grid-cols-4 gap-2">
+        {[["Days", d], ["Hours", h], ["Minutes", m], ["Seconds", s]].map(([l, v]) => (
+          <div key={l as string} className="rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-4 text-center">
+            <div className="text-3xl font-bold tabular-nums">{v}</div>
+            <div className="text-xs text-brand-700 dark:text-brand-300">{l as string}</div>
+          </div>
+        ))}
+      </div>
+    </ToolPage>
+  );
+}
+
+// Stopwatch
+export function Stopwatch({ tool }: Props) {
+  const [running, setRunning] = useState(false);
+  const [ms, setMs] = useState(0);
+  const [laps, setLaps] = useState<number[]>([]);
+  const ref = useRef<number | null>(null);
+  useEffect(() => {
+    if (running) {
+      const start = Date.now() - ms;
+      ref.current = window.setInterval(() => setMs(Date.now() - start), 31);
+    } else if (ref.current) clearInterval(ref.current);
+    return () => { if (ref.current) clearInterval(ref.current); };
+  }, [running]); // eslint-disable-line react-hooks/exhaustive-deps
+  function fmt(t: number) {
+    const s = Math.floor(t / 1000); const cs = Math.floor((t % 1000) / 10);
+    return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}.${String(cs).padStart(2,"0")}`;
+  }
+  return (
+    <ToolPage tool={tool} content={{
+      howTo: "Start the stopwatch, click Lap to record split times, Reset to zero everything out.",
+      formula: "Uses Date.now() differences for accuracy independent of CPU jitter; redraws every ~31 ms.",
+      examples: "Track workout intervals, kitchen timers, or anything you'd time on a phone.",
+      faq: [],
+    }}>
+      <div className="text-center font-mono text-6xl font-bold tabular-nums my-6">{fmt(ms)}</div>
+      <div className="flex gap-2 justify-center">
+        <button onClick={() => setRunning(!running)} className="btn-primary min-tap">{running ? "Pause" : "Start"}</button>
+        <button onClick={() => setLaps([ms, ...laps])} disabled={!running} className="btn-ghost min-tap">Lap</button>
+        <button onClick={() => { setRunning(false); setMs(0); setLaps([]); }} className="btn-ghost min-tap">Reset</button>
+      </div>
+      {laps.length > 0 && <ul className="mt-6 text-sm space-y-1 max-h-40 overflow-auto">{laps.map((l, i) => (<li key={i} className="flex justify-between font-mono px-2"><span>Lap {laps.length - i}</span><span>{fmt(l)}</span></li>))}</ul>}
+    </ToolPage>
+  );
+}
+
+// Days Between Dates
+export function DaysBetween({ tool }: Props) {
+  const [a, setA] = useState("2024-01-01");
+  const [b, setB] = useState(new Date().toISOString().slice(0, 10));
+  const r = useMemo(() => {
+    const x = new Date(a), y = new Date(b);
+    if (Number.isNaN(x.getTime()) || Number.isNaN(y.getTime())) return null;
+    const ms = Math.abs(y.getTime() - x.getTime());
+    return { days: Math.floor(ms / 86400000), weeks: Math.floor(ms / (86400000 * 7)) };
+  }, [a, b]);
+  return (
+    <ToolPage tool={tool} content={{
+      howTo: "Pick two dates — the gap is shown in days and weeks.",
+      formula: "Absolute difference in milliseconds, divided by 86,400,000.",
+      examples: "Jan 1 to Dec 31 = 365 days (or 366 in a leap year).",
+      faq: [],
+    }}>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div><label className="label">Date A</label><input type="date" className="input" value={a} onChange={(e) => setA(e.target.value)} /></div>
+        <div><label className="label">Date B</label><input type="date" className="input" value={b} onChange={(e) => setB(e.target.value)} /></div>
+      </div>
+      {r && (
+        <div className="mt-4 grid sm:grid-cols-2 gap-2">
+          <div className="rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-3 text-center"><div className="text-xs text-brand-700 dark:text-brand-300">Days</div><div className="text-3xl font-bold tabular-nums">{r.days}</div></div>
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">Weeks</div><div className="text-3xl font-bold tabular-nums">{r.weeks}</div></div>
+        </div>
+      )}
+    </ToolPage>
+  );
+}
+
+// Week Number (ISO 8601)
+export function WeekNumber({ tool }: Props) {
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const r = useMemo(() => {
+    const d = new Date(date);
+    if (Number.isNaN(d.getTime())) return null;
+    // ISO week: Thursday-based, week 1 contains Jan 4.
+    const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const day = t.getUTCDay() || 7;
+    t.setUTCDate(t.getUTCDate() + 4 - day);
+    const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+    const week = Math.ceil(((t.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    return { week, year: t.getUTCFullYear(), dayOfYear: Math.floor((d.getTime() - new Date(d.getFullYear(), 0, 0).getTime()) / 86400000) };
+  }, [date]);
+  return (
+    <ToolPage tool={tool} content={{
+      howTo: "Pick a date — ISO week number, ISO year, and day-of-year are computed.",
+      formula: "ISO 8601 weeks start Monday; week 1 contains January 4th.",
+      examples: "January 1 might be week 52 or 53 of the previous ISO year if it falls on a Friday/Saturday/Sunday.",
+      faq: [],
+    }}>
+      <input type="date" className="input" value={date} onChange={(e) => setDate(e.target.value)} />
+      {r && (
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">ISO Week</div><div className="text-2xl font-bold">{r.week}</div></div>
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">ISO Year</div><div className="text-2xl font-bold">{r.year}</div></div>
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">Day of year</div><div className="text-2xl font-bold">{r.dayOfYear}</div></div>
+        </div>
+      )}
+    </ToolPage>
+  );
+}
