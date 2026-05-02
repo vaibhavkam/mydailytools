@@ -9,7 +9,7 @@ import type { Tool } from "@/lib/tools";
 type Level = "L" | "M" | "Q" | "H";
 
 export default function QrCodeGenerator({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
-  const [text, setText] = useState("https://mydailytools.com");
+  const [text, setText] = useState("https://mydailytool.com");
   const [level, setLevel] = useState<Level>("M");
   const [size, setSize] = useState(280);
   const [fg, setFg] = useState("#0f172a");

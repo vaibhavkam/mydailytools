@@ -3,7 +3,7 @@
 #
 # Usage:
 #   terraform init
-#   terraform apply -var="domain=mydailytools.com" -var="hosted_zone_id=Z0123456789"
+#   terraform apply -var="domain=mydailytool.com" -var="hosted_zone_id=Z0123456789"
 #
 # Note: ACM for CloudFront must live in us-east-1, hence the aliased provider.
 

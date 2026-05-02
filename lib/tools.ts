@@ -339,12 +339,12 @@ export function findCategory(slug: string) {
 
 export const SITE = {
   name: "MyDailyTools",
-  domain: "mydailytools.com",
-  url: "https://mydailytools.com",
+  domain: "mydailytool.com",
+  url: "https://mydailytool.com",
   tagline: "Free online tools for everyday tasks",
   description:
     "Free, fast, privacy-friendly online tools: calculators, unit converters, developer utilities, text tools, and more. No login, runs entirely in your browser.",
   twitter: "@mydailytools",
-  email: "hello@mydailytools.com",
+  email: "hello@mydailytool.com",
   bmc: "vaibhav.kamble", // Buy Me a Coffee username — full URL: https://buymeacoffee.com/<bmc>
 };

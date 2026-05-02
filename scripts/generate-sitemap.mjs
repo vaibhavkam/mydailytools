@@ -27,7 +27,7 @@ function readSlugs() {
 
 const { toolSlugs, catSlugs } = readSlugs();
 
-const SITE = "https://mydailytools.com";
+const SITE = "https://mydailytool.com";
 const today = new Date().toISOString().slice(0, 10);
 
 const staticPaths = ["/", "/tools/", "/about/", "/contact/", "/support/", "/sitemap-html/", "/privacy/", "/terms/"];

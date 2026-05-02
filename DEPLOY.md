@@ -18,22 +18,22 @@ Deploy artifacts: `out/` directory + `out/sitemap.xml`.
 
 ## 2. One-time AWS setup (CLI)
 
-Replace `mydailytools.com` and `us-east-1` with your domain and region. **Note:** ACM cert for CloudFront *must* be in `us-east-1` regardless of your bucket region.
+Replace `mydailytool.com` and `us-east-1` with your domain and region. **Note:** ACM cert for CloudFront *must* be in `us-east-1` regardless of your bucket region.
 
 ```bash
 # 2a. Create the S3 bucket (private — CloudFront will read via OAC, no public access).
 aws s3api create-bucket \
-  --bucket mydailytools.com \
+  --bucket mydailytool.com \
   --region us-east-1
 
 aws s3api put-public-access-block \
-  --bucket mydailytools.com \
+  --bucket mydailytool.com \
   --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
 
 # 2b. Request an ACM certificate in us-east-1.
 aws acm request-certificate \
-  --domain-name mydailytools.com \
-  --subject-alternative-names www.mydailytools.com \
+  --domain-name mydailytool.com \
+  --subject-alternative-names www.mydailytool.com \
   --validation-method DNS \
   --region us-east-1
 
@@ -58,13 +58,13 @@ After the distribution is created, attach the bucket policy that AWS suggests (i
 
 ```bash
 # Sync HTML with no-cache (so updates go live instantly).
-aws s3 sync out/ s3://mydailytools.com/ \
+aws s3 sync out/ s3://mydailytool.com/ \
   --delete \
   --exclude "_next/static/*" \
   --cache-control "public, max-age=0, must-revalidate"
 
 # Sync hashed assets with year-long cache (filenames change on each build).
-aws s3 sync out/_next/static/ s3://mydailytools.com/_next/static/ \
+aws s3 sync out/_next/static/ s3://mydailytool.com/_next/static/ \
   --cache-control "public, max-age=31536000, immutable"
 
 # Invalidate HTML / sitemap so visitors see new content immediately.
@@ -91,7 +91,7 @@ aws route53 change-resource-record-sets \
   "Changes": [{
     "Action": "UPSERT",
     "ResourceRecordSet": {
-      "Name": "mydailytools.com.",
+      "Name": "mydailytool.com.",
       "Type": "A",
       "AliasTarget": {
         "HostedZoneId": "Z2FDTNDATAQYW2",
@@ -134,7 +134,7 @@ See `infra/main.tf` — one `terraform apply` provisions bucket, OAC, CloudFront
 See `.github/workflows/deploy.yml` — pushes to `main` build and deploy automatically. Set these repo secrets:
 
 - `AWS_ROLE_ARN` — IAM role with S3 + CloudFront write permissions (use OIDC, not long-lived keys).
-- `S3_BUCKET` — `mydailytools.com`
+- `S3_BUCKET` — `mydailytool.com`
 - `CF_DISTRIBUTION_ID` — CloudFront distribution ID
 - `NEXT_PUBLIC_ADSENSE_CLIENT`, `NEXT_PUBLIC_GA4_ID`, `NEXT_PUBLIC_WEB3FORMS_KEY` — public env vars baked into the build.
 
@@ -142,8 +142,8 @@ See `.github/workflows/deploy.yml` — pushes to `main` build and deploy automat
 
 ## 8. Post-deploy checklist
 
-- [ ] `https://mydailytools.com` resolves and serves over HTTPS.
-- [ ] `www.mydailytools.com` redirects to apex (or vice versa — pick one).
+- [ ] `https://mydailytool.com` resolves and serves over HTTPS.
+- [ ] `www.mydailytool.com` redirects to apex (or vice versa — pick one).
 - [ ] `/sitemap.xml` and `/robots.txt` return 200.
 - [ ] Open the homepage in Lighthouse — target Performance ≥ 95, SEO 100.
 - [ ] **Google Search Console**: add the property, verify by DNS TXT, submit `sitemap.xml`.

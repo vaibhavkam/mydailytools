@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mydailytools.com/sitemap.xml
+Sitemap: https://mydailytool.com/sitemap.xml
