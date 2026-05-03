@@ -30,8 +30,14 @@ jobs:
           node-version: 22
           cache: npm
 
+      # --ignore-scripts skips postinstall lifecycle hooks. Some deps (qrcode,
+      # node-forge) try to compile native bindings we don't actually use —
+      # they were silently hanging the runner for ~8 min until npm timed out
+      # with "Exit handler never called". Our tools all run in the browser, so
+      # we don't need any native bindings. --no-progress + --loglevel=verbose
+      # gives us per-package output if anything still goes sideways.
       - run: |
-          npm ci --no-audit --no-fund --include=dev
+          npm ci --no-audit --no-fund --include=dev --ignore-scripts --no-progress --loglevel=verbose
           ls -la node_modules/.bin/next
           echo "Installed: $(node_modules/.bin/next --version)"
 
