@@ -25,21 +25,10 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          # Node 22 ships npm 10.9 which fixes an "Exit handler never called"
-          # crash that surfaced on the runner under memory pressure.
-          node-version: 22
+          node-version: 20
           cache: npm
 
-      # --ignore-scripts skips postinstall lifecycle hooks. Some deps (qrcode,
-      # node-forge) try to compile native bindings we don't actually use —
-      # they were silently hanging the runner for ~8 min until npm timed out
-      # with "Exit handler never called". Our tools all run in the browser, so
-      # we don't need any native bindings. --no-progress + --loglevel=verbose
-      # gives us per-package output if anything still goes sideways.
-      - run: |
-          npm ci --no-audit --no-fund --include=dev --ignore-scripts --no-progress --loglevel=verbose
-          ls -la node_modules/.bin/next
-          echo "Installed: $(node_modules/.bin/next --version)"
+      - run: npm ci --no-audit --no-fund
 
       - name: Build
         env:
@@ -50,12 +39,7 @@ jobs:
           NEXT_PUBLIC_ADSENSE_SLOT_FOOTER: ${{ secrets.NEXT_PUBLIC_ADSENSE_SLOT_FOOTER }}
           NEXT_PUBLIC_GA4_ID: ${{ secrets.NEXT_PUBLIC_GA4_ID }}
           NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_KEY }}
-        # Use `npx` so the path resolution is explicit, not dependent on the
-        # shell PATH that npm hands to lifecycle scripts.
-        run: |
-          npx --no-install -- node scripts/fetch-rates.mjs
-          npx --no-install -- next build
-          node scripts/generate-sitemap.mjs
+        run: npm run build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
