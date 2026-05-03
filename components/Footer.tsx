@@ -29,6 +29,7 @@ export function Footer() {
         <div className="text-sm">
           <h3 className="font-semibold mb-2">Company</h3>
           <ul className="space-y-1.5">
+            <li><Link href="/blog/" className="text-[rgb(var(--fg-muted))] hover:text-brand-600">Blog</Link></li>
             <li><Link href="/about/" className="text-[rgb(var(--fg-muted))] hover:text-brand-600">About</Link></li>
             <li><Link href="/contact/" className="text-[rgb(var(--fg-muted))] hover:text-brand-600">Contact</Link></li>
             <li><Link href="/support/" className="text-[rgb(var(--fg-muted))] hover:text-brand-600 inline-flex items-center gap-1">☕ Support</Link></li>

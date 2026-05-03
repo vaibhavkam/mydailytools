@@ -25,16 +25,24 @@ function readSlugs() {
   return { toolSlugs: [...new Set(toolSlugs.filter((s) => !catSlugs.includes(s)))], catSlugs };
 }
 
+function readPostSlugs() {
+  // Same lightweight regex parse trick on lib/posts.ts.
+  const src = readFileSync(resolve(root, "lib/posts.ts"), "utf8");
+  return [...src.matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
+}
+
 const { toolSlugs, catSlugs } = readSlugs();
+const postSlugs = readPostSlugs();
 
 const SITE = "https://mydailytool.com";
 const today = new Date().toISOString().slice(0, 10);
 
-const staticPaths = ["/", "/tools/", "/about/", "/contact/", "/support/", "/sitemap-html/", "/privacy/", "/terms/"];
+const staticPaths = ["/", "/tools/", "/blog/", "/about/", "/contact/", "/support/", "/sitemap-html/", "/privacy/", "/terms/"];
 const urls = [
   ...staticPaths.map((p) => ({ loc: SITE + p, priority: p === "/" ? 1.0 : 0.7 })),
   ...catSlugs.map((s) => ({ loc: `${SITE}/${s}/`, priority: 0.8 })),
   ...toolSlugs.map((s) => ({ loc: `${SITE}/tools/${s}/`, priority: 0.6 })),
+  ...postSlugs.map((s) => ({ loc: `${SITE}/blog/${s}/`, priority: 0.7 })),
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

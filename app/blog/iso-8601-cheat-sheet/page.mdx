@@ -1,0 +1,185 @@
+import { BlogPost } from "@/components/BlogPost";
+import { findPost } from "@/lib/posts";
+import { buildMetadata } from "@/lib/seo";
+
+export const post = findPost("iso-8601-cheat-sheet");
+
+export const metadata = buildMetadata({
+  title: post.title,
+  description: post.description,
+  path: `/blog/${post.slug}/`,
+  keywords: post.tags,
+});
+
+export default function Layout({ children }) {
+  return <BlogPost post={post}>{children}</BlogPost>;
+}
+
+ISO 8601 is the international standard for representing dates and times in a way that humans and machines both understand. If you've ever stared at `2026-05-03T16:30:00Z` and wondered exactly what each character means, this is for you.
+
+I'll skip the history lesson. Here's what you actually need.
+
+## The basic date format
+
+```
+YYYY-MM-DD
+```
+
+Four-digit year, dash, two-digit month, dash, two-digit day. Always zero-padded.
+
+```
+2026-05-03         valid — May 3, 2026
+26-5-3             not ISO 8601
+2026/05/03         not ISO 8601 (slash, not dash)
+2026-05-3          invalid — day must be zero-padded
+```
+
+The dashes are required when you write it for humans. Some systems use the compact form `20260503` (no dashes), which is also valid ISO 8601 but harder to read.
+
+## Adding a time
+
+Glue a `T` between the date and the time, then write the time as 24-hour `HH:MM:SS`:
+
+```
+2026-05-03T16:30:00
+```
+
+The `T` is mandatory in strict ISO 8601. A space (`2026-05-03 16:30:00`) is more human-friendly but technically a different format (RFC 3339 allows it; pure ISO 8601 doesn't).
+
+You can omit fields from the right:
+
+```
+2026-05-03T16:30:00     full second
+2026-05-03T16:30        no seconds
+2026-05-03T16           no minutes (rare)
+```
+
+You can also add fractional seconds:
+
+```
+2026-05-03T16:30:00.123          milliseconds
+2026-05-03T16:30:00.123456       microseconds
+2026-05-03T16:30:00.123456789    nanoseconds
+```
+
+## The timezone — the part everybody gets wrong
+
+A timestamp without a timezone is ambiguous. ISO 8601 gives you three ways to specify it:
+
+```
+2026-05-03T16:30:00Z          UTC (Z = "Zulu time")
+2026-05-03T16:30:00+05:30     IST (5h 30m ahead of UTC)
+2026-05-03T16:30:00-08:00     PST (8h behind UTC)
+```
+
+A few things people get wrong:
+
+- **`+0000` is not the same as `Z`** in some parsers. Both mean UTC; `Z` is the canonical form. Use `Z` if you have the choice.
+- **Offset must include a sign.** `+05:30`, not `05:30`.
+- **The colon is allowed but not required:** `+0530` and `+05:30` are both valid. Be consistent within your codebase.
+- **Negative zero is allowed:** `-00:00` means "UTC, but the offset is unknown." `+00:00` means "UTC, definitely." You'll rarely see this distinction respected.
+
+## Local time — the trap
+
+A timestamp like `2026-05-03T16:30:00` (no timezone) is officially "local time" — meaning **whatever timezone the reader assumes**. Don't store these. Always include the timezone or always store UTC.
+
+If you receive an ISO timestamp without a timezone from an API, assume nothing. Ask. Then add documentation.
+
+## Durations
+
+Durations use a different format starting with `P` (for "period"):
+
+```
+P1Y               1 year
+P2M               2 months
+P10D              10 days
+PT1H              1 hour (note the T separator)
+PT30M             30 minutes
+PT45S             45 seconds
+P1Y2M3DT4H5M6S    1 year, 2 months, 3 days, 4 hours, 5 min, 6 sec
+PT2H30M           2 hours 30 minutes (common for video / podcast lengths)
+P7W               7 weeks
+```
+
+Rules:
+
+- The `P` is required.
+- The `T` separator is required between the date part (Y/M/D) and the time part (H/M/S). Without `T`, `M` is ambiguous between months and minutes.
+- Order matters: `P1Y2M3D` (years, months, days). You can't write `P3D2M1Y`.
+- Weeks (`W`) can't be combined with other units.
+
+## Intervals
+
+An interval is a range with a start and end. Three formats:
+
+```
+2026-05-03T00:00:00Z/2026-05-04T00:00:00Z      explicit start and end
+2026-05-03T00:00:00Z/P1D                       start + duration
+P1D/2026-05-04T00:00:00Z                       duration + end
+```
+
+The slash separator is the giveaway you're looking at an interval, not a single timestamp.
+
+## Repeating intervals
+
+Less common but useful for cron-like things:
+
+```
+R/2026-05-03T16:30:00Z/PT1H        every 1 hour starting at this time, forever
+R5/2026-05-03T16:30:00Z/PT1H       repeat 5 times
+```
+
+The `R` (with optional count) prefix.
+
+## Week dates and ordinal dates
+
+ISO 8601 also defines two alternatives to year-month-day:
+
+```
+2026-W18-7         year-week-dayofweek (Sunday of week 18, 2026)
+2026-123           year-dayofyear (123rd day of 2026 = May 3)
+```
+
+Most APIs don't use these. They show up in finance, logistics, and academic contexts.
+
+## What ISO 8601 does *not* specify
+
+- **Quarter notation** (`2026-Q2`). Common but not part of the standard.
+- **Time without a date**. `16:30:00Z` alone is technically valid ISO 8601 but most systems reject it.
+- **Relative dates** like "yesterday" or "next Tuesday". Not ISO 8601's job.
+- **Time periods like "2 weekdays"** that depend on calendar context. ISO durations are absolute.
+
+## The cheat sheet
+
+Bookmark this:
+
+| What | Format | Example |
+| --- | --- | --- |
+| Date | `YYYY-MM-DD` | `2026-05-03` |
+| Date + time (UTC) | `YYYY-MM-DDTHH:MM:SSZ` | `2026-05-03T16:30:00Z` |
+| Date + time + offset | `YYYY-MM-DDTHH:MM:SS±HH:MM` | `2026-05-03T16:30:00+05:30` |
+| Date + time + ms | `YYYY-MM-DDTHH:MM:SS.sssZ` | `2026-05-03T16:30:00.123Z` |
+| Duration | `PnYnMnDTnHnMnS` | `P1Y2M3DT4H5M6S` |
+| Interval | `<start>/<end>` | `2026-05-03/2026-05-10` |
+| Week date | `YYYY-Www-D` | `2026-W18-7` |
+| Ordinal date | `YYYY-DDD` | `2026-123` |
+
+## Practical advice
+
+1. **Store all timestamps in UTC.** Convert to local time only at display.
+2. **Always include the timezone.** `Z` for UTC; offset for everything else.
+3. **Use ISO 8601 in JSON APIs**, not Unix timestamps as integers. Far easier to debug.
+4. **In SQL, use `TIMESTAMPTZ` (Postgres) or equivalent.** It stores as UTC internally and converts on read.
+5. **For filenames and sortable identifiers**, use the compact form: `20260503T163000Z`. Lexicographic sort = chronological sort.
+
+If you ever need to convert between formats, the [Unix Timestamp Converter](/tools/unix-timestamp-converter/) and [Date Calculator](/tools/date-calculator/) on this site handle the common cases.
+
+## When ISO 8601 isn't enough
+
+For the rare cases where you need something it can't express:
+
+- **Recurring events with specific exceptions** — use iCalendar's RFC 5545 RRULE (a superset of ISO 8601).
+- **Vague historical dates** — use EDTF (Extended Date Time Format), which adds wildcards and uncertainty.
+- **Calendar systems other than Gregorian** — ISO 8601 is Gregorian-only.
+
+For everyday work — API timestamps, log files, database columns — ISO 8601 is enough. Memorize the basic format, always include the timezone, and you'll dodge 90% of the date-handling bugs that bite production systems.

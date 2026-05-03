@@ -76,7 +76,10 @@ resource "aws_cloudfront_distribution" "site" {
   default_root_object = "index.html"
   aliases             = [var.domain, "www.${var.domain}"]
   http_version        = "http2and3"
-  price_class         = "PriceClass_100"
+  # PriceClass_All serves all CloudFront edge locations including India,
+  # Australia, South Africa. Cost difference at low traffic is pennies/month;
+  # latency benefit for non-US/EU users is significant.
+  price_class         = "PriceClass_All"
 
   origin {
     domain_name              = aws_s3_bucket.site.bucket_regional_domain_name

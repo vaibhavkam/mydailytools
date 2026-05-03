@@ -51,6 +51,28 @@
   .prose-tool h3 { @apply text-base font-semibold mt-5 mb-2; }
   .prose-tool p, .prose-tool li { @apply text-[rgb(var(--fg-muted))] leading-relaxed; }
   .prose-tool ul { @apply list-disc pl-5 space-y-1; }
+
+  /* Blog post prose — slightly larger, more breathing room than the
+     prose-tool styles, since blog content is longer-form. */
+  .prose-blog { @apply text-base leading-relaxed; color: rgb(var(--fg)); }
+  .prose-blog h2 { @apply text-2xl font-bold mt-12 mb-4 tracking-tight; }
+  .prose-blog h3 { @apply text-lg font-semibold mt-8 mb-3; }
+  .prose-blog h4 { @apply text-base font-semibold mt-6 mb-2; }
+  .prose-blog p { @apply my-4 text-[rgb(var(--fg))] leading-7; }
+  .prose-blog ul { @apply my-4 list-disc pl-6 space-y-1.5; }
+  .prose-blog ol { @apply my-4 list-decimal pl-6 space-y-1.5; }
+  .prose-blog li { @apply text-[rgb(var(--fg))] leading-7; }
+  .prose-blog li > p { @apply my-1; }
+  .prose-blog a { @apply text-brand-600 hover:underline; }
+  .prose-blog strong { @apply font-semibold text-[rgb(var(--fg))]; }
+  .prose-blog code:not(pre code) { @apply bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[0.875em] font-mono; }
+  .prose-blog pre { @apply my-6 rounded-xl bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 overflow-x-auto text-sm leading-relaxed; }
+  .prose-blog pre code { @apply bg-transparent p-0 text-slate-100; }
+  .prose-blog blockquote { @apply my-6 border-l-4 border-brand-500/60 pl-4 italic text-[rgb(var(--fg-muted))]; }
+  .prose-blog table { @apply my-6 w-full border-collapse text-sm; }
+  .prose-blog th, .prose-blog td { @apply border border-[rgb(var(--border))] px-3 py-2 text-left; }
+  .prose-blog th { @apply bg-slate-100 dark:bg-slate-800 font-semibold; }
+  .prose-blog hr { @apply my-10 border-[rgb(var(--border))]; }
 }
 
 @layer utilities {
