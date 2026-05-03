@@ -26,14 +26,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # Note: npm cache disabled while we're debugging missing `next` CLI.
+          # Re-enable once the deploy is stable.
 
-      - run: npm ci
-
-      # Verify the next CLI is available before invoking it. If the cached
-      # node_modules is incomplete (partial install on a slow runner), this
-      # surfaces the failure with a clear error.
-      - run: ls -la node_modules/.bin/next || (echo "next CLI missing from node_modules" && exit 1)
+      # Belt-and-braces: scrub any leftover state, then install fresh.
+      # Diagnostic ls confirms the next CLI actually got installed before we
+      # try to invoke it.
+      - run: |
+          rm -rf node_modules .next out
+          npm ci --no-audit --no-fund --include=dev
+          ls -la node_modules/.bin/next
+          echo "Installed: $(node_modules/.bin/next --version)"
 
       - name: Build
         env:
