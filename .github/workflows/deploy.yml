@@ -30,6 +30,11 @@ jobs:
 
       - run: npm ci
 
+      # Verify the next CLI is available before invoking it. If the cached
+      # node_modules is incomplete (partial install on a slow runner), this
+      # surfaces the failure with a clear error.
+      - run: ls -la node_modules/.bin/next || (echo "next CLI missing from node_modules" && exit 1)
+
       - name: Build
         env:
           NEXT_PUBLIC_ADSENSE_CLIENT: ${{ secrets.NEXT_PUBLIC_ADSENSE_CLIENT }}
@@ -39,7 +44,12 @@ jobs:
           NEXT_PUBLIC_ADSENSE_SLOT_FOOTER: ${{ secrets.NEXT_PUBLIC_ADSENSE_SLOT_FOOTER }}
           NEXT_PUBLIC_GA4_ID: ${{ secrets.NEXT_PUBLIC_GA4_ID }}
           NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_KEY }}
-        run: npm run build
+        # Use `npx` so the path resolution is explicit, not dependent on the
+        # shell PATH that npm hands to lifecycle scripts.
+        run: |
+          npx --no-install -- node scripts/fetch-rates.mjs
+          npx --no-install -- next build
+          node scripts/generate-sitemap.mjs
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
