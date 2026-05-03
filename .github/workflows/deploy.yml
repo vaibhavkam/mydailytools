@@ -38,6 +38,7 @@ jobs:
           NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT: ${{ secrets.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT }}
           NEXT_PUBLIC_ADSENSE_SLOT_FOOTER: ${{ secrets.NEXT_PUBLIC_ADSENSE_SLOT_FOOTER }}
           NEXT_PUBLIC_GA4_ID: ${{ secrets.NEXT_PUBLIC_GA4_ID }}
+          NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_KEY }}
         run: npm run build
 
       - name: Configure AWS credentials
