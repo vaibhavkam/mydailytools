@@ -1,50 +1,111 @@
 # MyDailyTools
 
-Free, fast, privacy-friendly online tools — calculators, converters, developer utilities, and text tools. Built with Next.js (static export), Tailwind CSS, and shadcn-style components. Hosted on S3 + CloudFront.
+A static website hosting **168 free online tools** — calculators, converters, developer utilities, and text helpers — at [mydailytool.com](https://mydailytool.com).
+
+Built with Next.js 14 (App Router, static export), TypeScript, Tailwind CSS. Deployed on AWS S3 + CloudFront.
+
+---
 
 ## Quick start
 
 ```bash
-npm install
-cp .env.example .env.local        # optional: AdSense / GA4 / Web3Forms keys
-npm run dev                        # http://localhost:3000
-npm run build                      # produces /out (deployable static site)
+# Prerequisites: Node 20+ and npm
+nvm use 20                                        # if you use nvm
+npm install                                       # ~30 seconds, public registry
+npm run dev                                       # http://localhost:3000
 ```
 
-## Project layout
+To produce the deployable static site:
+
+```bash
+npm run build                                     # outputs /out (~10 MB, 449 files)
+```
+
+That's it. No backend, no database, no API keys required to run locally. The `prebuild` step fetches live currency rates from Frankfurter; if you have no network it falls back to baked-in static rates.
+
+---
+
+## Documentation
+
+For anything beyond running it locally:
+
+| Doc | What's inside |
+| --- | --- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Code layout, data flow, key patterns |
+| [docs/INFRA.md](docs/INFRA.md) | AWS deployment, DNS, CI/CD, monitoring (with diagrams) |
+| [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | How to add a tool, edit the registry, commit conventions |
+| [docs/RUNBOOK.md](docs/RUNBOOK.md) | Operations: "site is down — what do I check?" |
+| [docs/DECISIONS.md](docs/DECISIONS.md) | Architecture decision records — why we chose what we chose |
+| [DEPLOY.md](DEPLOY.md) | Step-by-step AWS deploy walkthrough (CLI commands) |
+
+Read **ARCHITECTURE** first. **CONTRIBUTING** is the most-asked question.
+
+---
+
+## What's where
 
 ```
-app/                      # Next.js App Router pages
-  layout.tsx              # root layout: header, footer, fonts, AdSense, GA4
-  page.tsx                # home
-  [category]/             # /math, /converters, etc.
-  tools/page.tsx          # all-tools index
-  tools/[slug]/page.tsx   # tool detail (resolves to registry or stub)
-  about, contact, privacy, terms, not-found
+app/                   Next.js routes (pages)
+  [category]/          Category landing pages: /math/, /developer/, etc.
+  blog/                Blog posts (MDX)
+  tools/[slug]/        Per-tool pages
 components/
-  Header, Footer, Sidebar, Breadcrumbs, ThemeToggle, Logo, AdSlot, ContactForm
-  ToolPage.tsx            # standard wrapper for working tools (breadcrumbs, JSON-LD, FAQ, related)
-  tools/                  # working tool widgets + dynamic-import registry
+  tools/               Interactive tool widgets (one component per tool)
+  *.tsx                Header, Footer, Sidebar, ToolPage wrapper, etc.
 lib/
-  tools.ts                # central tool/category registry — drives nav, sitemap, search
-  seo.ts                  # metadata + JSON-LD helpers
-  cn.ts
+  tools.ts             Single source of truth: 168 tools across 14 categories
+  posts.ts             Blog post registry
+  locale.ts            User locale + currency formatting hook
+  rates.json           Currency exchange rates (refreshed daily by prebuild)
+  seo.ts               JSON-LD schema helpers
+infra/main.tf          Terraform alternative for the AWS deploy
 scripts/
-  generate-sitemap.mjs    # postbuild — writes out/sitemap.xml
-infra/main.tf             # Terraform: S3 + CloudFront + ACM + Route 53
-.github/workflows/deploy.yml
-DEPLOY.md                 # AWS deploy guide + post-deploy checklist
+  fetch-rates.mjs      Pre-build hook: fetches live FX rates from Frankfurter
+  generate-sitemap.mjs Post-build hook: generates sitemap.xml
+  generate-icons.mjs   Manual: regenerates favicon + OG image PNGs from SVGs
+public/                Static assets (favicon, OG image, robots.txt, etc.)
+.github/workflows/     GitHub Actions: auto-deploy on push, daily rate refresh
 ```
 
-## Adding a tool
+---
 
-1. Add an entry under the right category in `lib/tools.ts` with `status: "live"`.
-2. Create `components/tools/MyNewTool.tsx`. Use the `<ToolPage>` wrapper and pass `content` for the SEO body (howTo, formula, examples, faq).
-3. Register it in `components/tools/registry.ts` with a `dynamic(() => import(...))` line.
-4. `npm run build` — the page is auto-generated at `/tools/<slug>/`, sitemap entry included.
+## Common tasks
 
-Tools left as `status: "stub"` in `lib/tools.ts` show a "coming soon" page but still appear in nav, search, and sitemap, so they're crawlable and ready to flip to `live` later.
+| Task | How |
+| --- | --- |
+| Add a new tool | See [CONTRIBUTING.md](docs/CONTRIBUTING.md) → "Adding a tool" |
+| Edit a tool's name/description | Edit `lib/tools.ts`, push |
+| Refresh currency rates manually | `npm run build` (prebuild fetches them) |
+| Regenerate favicons/OG image | `node scripts/generate-icons.mjs` |
+| Deploy a code change | Push to `main` — GitHub Actions auto-deploys |
 
-## Deployment
+---
 
-See [DEPLOY.md](./DEPLOY.md) for AWS setup, Terraform, and the GitHub Actions workflow.
+## Tech stack
+
+- **Framework**: Next.js 14, App Router, `output: "export"` (static)
+- **Language**: TypeScript (strict)
+- **Styling**: Tailwind CSS + CSS variables for theming
+- **Icons**: lucide-react
+- **Hosting**: AWS S3 (origin) + CloudFront (CDN, all edge regions)
+- **DNS**: AWS Route 53
+- **Email**: ImprovMX (forwards `*@mydailytool.com` to Gmail)
+- **Analytics**: Google Analytics 4
+- **Currency rates**: Frankfurter API (free, ECB reference rates)
+- **Tool-specific libs**: jose (JWT), node-forge (X.509), qrcode, jsbarcode, marked, cronstrue, sql-formatter, zxcvbn
+
+---
+
+## Repo / project links
+
+- **Live site**: https://mydailytool.com
+- **Repo**: https://github.com/vaibhavkam/mydailytools (private)
+- **Search Console**: verified for `mydailytool.com`
+- **GA4 property**: `G-4MB75MYFSR`
+- **Buy Me a Coffee**: [buymeacoffee.com/vaibhav.kamble](https://buymeacoffee.com/vaibhav.kamble)
+
+---
+
+## License
+
+Not currently licensed for redistribution. If you want to fork or reuse, open an issue first.
