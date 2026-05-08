@@ -70,6 +70,26 @@ export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
   };
 }
 
+export function itemListJsonLd(items: { name: string; url: string; description?: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "SoftwareApplication",
+        name: it.name,
+        url: it.url,
+        ...(it.description ? { description: it.description } : {}),
+        applicationCategory: "UtilityApplication",
+        operatingSystem: "Any (browser)",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      },
+    })),
+  };
+}
+
 export function faqJsonLd(qa: { q: string; a: string }[]) {
   return {
     "@context": "https://schema.org",

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { CATEGORIES, ALL_TOOLS } from "@/lib/tools";
+import { CATEGORIES, ALL_TOOLS, SITE } from "@/lib/tools";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, itemListJsonLd } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "All Tools",
@@ -10,8 +10,16 @@ export const metadata = buildMetadata({
 });
 
 export default function AllToolsPage() {
+  const ld = itemListJsonLd(
+    ALL_TOOLS.map((t) => ({
+      name: t.title,
+      url: `${SITE.url}/tools/${t.slug}/`,
+      description: t.description,
+    }))
+  );
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "All tools" }]} />
       <h1 className="mt-3 text-3xl md:text-4xl font-bold">All tools</h1>
       <p className="mt-2 text-[rgb(var(--fg-muted))]">Every tool, organized by category. {ALL_TOOLS.length} total.</p>

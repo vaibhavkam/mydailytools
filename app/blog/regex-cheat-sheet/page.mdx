@@ -1,0 +1,259 @@
+import { BlogPost } from "@/components/BlogPost";
+import { findPost } from "@/lib/posts";
+import { buildMetadata } from "@/lib/seo";
+
+export const post = findPost("regex-cheat-sheet");
+
+export const metadata = buildMetadata({
+  title: post.title,
+  description: post.description,
+  path: `/blog/${post.slug}/`,
+  keywords: post.tags,
+});
+
+export default function Layout({ children }) {
+  return <BlogPost post={post}>{children}</BlogPost>;
+}
+
+Regular expressions are one of those skills that feel arcane until they click — and once they do, you use them constantly. This guide skips the theory and gives you patterns you can copy, paste, and adapt today.
+
+## The syntax at a glance
+
+Every regex is a sequence of **tokens** — each one matches something in the input string.
+
+| Token | Matches |
+| --- | --- |
+| `a` | The literal character `a` |
+| `.` | Any single character except newline |
+| `\d` | Any digit (0–9) |
+| `\D` | Any non-digit |
+| `\w` | Word character: `[a-zA-Z0-9_]` |
+| `\W` | Non-word character |
+| `\s` | Whitespace (space, tab, newline) |
+| `\S` | Non-whitespace |
+| `\b` | Word boundary (zero-width) |
+| `^` | Start of string (or line with `m` flag) |
+| `$` | End of string (or line with `m` flag) |
+
+## Character classes
+
+Square brackets match **any one** of the characters inside:
+
+```
+[aeiou]         any vowel
+[^aeiou]        any consonant (^ inside = negate)
+[a-z]           any lowercase letter
+[A-Za-z0-9]     alphanumeric
+[0-9]           same as \d
+[\-.]           literal dash or dot (escape or put dash first/last)
+```
+
+## Quantifiers
+
+Quantifiers come **after** a token and control how many times it repeats:
+
+| Quantifier | Meaning |
+| --- | --- |
+| `?` | 0 or 1 (optional) |
+| `*` | 0 or more |
+| `+` | 1 or more |
+| `{3}` | Exactly 3 |
+| `{2,5}` | Between 2 and 5 |
+| `{3,}` | 3 or more |
+
+By default these are **greedy** — they match as much as possible. Add `?` to make them lazy:
+
+```
+<.+>     greedy — matches the longest possible string between < and >
+<.+?>    lazy  — matches the shortest possible string
+```
+
+## Groups and alternation
+
+Parentheses create **capturing groups**. The matched text is saved and referenceable:
+
+```
+(foo|bar)       matches "foo" or "bar"; saves the match
+(?:foo|bar)     non-capturing group — same match, no save
+(foo)(bar)      two groups; $1 = "foo", $2 = "bar"
+```
+
+Alternation with `|` has the lowest precedence — it applies to everything on either side unless you use groups:
+
+```
+cat|dog         "cat" or "dog"
+c(a|o)t         "cat" or "cot"
+```
+
+## Lookaheads and lookbehinds
+
+These match positions, not characters:
+
+```
+foo(?=bar)      "foo" only if followed by "bar"   (positive lookahead)
+foo(?!bar)      "foo" only if NOT followed by "bar" (negative lookahead)
+(?<=bar)foo     "foo" only if preceded by "bar"   (positive lookbehind)
+(?<!bar)foo     "foo" only if NOT preceded by "bar" (negative lookbehind)
+```
+
+Example: match a number only if it's followed by "px":
+
+```
+\d+(?=px)
+```
+
+## Flags
+
+Flags change how the engine interprets the pattern. In JavaScript, they go after the closing `/`:
+
+| Flag | Meaning |
+| --- | --- |
+| `g` | Global — find all matches, not just the first |
+| `i` | Case-insensitive |
+| `m` | Multiline — `^` and `$` match line starts/ends |
+| `s` | Dotall — `.` matches newlines too |
+| `u` | Unicode-aware |
+
+```js
+/hello/gi     matches "Hello", "HELLO", "hello" everywhere in the string
+```
+
+## Ready-to-use patterns
+
+### Email address (simple)
+
+```
+^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$
+```
+
+This handles the common case. Email validation is famously hard to get perfectly right with regex — for production, use a library or just send a confirmation link.
+
+### URL
+
+```
+https?://[^\s/$.?#][^\s]*
+```
+
+Matches `http://` or `https://` followed by anything that isn't whitespace.
+
+### IPv4 address
+
+```
+\b(?:\d{1,3}\.){3}\d{1,3}\b
+```
+
+Note: this matches `999.999.999.999` which isn't a valid IP. Add range checks in code if you need strict validation.
+
+### Date (YYYY-MM-DD)
+
+```
+\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])
+```
+
+Validates month range (01–12) and day range (01–31). Doesn't catch month-specific day limits (e.g., April 31) — that needs code.
+
+### Time (HH:MM or HH:MM:SS)
+
+```
+(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?
+```
+
+### US phone number (flexible)
+
+```
+\+?1?[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}
+```
+
+Matches formats like `(555) 123-4567`, `555-123-4567`, `+1 555 123 4567`.
+
+### Hex color
+
+```
+#(?:[0-9a-fA-F]{3}){1,2}
+```
+
+Matches `#fff` and `#ffffff`. Doesn't match `rgba()` — for that you need a more specific pattern.
+
+### Slug (URL-safe string)
+
+```
+^[a-z0-9]+(?:-[a-z0-9]+)*$
+```
+
+Matches strings like `my-page-title`. No uppercase, no leading/trailing dashes.
+
+### Username (alphanumeric + underscore, 3–20 chars)
+
+```
+^[a-zA-Z0-9_]{3,20}$
+```
+
+### Semver version number
+
+```
+^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([\w.-]+))?(?:\+([\w.-]+))?$
+```
+
+Matches `1.0.0`, `2.3.1-beta.1`, `1.0.0+build.123`.
+
+### Credit card number (stripped)
+
+```
+^\d{13,19}$
+```
+
+Strip spaces and dashes first; then validate with Luhn algorithm in code.
+
+### HTML tag (opening)
+
+```
+<([a-z][a-z0-9]*)\b[^>]*>
+```
+
+Group 1 captures the tag name. Don't parse arbitrary HTML with regex for real work — use a DOM parser.
+
+### Trailing whitespace
+
+```
+\s+$
+```
+
+Useful in a find-and-replace to clean up lines.
+
+### Blank line
+
+```
+^$
+```
+
+With the `m` flag, matches any empty line in a multiline string.
+
+### Extract text between quotes
+
+```
+"([^"]*)"
+```
+
+Captures the text inside double quotes. Group 1 holds the value.
+
+## Escape sequences to remember
+
+These characters have special meaning in regex and need a backslash when you mean the literal character:
+
+```
+. * + ? ^ $ { } [ ] | ( ) \
+```
+
+Inside a character class `[...]`, most of these lose their special meaning — but `]`, `\`, `^`, and `-` still need escaping.
+
+## Practical tips
+
+**Test as you write.** Regex engines differ subtly between JavaScript, Python, Go, and others. Use the [Regex Tester](/tools/regex-tester/) to run your pattern against real examples before pasting it into code.
+
+**Name your groups.** `(?<year>\d{4})` is clearer than `(\d{4})`, especially when the pattern has many groups.
+
+**Prefer simpler alternatives when they exist.** `startsWith()`, `endsWith()`, `includes()`, and `split()` are often faster and easier to read than a regex.
+
+**Compile once, use many times.** In performance-sensitive code, pre-compile your regex outside the loop rather than creating a new regex object on every iteration.
+
+**Anchor when you mean the whole string.** Without `^` and `$`, your pattern might match a substring of a longer input. `\d+` matches the digits in `"abc123def"`. `^\d+$` only matches strings that are entirely digits.

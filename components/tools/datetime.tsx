@@ -24,7 +24,11 @@ export function DateCalculator({ tool }: Props) {
       howTo: "Pick a starting date and how many days/months/years to add (use negatives to subtract).",
       formula: "Adds in this order: years, then months, then days, using JavaScript Date arithmetic which handles month-overflow.",
       examples: "2024-01-31 + 1 month = 2024-03-02 (Feb has only 29 days in 2024).",
-      faq: [],
+      faq: [
+        { q: "How do I subtract days from a date?", a: "Enter a negative number in the Days field. For example, -7 subtracts one week from the starting date." },
+        { q: "What happens when adding a month to January 31?", a: "February doesn't have 31 days, so the result overflows to March 2 or 3 depending on whether it's a leap year. This matches standard calendar arithmetic used by most date libraries." },
+        { q: "Does this account for leap years?", a: "Yes — the browser's native Date object correctly handles leap years, so February 28 + 1 day = February 29 in a leap year." },
+      ],
     }}>
       <div className="grid sm:grid-cols-4 gap-3">
         <div><label className="label">Start</label><input type="date" className="input" value={start} onChange={(e) => setStart(e.target.value)} /></div>
@@ -100,7 +104,11 @@ export function CountdownTimer({ tool }: Props) {
       howTo: "Pick a future date and time. The countdown updates every second; once it hits zero, all values stay at 0.",
       formula: "Difference between the target timestamp and the current local time, broken into days/hours/minutes/seconds.",
       examples: "Useful for tracking product launches, exam dates, or holidays.",
-      faq: [],
+      faq: [
+        { q: "Does the countdown continue if I close the tab?", a: "No — the countdown runs in the browser. When you reopen the page it recalculates from your target date vs the current time, so it will still show the correct remaining time as long as the target hasn't passed." },
+        { q: "What timezone is the countdown using?", a: "Your local system timezone. The target date/time you pick is interpreted in your browser's local time." },
+        { q: "What happens when the countdown reaches zero?", a: "All values stop at 0 and stay there. The page doesn't refresh or navigate anywhere." },
+      ],
     }}>
       <label className="label">Target date & time</label>
       <input type="datetime-local" className="input" value={target} onChange={(e) => setTarget(e.target.value)} />
@@ -138,7 +146,11 @@ export function Stopwatch({ tool }: Props) {
       howTo: "Start the stopwatch, click Lap to record split times, Reset to zero everything out.",
       formula: "Uses Date.now() differences for accuracy independent of CPU jitter; redraws every ~31 ms.",
       examples: "Track workout intervals, kitchen timers, or anything you'd time on a phone.",
-      faq: [],
+      faq: [
+        { q: "How accurate is the stopwatch?", a: "It uses Date.now() sampled every ~31 ms, so displayed precision is to the centisecond (1/100 s). Actual accuracy depends on tab-throttling — background tabs may drift by tens of milliseconds." },
+        { q: "How many laps can I record?", a: "There's no hard limit. Laps are stored in memory so they're cleared when you reset or refresh the page." },
+        { q: "Does pausing the stopwatch lose time?", a: "No — pausing captures the elapsed time, and resuming continues from exactly where it left off." },
+      ],
     }}>
       <div className="text-center font-mono text-6xl font-bold tabular-nums my-6">{fmt(ms)}</div>
       <div className="flex gap-2 justify-center">
@@ -166,7 +178,11 @@ export function DaysBetween({ tool }: Props) {
       howTo: "Pick two dates — the gap is shown in days and weeks.",
       formula: "Absolute difference in milliseconds, divided by 86,400,000.",
       examples: "Jan 1 to Dec 31 = 365 days (or 366 in a leap year).",
-      faq: [],
+      faq: [
+        { q: "Does the order of the two dates matter?", a: "No — the tool always returns the absolute difference, so Date A can be before or after Date B." },
+        { q: "Are the start and end dates themselves counted?", a: "The calculation counts the gap between midnight on each date, so neither boundary day is included. Add 1 if you need inclusive counting." },
+        { q: "How many days are in a week for the weeks calculation?", a: "Exactly 7. Partial weeks are truncated — 13 days shows 1 week, not 2." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div><label className="label">Date A</label><input type="date" className="input" value={a} onChange={(e) => setA(e.target.value)} /></div>
@@ -201,7 +217,11 @@ export function WeekNumber({ tool }: Props) {
       howTo: "Pick a date — ISO week number, ISO year, and day-of-year are computed.",
       formula: "ISO 8601 weeks start Monday; week 1 contains January 4th.",
       examples: "January 1 might be week 52 or 53 of the previous ISO year if it falls on a Friday/Saturday/Sunday.",
-      faq: [],
+      faq: [
+        { q: "Why does January 1 sometimes belong to week 52 of the previous year?", a: "ISO 8601 defines week 1 as the week containing the first Thursday of the year. If January 1 falls on a Friday, Saturday, or Sunday, it belongs to the last week of the previous ISO year." },
+        { q: "What is the difference between ISO week year and calendar year?", a: "The ISO week year can differ from the calendar year by ±1 day for dates at the start or end of January. The ISO week year is always the year that contains Thursday of that week." },
+        { q: "How is the day-of-year counted?", a: "Day 1 is January 1. Day 365 (or 366 in a leap year) is December 31. The count resets to 1 on January 1 each calendar year." },
+      ],
     }}>
       <input type="date" className="input" value={date} onChange={(e) => setDate(e.target.value)} />
       {r && (

@@ -1,0 +1,295 @@
+import { BlogPost } from "@/components/BlogPost";
+import { findPost } from "@/lib/posts";
+import { buildMetadata } from "@/lib/seo";
+
+export const post = findPost("json-formatting-guide");
+
+export const metadata = buildMetadata({
+  title: post.title,
+  description: post.description,
+  path: `/blog/${post.slug}/`,
+  keywords: post.tags,
+});
+
+export default function Layout({ children }) {
+  return <BlogPost post={post}>{children}</BlogPost>;
+}
+
+JSON is ubiquitous. It's the lingua franca of APIs, config files, and data interchange. Yet a surprising number of developers don't know the rules that make it valid, why formatting matters for debugging, or how to minify correctly for production. This guide covers all of it.
+
+## What makes JSON valid
+
+JSON has six data types. Every valid JSON document is exactly one of these:
+
+| Type | Example |
+| --- | --- |
+| String | `"hello"` |
+| Number | `42`, `-3.14`, `1e10` |
+| Boolean | `true`, `false` |
+| Null | `null` |
+| Array | `[1, "two", true]` |
+| Object | `{"key": "value"}` |
+
+**The rules that trip people up:**
+
+- **String keys are mandatory in objects.** `{key: "value"}` is JavaScript, not JSON. Valid JSON requires `{"key": "value"}`.
+- **No trailing commas.** `[1, 2, 3,]` is invalid. `[1, 2, 3]` is valid.
+- **No comments.** JSON doesn't have a comment syntax. If you need comments in a config file, consider JSONC (JSON with Comments) or TOML.
+- **Strings must use double quotes.** Single-quoted strings (`'hello'`) are invalid.
+- **Numbers have limits.** JSON itself doesn't restrict number size, but parsers typically use 64-bit IEEE 754 floats. Integers larger than 2^53 − 1 lose precision — use strings for large IDs.
+- **No undefined.** `undefined` is a JavaScript concept; it doesn't exist in JSON. `JSON.stringify` silently drops object keys with `undefined` values.
+
+## Pretty-printing (indentation)
+
+Raw JSON from an API looks like this:
+
+```json
+{"user":{"id":1,"name":"Alice","roles":["admin","editor"],"active":true}}
+```
+
+Pretty-printed with 2-space indentation:
+
+```json
+{
+  "user": {
+    "id": 1,
+    "name": "Alice",
+    "roles": [
+      "admin",
+      "editor"
+    ],
+    "active": true
+  }
+}
+```
+
+**Indentation conventions:**
+
+- **2 spaces** — most common in JavaScript and web projects
+- **4 spaces** — common in Python and many other languages
+- **Tabs** — saves bytes vs. spaces; harder to align visually
+
+In JavaScript, `JSON.stringify` takes an optional second and third argument:
+
+```js
+JSON.stringify(obj, null, 2)    // 2-space indent
+JSON.stringify(obj, null, 4)    // 4-space indent
+JSON.stringify(obj, null, "\t") // tab indent
+```
+
+The second argument is a replacer function or array — pass `null` to include all keys.
+
+## Minification
+
+Minified JSON strips all whitespace that isn't inside strings:
+
+```json
+{"user":{"id":1,"name":"Alice","roles":["admin","editor"],"active":true}}
+```
+
+This is what you want in HTTP responses and anywhere size matters. Whitespace is not semantically meaningful in JSON — the pretty and minified versions are identical to any JSON parser.
+
+**In JavaScript:**
+
+```js
+JSON.stringify(obj) // no indent argument = minified
+```
+
+**Common mistake:** stripping whitespace from the raw JSON string with a regex. Don't do this — a regex can't distinguish whitespace inside strings from structural whitespace. Use a real JSON parser.
+
+## Sorting keys
+
+By default, `JSON.stringify` outputs keys in insertion order. For stable diffs or canonical representations, you may want alphabetically sorted keys:
+
+```js
+function sortedJson(obj, indent = 2) {
+  return JSON.stringify(obj, Object.keys(obj).sort(), indent);
+}
+```
+
+This works for flat objects. For deep sorting you need a recursive approach. Be aware that **key order is not part of the JSON spec** — two JSON objects with the same key-value pairs in different order are semantically identical.
+
+## Validating JSON
+
+Before you can format JSON, it has to be valid. The most common validation errors:
+
+**Trailing comma:**
+```
+{"a": 1, "b": 2,}   ← invalid
+{"a": 1, "b": 2}    ← valid
+```
+
+**Unquoted key:**
+```
+{a: 1}              ← invalid
+{"a": 1}            ← valid
+```
+
+**Single-quoted string:**
+```
+{'a': 1}            ← invalid
+{"a": 1}            ← valid
+```
+
+**Unclosed bracket or brace:**
+```
+{"a": [1, 2}        ← mismatched brackets
+{"a": [1, 2]}       ← valid
+```
+
+**Control characters in strings:**
+Newlines and tabs inside string values must be escaped:
+```
+{"note": "line1
+line2"}             ← invalid (literal newline)
+{"note": "line1\nline2"}  ← valid
+```
+
+The fastest way to validate: paste into a JSON formatter like the [JSON Formatter](/tools/json-formatter/) on this site — it highlights the exact character where parsing fails.
+
+## Converting between JSON and other formats
+
+### JSON to CSV
+
+When your JSON is an array of flat objects, it maps naturally to CSV rows:
+
+```json
+[
+  {"name": "Alice", "age": 30},
+  {"name": "Bob",   "age": 25}
+]
+```
+
+Becomes:
+
+```
+name,age
+Alice,30
+Bob,25
+```
+
+Nested objects and arrays don't map cleanly to CSV — you need to decide whether to flatten, stringify, or exclude them. Use the [JSON ↔ CSV Converter](/tools/json-to-csv/) to handle the common cases automatically.
+
+### JSON to YAML
+
+YAML is a superset of JSON (any valid JSON is valid YAML), but human-written YAML typically looks much cleaner:
+
+```yaml
+name: Alice
+age: 30
+roles:
+  - admin
+  - editor
+```
+
+The main difference: YAML uses indentation instead of braces and brackets, and strings don't need quotes unless they contain special characters. Use the [YAML ↔ JSON Converter](/tools/yaml-to-json/) to go in either direction.
+
+### JSON to TypeScript
+
+Given a sample JSON response, you can generate TypeScript interfaces automatically. For example:
+
+```json
+{"id": 1, "name": "Alice", "active": true}
+```
+
+Becomes:
+
+```ts
+interface Root {
+  id: number;
+  name: string;
+  active: boolean;
+}
+```
+
+The [JSON to TypeScript tool](/tools/json-to-typescript/) handles this including nested objects and arrays — useful for quickly typing an API response you don't control.
+
+## JSON in different languages
+
+### JavaScript / Node.js
+
+```js
+// Parse a string into an object
+const obj = JSON.parse('{"key": "value"}');
+
+// Serialize an object to a string
+const str = JSON.stringify(obj, null, 2);
+
+// Safe parse (catch errors)
+function safeParse(str) {
+  try { return { ok: true, value: JSON.parse(str) }; }
+  catch (e) { return { ok: false, error: e.message }; }
+}
+```
+
+### Python
+
+```python
+import json
+
+# Parse
+obj = json.loads('{"key": "value"}')
+
+# Serialize (pretty-printed)
+s = json.dumps(obj, indent=2)
+
+# Read from file
+with open("data.json") as f:
+    obj = json.load(f)
+
+# Write to file
+with open("data.json", "w") as f:
+    json.dump(obj, f, indent=2)
+```
+
+### Go
+
+```go
+import "encoding/json"
+
+// Unmarshal into a struct
+var result MyStruct
+err := json.Unmarshal([]byte(data), &result)
+
+// Marshal from a struct
+bytes, err := json.MarshalIndent(result, "", "  ")
+```
+
+## Handling large numbers
+
+JavaScript's `JSON.parse` loses precision on integers larger than `2^53 - 1` (9,007,199,254,740,991). This is a common problem with database row IDs from systems that use 64-bit integers.
+
+**Symptom:** your parsed object has `id: 9007199254740992` when the actual ID is `9007199254740993`.
+
+**Solution:** have the API return large integers as strings, or use a JSON parser that supports BigInt. In modern JavaScript:
+
+```js
+const obj = JSON.parse(data, (key, value, context) => {
+  if (context?.source && /^\d{17,}$/.test(context.source)) {
+    return BigInt(context.source);
+  }
+  return value;
+});
+```
+
+## JSON vs. JSON5 vs. JSONC
+
+If you find JSON's strictness frustrating for config files, two formats relax the rules:
+
+- **JSON5** allows comments, trailing commas, unquoted keys, and single-quoted strings. Used by some build tools.
+- **JSONC** (JSON with Comments) allows `//` and `/* */` comments. Used by VS Code's `settings.json` and `tsconfig.json`.
+
+Neither is interchangeable with JSON — don't pass JSONC to `JSON.parse`.
+
+## Quick reference
+
+| Task | JS syntax |
+| --- | --- |
+| Parse JSON string | `JSON.parse(str)` |
+| Serialize to minified | `JSON.stringify(obj)` |
+| Serialize to pretty (2-space) | `JSON.stringify(obj, null, 2)` |
+| Serialize to pretty (tab) | `JSON.stringify(obj, null, "\t")` |
+| Deep clone an object | `JSON.parse(JSON.stringify(obj))` |
+| Check if string is valid JSON | `try { JSON.parse(s); return true } catch { return false }` |
+
+For anything more complex — validating schemas, transforming large datasets, or streaming large JSON — reach for a dedicated library like `zod`, `ajv`, or `jsonstream`.

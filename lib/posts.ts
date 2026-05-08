@@ -16,6 +16,24 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "regex-cheat-sheet",
+    title: "Regex Cheat Sheet: Patterns Every Developer Should Know",
+    description: "A practical reference for regular expressions — character classes, quantifiers, anchors, groups, and lookaheads — with ready-to-use patterns for emails, URLs, dates, and more.",
+    date: "2026-05-08",
+    tags: ["regex", "developer", "reference"],
+    relatedTools: ["regex-tester", "find-and-replace", "url-encoder-decoder", "json-formatter"],
+    readingTimeMin: 8,
+  },
+  {
+    slug: "json-formatting-guide",
+    title: "JSON Formatting Guide: Pretty-Print, Minify, and Validate Like a Pro",
+    description: "Everything you need to know about formatting JSON — indentation rules, minification for production, common validation errors, and how to convert between JSON and other formats.",
+    date: "2026-05-06",
+    tags: ["json", "developer", "reference"],
+    relatedTools: ["json-formatter", "json-to-csv", "yaml-to-json", "json-to-typescript"],
+    readingTimeMin: 6,
+  },
+  {
     slug: "iso-8601-cheat-sheet",
     title: "ISO 8601 Cheat Sheet: Timestamps, Durations, and Intervals You'll Actually Use",
     description: "A practical reference for ISO 8601 — date, time, timezone, durations, and intervals — with copy-pasteable examples for the formats developers actually need.",

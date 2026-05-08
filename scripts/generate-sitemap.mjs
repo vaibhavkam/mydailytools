@@ -25,24 +25,33 @@ function readSlugs() {
   return { toolSlugs: [...new Set(toolSlugs.filter((s) => !catSlugs.includes(s)))], catSlugs };
 }
 
-function readPostSlugs() {
-  // Same lightweight regex parse trick on lib/posts.ts.
+function readPosts() {
+  // Extract slug + date pairs from lib/posts.ts so each post gets its actual
+  // publication date as lastmod rather than the build date.
   const src = readFileSync(resolve(root, "lib/posts.ts"), "utf8");
-  return [...src.matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
+  const slugs = [...src.matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
+  const dates = [...src.matchAll(/date:\s*"(\d{4}-\d{2}-\d{2})"/g)].map((m) => m[1]);
+  return slugs.map((slug, i) => ({ slug, date: dates[i] ?? today }));
 }
 
 const { toolSlugs, catSlugs } = readSlugs();
-const postSlugs = readPostSlugs();
+const posts = readPosts();
 
 const SITE = "https://mydailytool.com";
 const today = new Date().toISOString().slice(0, 10);
 
+// Static pages use the build date as lastmod because they change with every deploy.
+// Category pages are also build-time artifacts — their content changes when tools are
+// added, so build date is appropriate.
+// Tool pages are stable once live; use a fixed date that won't thrash on every build.
+const TOOL_LASTMOD = "2026-05-04";
+
 const staticPaths = ["/", "/tools/", "/blog/", "/about/", "/contact/", "/support/", "/sitemap-html/", "/privacy/", "/terms/"];
 const urls = [
-  ...staticPaths.map((p) => ({ loc: SITE + p, priority: p === "/" ? 1.0 : 0.7 })),
-  ...catSlugs.map((s) => ({ loc: `${SITE}/${s}/`, priority: 0.8 })),
-  ...toolSlugs.map((s) => ({ loc: `${SITE}/tools/${s}/`, priority: 0.6 })),
-  ...postSlugs.map((s) => ({ loc: `${SITE}/blog/${s}/`, priority: 0.7 })),
+  ...staticPaths.map((p) => ({ loc: SITE + p, lastmod: today, priority: p === "/" ? 1.0 : 0.7 })),
+  ...catSlugs.map((s) => ({ loc: `${SITE}/${s}/`, lastmod: today, priority: 0.8 })),
+  ...toolSlugs.map((s) => ({ loc: `${SITE}/tools/${s}/`, lastmod: TOOL_LASTMOD, priority: 0.6 })),
+  ...posts.map(({ slug, date }) => ({ loc: `${SITE}/blog/${slug}/`, lastmod: date, priority: 0.8 })),
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -51,7 +60,7 @@ ${urls
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${u.lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>${u.priority.toFixed(1)}</priority>
   </url>`

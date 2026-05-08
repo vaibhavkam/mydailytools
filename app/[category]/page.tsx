@@ -4,7 +4,7 @@ import { CATEGORIES, findCategory, SITE } from "@/lib/tools";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Sidebar } from "@/components/Sidebar";
 import { AdSlot } from "@/components/AdSlot";
-import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import { buildMetadata, breadcrumbJsonLd, itemListJsonLd } from "@/lib/seo";
 
 // Pre-generate one route per category (output: "export" requires this).
 export function generateStaticParams() {
@@ -26,16 +26,27 @@ export default function CategoryPage({ params }: { params: { category: string } 
   const cat = findCategory(params.category);
   if (!cat) notFound();
 
-  const ld = breadcrumbJsonLd([
-    { name: "Home", url: SITE.url + "/" },
-    { name: cat.name, url: `${SITE.url}/${cat.slug}/` },
-  ]);
+  const ld = [
+    breadcrumbJsonLd([
+      { name: "Home", url: SITE.url + "/" },
+      { name: cat.name, url: `${SITE.url}/${cat.slug}/` },
+    ]),
+    itemListJsonLd(
+      cat.tools.map((t) => ({
+        name: t.title,
+        url: `${SITE.url}/tools/${t.slug}/`,
+        description: t.description,
+      }))
+    ),
+  ];
 
   return (
     <div className="flex gap-8">
       <Sidebar activeCategory={cat.slug} />
       <div className="flex-1 min-w-0">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+        {ld.map((blob, i) => (
+          <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blob) }} />
+        ))}
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: cat.name }]} />
         <h1 className="mt-3 text-3xl md:text-4xl font-bold">{cat.name} Tools</h1>
         <p className="mt-2 text-[rgb(var(--fg-muted))]">{cat.blurb}</p>
