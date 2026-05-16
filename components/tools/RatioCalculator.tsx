@@ -23,7 +23,12 @@ export default function RatioCalculator({ tool }: { tool: Tool & { categorySlug:
       howTo: "Enter two numbers — the ratio is simplified to lowest terms (for integers) and shown as a decimal.",
       formula: "Simplified ratio: divide both terms by GCD. Decimal: a ÷ b.",
       examples: "16 : 9 is already simplified, decimal 1.778. 24 : 36 simplifies to 2 : 3.",
-      faq: [],
+      faq: [
+        { q: "What does simplifying a ratio mean?", a: "Simplifying means dividing both terms by their greatest common divisor (GCD) so the ratio is expressed in the smallest whole numbers. 24:36 simplifies to 2:3." },
+        { q: "Can I enter decimal or fractional values?", a: "Yes. For non-integer inputs the tool shows the ratio as-is and gives the decimal equivalent, since GCD is only defined for integers." },
+        { q: "How is a ratio different from a fraction?", a: "A ratio compares two quantities (a:b), while a fraction represents one part of a whole (a/b). They're numerically equivalent but used in different contexts." },
+        { q: "What is the aspect ratio 16:9 as a decimal?", a: "16 ÷ 9 ≈ 1.7778. This is the standard widescreen display ratio used by most HD and 4K screens." },
+      ],
     }}>
       <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-end">
         <div><label className="label" htmlFor="ra">A</label><input id="ra" className="input" value={a} onChange={(e) => setA(e.target.value)} /></div>

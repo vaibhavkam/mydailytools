@@ -39,7 +39,12 @@ export default function StringEscape({ tool }: { tool: Tool & { categorySlug: st
       howTo: "Pick the target context (JSON, JavaScript, HTML, SQL). Edit the left side to escape, the right side to unescape.",
       formula: "JSON: uses JSON.stringify rules. JS: backslash-escapes quotes, backslash, and control chars. HTML: replaces &<>\"' with named entities. SQL: doubles single quotes (the standard literal-string escape).",
       examples: "JSON: She said \"hi\" becomes She said \\\"hi\\\". SQL: it's becomes it''s (single quotes doubled).",
-      faq: [],
+      faq: [
+        { q: "When should I use HTML escaping vs JSON escaping?", a: "Use HTML escaping when inserting user-supplied text into an HTML page to prevent XSS. Use JSON escaping when embedding strings inside JSON payloads or configuration files." },
+        { q: "Why does SQL escaping only double single quotes?", a: "In standard SQL, string literals are delimited by single quotes, and a literal single quote inside a string is represented by two consecutive single quotes (''). This is defined by the SQL standard (ISO 9075)." },
+        { q: "What is the difference between JS and JSON escaping?", a: "JSON escaping is a strict subset: it always uses double quotes and only escapes what the JSON spec requires. JS escaping is more permissive — it handles both single and double quotes and the same control characters." },
+        { q: "Does this tool send my text anywhere?", a: "No. All escaping and unescaping happens entirely in your browser with no data sent to any server." },
+      ],
     }}>
       <div className="flex gap-2 mb-3">
         {(["json", "js", "html", "sql"] as Mode[]).map((m) => (

@@ -28,7 +28,12 @@ export default function RoundingCalculator({ tool }: { tool: Tool & { categorySl
       howTo: "Enter a number, choose the place to round to, and pick a mode (nearest, up, down, or truncate toward zero).",
       formula: "Multiply by 10^(−place), apply the rounding function, divide back. Place: −2 = hundredths, 0 = ones, 2 = hundreds.",
       examples: "3.14159 → nearest hundredth = 3.14. 7.6 → round down = 7. −7.6 truncate = −7, floor = −8.",
-      faq: [],
+      faq: [
+        { q: "What is the difference between floor, ceil, and truncate?", a: "Floor always rounds toward negative infinity (floor(−7.2) = −8). Ceil always rounds toward positive infinity (ceil(−7.2) = −7). Truncate drops the decimal toward zero (trunc(−7.2) = −7)." },
+        { q: "What does 'round to nearest' mean for halfway values?", a: "This calculator uses 'half away from zero': 2.5 rounds to 3, and −2.5 rounds to −3. Some systems use 'half to even' (banker's rounding) which rounds 2.5 to 2." },
+        { q: "How do I round to the nearest hundred or thousand?", a: "Set the place to 10^2 (hundreds) or 10^3 (thousands). For example, 3,741 rounded to the nearest hundred is 3,700." },
+        { q: "Why does rounding cause floating-point oddities?", a: "Floating-point arithmetic (IEEE 754) cannot represent all decimals exactly, so you may see results like 3.1400000000000001. This is a known property of binary floating-point, not a bug." },
+      ],
     }}>
       <div className="grid sm:grid-cols-3 gap-3">
         <div><label className="label" htmlFor="rn">Number</label><input id="rn" className="input" value={n} onChange={(e) => setN(e.target.value)} /></div>

@@ -50,7 +50,12 @@ export function CommaLines({ tool }: Props) {
       howTo: "Paste a comma-separated string on the left to get one item per line; paste a list on the right to join with your separator. Toggles let you trim whitespace, drop empties, or dedupe.",
       formula: "Splits and joins are exact — the only transformations are the toggles you enable.",
       examples: '"apple, banana, cherry" → three lines. With dedupe on, repeated values collapse.',
-      faq: [],
+      faq: [
+        { q: "How do I convert a comma-separated list to one item per line?", a: "Paste your CSV into the left box and the tool splits it by commas automatically, putting each item on its own line." },
+        { q: "Can I use a separator other than a comma?", a: "Yes — change the Separator field to any character such as a semicolon, pipe, or tab, and both panels update instantly." },
+        { q: "How do I remove duplicate entries while converting?", a: "Enable the Dedupe toggle; it keeps the first occurrence of each value and drops subsequent repeats." },
+        { q: "What does the Trim toggle do?", a: "It strips leading and trailing whitespace from each item, so ' apple ' becomes 'apple'. This prevents invisible mismatches when deduping." },
+      ],
     }}>
       <div className="flex flex-wrap gap-3 mb-3 items-end">
         <div className="w-32"><label className="label">Separator</label><input className="input font-mono" value={sep} onChange={(e) => setSep(e.target.value)} /></div>
@@ -106,7 +111,12 @@ export function ListSetOps({ tool }: Props) {
       howTo: "Paste two lists, one item per line. The five common set results compute simultaneously: union, intersection, A only, B only, and symmetric difference.",
       formula: "Order is preserved from the first occurrence; duplicates within a list are collapsed in the output.",
       examples: "A: apple, banana, cherry, date. B: banana, cherry, elderberry. Intersection: banana, cherry. A−B: apple, date.",
-      faq: [],
+      faq: [
+        { q: "What is the difference between intersection and union of two lists?", a: "The intersection contains only items present in both lists; the union contains all items from either list with no duplicates." },
+        { q: "What is symmetric difference?", a: "Symmetric difference (A △ B) contains items that appear in either list but not both — the opposite of intersection." },
+        { q: "Does the tool handle case-insensitive comparison?", a: "Yes — uncheck 'Case sensitive' and 'Apple' and 'apple' will be treated as the same item." },
+        { q: "Are duplicates within a single list removed?", a: "Yes, each output set collapses duplicates so you get clean, unique results even if your original list had repeated entries." },
+      ],
     }}>
       <div className="flex gap-3 mb-3 text-sm">
         <label className="flex items-center gap-2"><input type="checkbox" checked={trim} onChange={(e) => setTrim(e.target.checked)} className="accent-brand-600" /> Trim</label>
@@ -160,7 +170,12 @@ export function ListCompare({ tool }: Props) {
       howTo: "Paste two lists. See three columns: items in both, items only in A, items only in B.",
       formula: "Set-based comparison after trimming each line. Lines preserved in their original order.",
       examples: "Compare two CSVs of email addresses, two lists of file names, etc.",
-      faq: [],
+      faq: [
+        { q: "How do I find items that are in one list but not the other?", a: "The 'Only in A' and 'Only in B' columns show exactly those items. Copy either column for a clean difference list." },
+        { q: "Is the comparison case-sensitive?", a: "Yes, the comparison is case-sensitive by default. 'Apple' and 'apple' would appear as different items." },
+        { q: "What common use cases is this tool good for?", a: "Comparing two exports of email addresses, finding new or removed rows between two CSV snapshots, or checking which file names were added or deleted." },
+        { q: "How many items can I compare?", a: "There is no hard limit; the comparison runs entirely in your browser so performance depends on list size, but thousands of lines work fine." },
+      ],
     }}>
       <div className="grid lg:grid-cols-2 gap-3">
         <div><label className="label">List A</label><textarea className="input min-h-[160px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} /></div>
@@ -206,7 +221,12 @@ export function ListStats({ tool }: Props) {
       howTo: "Paste any list. Counts, lengths, and the most-repeated entries are computed instantly.",
       formula: "Whitespace-trimmed, blank-skipped. Avg length is in characters.",
       examples: "Useful for quickly inspecting CSV exports, log lines, or raw API responses.",
-      faq: [],
+      faq: [
+        { q: "How do I count unique values in a list?", a: "Paste your list and the 'Unique' count shows exactly how many distinct items exist after trimming whitespace." },
+        { q: "Can I see which items appear more than once?", a: "Yes — the 'Top duplicates' section lists every repeated item alongside how many times it appears, sorted by frequency." },
+        { q: "What does average length mean here?", a: "It is the mean number of characters per line (after trimming), useful for spotting unexpectedly long or truncated entries in a data export." },
+        { q: "How are blank lines handled?", a: "Blank lines are skipped before all calculations, so they do not inflate the total count or distort average lengths." },
+      ],
     }}>
       <textarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
       {r && (
@@ -299,7 +319,12 @@ export function NumberSequence({ tool }: Props) {
       howTo: "Patterns: 1..20 (range, step 1), 1..2..20 (start..step..end), 0,2,4..20 (literals + range that infers step).",
       formula: "Sequences expand to at most 100,000 items.",
       examples: "1..10 → 1,2,…,10. 0,2,4..20 → all even numbers 0–20. 100..-10..0 → 100, 90, …, 0.",
-      faq: [],
+      faq: [
+        { q: "How do I generate a list of even numbers?", a: "Use a pattern like 0,2,4..100 — the tool infers the step of 2 from the first two literals and continues to 100." },
+        { q: "Can I generate a descending sequence?", a: "Yes — use a negative step: 100..-10..0 produces 100, 90, 80, …, 0." },
+        { q: "How do I change what separator appears between numbers?", a: "Edit the Separator field; it defaults to ', ' but you can use a newline, tab, pipe, or any string." },
+        { q: "What is the maximum sequence length?", a: "The generator stops at 100,000 items to prevent browser freezes. For very large sequences, generate in chunks." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div><label className="label">Pattern</label><input className="input font-mono" value={pattern} onChange={(e) => setPattern(e.target.value)} /></div>
@@ -375,7 +400,12 @@ export function PrefixSuffix({ tool }: Props) {
       howTo: "Set a prefix and a suffix; every line gets wrapped. Useful for SQL IN clauses, code generation, or quoting lists.",
       formula: "Pure string concatenation; no escaping is performed — that's your responsibility for the target context.",
       examples: 'Prefix \' and suffix \',  → SQL list: \'apple\', \'banana\', \'cherry\',',
-      faq: [],
+      faq: [
+        { q: "How do I format a list for a SQL IN clause?", a: "Set prefix to ' and suffix to ', then paste your values. Copy the result and paste inside IN ( … )." },
+        { q: "Can I add a prefix without a suffix, or vice versa?", a: "Yes — leave either field blank and only the non-empty side is added to each line." },
+        { q: "Does the tool escape quotes or special characters?", a: "No, it is pure string concatenation. If your values contain single quotes, escape them manually before pasting." },
+        { q: "What is 'Skip blank lines' for?", a: "It prevents blank lines in your input from becoming lines with only the prefix/suffix, keeping the output clean." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3 mb-2">
         <div><label className="label">Prefix</label><input className="input font-mono" value={prefix} onChange={(e) => setPrefix(e.target.value)} /></div>
@@ -413,7 +443,12 @@ export function ColumnPicker({ tool }: Props) {
       howTo: "Paste delimited rows, pick the delimiter and column index (0-based). Toggle 'has header' to skip the first row.",
       formula: "Splits each line by the chosen delimiter. Missing cells emit empty strings.",
       examples: "Tab-separated rows of name/age/city → pick column 1 to extract just ages.",
-      faq: [],
+      faq: [
+        { q: "Why are columns numbered from 0?", a: "Column indexing starts at 0 (zero-based), so the first column is 0, the second is 1, and so on — consistent with most programming languages." },
+        { q: "How do I extract a column from a CSV file?", a: "Paste your CSV text, set the delimiter to Comma, enter the column number, and enable 'First row is header' if your CSV has a header row." },
+        { q: "What happens if a row has fewer columns than the one I selected?", a: "Rows with missing cells output an empty string for that position, so every input row still produces one output line." },
+        { q: "Can I extract from tab-separated (TSV) files?", a: "Yes — select Tab as the delimiter. TSV is common in spreadsheet exports and database dumps." },
+      ],
     }}>
       <div className="grid sm:grid-cols-3 gap-3 mb-3">
         <div><label className="label">Delimiter</label>
@@ -465,7 +500,12 @@ export function ListFilter({ tool }: Props) {
       howTo: "Type a substring (or regex pattern). Choose to keep matching lines or drop them. Case sensitivity is configurable.",
       formula: "Plain mode does a case-insensitive substring match by default; regex mode uses your pattern as JavaScript regex.",
       examples: 'Pattern "a", keep mode → only lines containing "a". Switch to drop mode to remove them.',
-      faq: [],
+      faq: [
+        { q: "How do I remove lines that contain a specific word?", a: "Type the word in the Pattern field and select Drop mode. Every line containing that word will be removed from the output." },
+        { q: "Can I filter using regular expressions?", a: "Yes — enable the Regex toggle and enter any JavaScript regular expression, such as ^error to match lines starting with 'error'." },
+        { q: "Is the filter case-sensitive?", a: "No by default. Enable 'Case sensitive' if you need exact case matching, for example to distinguish 'NULL' from 'null'." },
+        { q: "What is a common use case for list filtering?", a: "Cleaning log files by removing noise lines, extracting only error lines from a large output, or filtering a CSV export by a keyword." },
+      ],
     }}>
       <div className="flex flex-wrap gap-3 mb-2 items-end">
         <div className="flex-1 min-w-[180px]"><label className="label">Pattern</label><input className="input font-mono" value={pattern} onChange={(e) => setPattern(e.target.value)} /></div>

@@ -22,7 +22,12 @@ export default function PermutationCombination({ tool }: { tool: Tool & { catego
       howTo: "Enter total items n and the selection size r (0 ≤ r ≤ n).",
       formula: "Permutations: nPr = n! ÷ (n−r)! (order matters). Combinations: nCr = n! ÷ (r! × (n−r)!) (order doesn't).",
       examples: "10P3 = 720, 10C3 = 120. 5C2 = 10 (the number of pairs in a group of 5).",
-      faq: [],
+      faq: [
+        { q: "What is the difference between permutations and combinations?", a: "Permutations count arrangements where order matters (e.g. PIN codes, race placements). Combinations count selections where order doesn't matter (e.g. lottery numbers, team selection)." },
+        { q: "Why is nPr always ≥ nCr?", a: "Because nPr = nCr × r!. Every combination can be arranged in r! ways, so permutations are always a multiple of combinations for the same n and r." },
+        { q: "What does r = 0 or r = n mean?", a: "nC0 = 1 (there is exactly one way to choose nothing). nCn = 1 (there is exactly one way to choose everything). nP0 = 1 and nPn = n! (all arrangements)." },
+        { q: "What is the maximum n this calculator supports?", a: "Up to n = 200, using BigInt arithmetic to handle the very large factorials that arise for large n values." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div><label className="label" htmlFor="pn">n</label><input id="pn" className="input" value={n} onChange={(e) => setN(e.target.value)} /></div>

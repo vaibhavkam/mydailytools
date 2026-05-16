@@ -100,7 +100,12 @@ export function CssGradient({ tool }: Props) {
       howTo: "Pick linear or radial, set the angle (linear only), and tweak each color stop. The CSS updates live below.",
       formula: "linear-gradient(<angle>deg, <color> <pos>%, …) emits a smooth color transition along the given direction.",
       examples: "Default: an indigo→purple linear gradient at 135°.",
-      faq: [],
+      faq: [
+        { q: "What is a CSS linear gradient?", a: "A linear gradient transitions smoothly between two or more colors along a straight line defined by an angle (e.g. 135deg goes top-left to bottom-right)." },
+        { q: "How do I add more color stops to a gradient?", a: "Click '+ Add stop' to insert an extra color at any position between 0% and 100%. Each stop can have its own color and position." },
+        { q: "Can I use this gradient on text?", a: "Yes — apply it with background: <gradient>; then use -webkit-background-clip: text; -webkit-text-fill-color: transparent; on the text element." },
+        { q: "What is the difference between linear-gradient and radial-gradient?", a: "linear-gradient blends colors along a straight line at a given angle, while radial-gradient radiates outward from a center point in a circular or elliptical shape." },
+      ],
     }}>
       <div className="rounded-2xl h-44" style={{ background: css }} />
       <div className="mt-3 grid sm:grid-cols-2 gap-3">
@@ -154,7 +159,12 @@ export function BoxShadowGenerator({ tool }: Props) {
       howTo: "Tweak the sliders to compose a CSS box-shadow. The preview updates live; click Copy when satisfied.",
       formula: "box-shadow: [inset?] x y blur spread color. Multiple shadows can be comma-separated to layer effects.",
       examples: "Default: a soft indigo glow under the box.",
-      faq: [],
+      faq: [
+        { q: "What do the four box-shadow values mean?", a: "In order: horizontal offset, vertical offset, blur radius, and spread radius — all in pixels. A positive Y offset drops the shadow down; negative lifts it up." },
+        { q: "How does spread affect the shadow?", a: "Positive spread expands the shadow beyond the element's edges; negative spread shrinks it, which is useful for creating tight, realistic depth effects." },
+        { q: "What does the 'inset' option do?", a: "Inset flips the shadow to the inside of the element, making it look sunken or pressed in rather than raised." },
+        { q: "Can I stack multiple box shadows?", a: "Yes — copy this output and comma-separate it with another shadow declaration (e.g. box-shadow: 0 2px 4px #000, 0 8px 24px rgba(0,0,0,.2);) to layer effects." },
+      ],
     }}>
       <div className="grid place-items-center min-h-[160px] py-8">
         <div className="w-32 h-32 rounded-2xl bg-[rgb(var(--bg-elevated))]" style={{ boxShadow: css }} />
@@ -190,7 +200,12 @@ export function BorderRadius({ tool }: Props) {
       howTo: "Drag the corner sliders. Toggle 'linked' to set all four corners at once.",
       formula: "border-radius: top-left top-right bottom-right bottom-left. Equal values can be condensed to one number.",
       examples: "Default: 20px on all corners.",
-      faq: [],
+      faq: [
+        { q: "How is border-radius shorthand ordered?", a: "The four-value shorthand goes clockwise: top-left, top-right, bottom-right, bottom-left. A single value applies to all four corners." },
+        { q: "How do I make a perfect circle with CSS?", a: "Set border-radius: 50% on an element that has equal width and height — or use border-radius: 9999px for a pill shape regardless of dimensions." },
+        { q: "Can I set different horizontal and vertical radii?", a: "Yes — use the elliptical form: border-radius: 40px / 20px; sets horizontal radius to 40px and vertical to 20px, creating an oval curve on each corner." },
+        { q: "What unit should I use for border-radius?", a: "px is most predictable for fixed-size elements. Use % when you want corners that scale with the element's size, such as a 50% circle." },
+      ],
     }}>
       <div className="grid place-items-center min-h-[160px] py-8">
         <div className="w-40 h-40 bg-brand-gradient" style={{ borderRadius: css }} />
@@ -238,7 +253,12 @@ export function TypeScale({ tool }: Props) {
       howTo: "Pick a base size and a musical-style ratio. The scale generates step-by-step font sizes — useful for type ramps in design systems.",
       formula: "Each step multiplies the previous by the ratio: size_n = base × ratio^n. The 'major third' ratio (1.25) is a popular default.",
       examples: "Base 16px, ratio 1.25, 8 steps → 16, 20, 25, 31.25, 39.06, … plus two smaller steps below the base.",
-      faq: [],
+      faq: [
+        { q: "What is a type scale?", a: "A type scale is a set of font sizes derived by multiplying a base size by a fixed ratio, creating visual harmony across headings, body text, and captions." },
+        { q: "Which ratio should I use for body-heavy content?", a: "Minor third (1.2) or Major second (1.125) produce subtle, compact scales well-suited to dense UIs. Major third (1.25) or Perfect fourth (1.333) give more dramatic hierarchy for landing pages." },
+        { q: "What is the golden ratio type scale?", a: "Using 1.618 as the ratio produces sizes that grow quickly — great for display headings but can feel too large for body copy if your step count is high." },
+        { q: "How do I use a type scale in CSS?", a: "Map each step to a CSS custom property or Tailwind text-size class. For example, step-0 becomes your base body size and step-2 or step-3 your h2/h1 sizes." },
+      ],
     }}>
       <div className="grid sm:grid-cols-3 gap-3">
         <div><label className="label">Base (px)</label><input type="number" className="input" value={base} onChange={(e) => setBase(Number(e.target.value))} /></div>
@@ -274,7 +294,12 @@ export function SpacingScale({ tool }: Props) {
       howTo: "Pick a base unit (commonly 4 or 8 px) and how many steps you want. The scale is step × base.",
       formula: "Linear progression. Tailwind uses base 4 (rem * 0.25); Material Design uses base 8.",
       examples: "Base 4, 12 steps → 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44 px.",
-      faq: [],
+      faq: [
+        { q: "Why is 4px the most common spacing base?", a: "4px divides evenly into the standard 16px root font size and aligns with most device pixel densities, making it easy to maintain visual rhythm across text and layout." },
+        { q: "What spacing base does Tailwind CSS use?", a: "Tailwind uses a 4px (0.25rem) base — its spacing-1 = 4px, spacing-2 = 8px, and so on — making a base-4 scale directly compatible." },
+        { q: "When should I use an 8px base instead of 4px?", a: "An 8px base is common in Material Design and works well for component-level spacing (padding, gaps) where you rarely need sub-8px values." },
+        { q: "How many spacing steps do I need?", a: "Most design systems work well with 10–16 steps. Fewer steps force creative reuse; more steps risk inconsistent usage. Tailwind ships 96 steps but most projects use only a dozen or so." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div><label className="label">Base (px)</label><input type="number" className="input" value={base} onChange={(e) => setBase(Number(e.target.value))} /></div>
@@ -363,7 +388,12 @@ export function PxRem({ tool }: Props) {
       howTo: "Set the base font-size (default 16px). Edit either the px or rem field — the other updates instantly.",
       formula: "rem = px ÷ base. px = rem × base. Most browsers default to 16px root.",
       examples: "Base 16: 32px = 2rem. 24px = 1.5rem.",
-      faq: [],
+      faq: [
+        { q: "Why use rem instead of px in CSS?", a: "rem units scale with the user's browser font-size preference, improving accessibility. If a user sets their browser to 20px, 1rem = 20px everywhere, whereas px values stay fixed." },
+        { q: "What is the base font size in most browsers?", a: "The default root font-size is 16px in all major browsers unless overridden by the user or by html { font-size: ... } in CSS." },
+        { q: "How do I convert 14px to rem?", a: "Divide by your base: 14 ÷ 16 = 0.875rem. Enter 14 in the px field (with base 16) and the tool shows the result instantly." },
+        { q: "Does rem work for spacing and not just font sizes?", a: "Yes — rem is valid for any CSS length property including padding, margin, width, and gap. It keeps your entire layout proportional to the user's font preference." },
+      ],
     }}>
       <div><label className="label">Base font-size (px)</label><input type="number" className="input" value={base} onChange={(e) => setBase(Number(e.target.value) || 16)} /></div>
       <div className="mt-3 grid sm:grid-cols-2 gap-3">
@@ -423,7 +453,12 @@ export function ImagePalette({ tool }: Props) {
       howTo: "Drop or pick an image; the 6 most-used colors are extracted client-side and shown as a palette.",
       formula: "We downsample to ≤100×100, bucket pixels into 32³ RGB cubes, and pick the densest. Fast, deterministic, no server upload.",
       examples: "Useful for matching a brand color from a logo, or finding the dominant tones of a photo.",
-      faq: [],
+      faq: [
+        { q: "Is my image uploaded to a server?", a: "No — color extraction runs entirely in your browser using the Canvas API. Your image never leaves your device." },
+        { q: "How are the dominant colors determined?", a: "The image is downsampled to at most 100×100 pixels, then pixels are grouped into 32³ RGB buckets. The six most-populated buckets become the palette." },
+        { q: "Why does the palette sometimes look washed out?", a: "Very high-contrast images can produce averaged bucket colors that appear muted. For better results, crop to the specific area of interest before uploading." },
+        { q: "Can I copy the hex codes?", a: "Yes — click any color swatch to copy its hex code to the clipboard." },
+      ],
     }}>
       <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); onFile(e.dataTransfer.files?.[0]); }}
         onClick={() => fileRef.current?.click()}

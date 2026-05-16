@@ -26,7 +26,12 @@ export function CaseConverter({ tool }: Props) {
       howTo: "Type or paste text. Every common case is shown side-by-side; click the copy icon on any row to grab it.",
       formula: "camelCase: lowercase first word, capitalize the rest. snake_case: lowercase, underscore-separated. kebab-case: lowercase, hyphen-separated.",
       examples: '"Hello world" → camelCase "helloWorld", PascalCase "HelloWorld", snake_case "hello_world".',
-      faq: [],
+      faq: [
+        { q: "What is the difference between camelCase and PascalCase?", a: "In camelCase the first letter is lowercase (e.g. myVariable), while PascalCase capitalises every word including the first (e.g. MyVariable). PascalCase is common for class names; camelCase for variable and function names." },
+        { q: "When should I use snake_case vs kebab-case?", a: "snake_case (underscores) is the norm in Python variable names, database column names, and file systems. kebab-case (hyphens) is standard in URLs, CSS class names, and HTML attributes." },
+        { q: "What is CONSTANT_CASE used for?", a: "CONSTANT_CASE (all caps with underscores) is the conventional style for named constants in languages like JavaScript, Java, and C — for example MAX_RETRIES or API_BASE_URL." },
+        { q: "Can I convert multi-word phrases with punctuation?", a: "Yes. The converter strips punctuation and special characters, then applies the chosen casing to the remaining words." },
+      ],
     }}>
       <textarea className="input min-h-[80px]" value={text} onChange={(e) => setText(e.target.value)} />
       <ul className="mt-3 grid gap-1.5">
@@ -56,7 +61,12 @@ export function CharacterCounter({ tool }: Props) {
       howTo: "Type or paste text. Characters with and without spaces, byte length (UTF-8), and word count update live.",
       formula: "Bytes: TextEncoder UTF-8 byte length. Useful for SMS limits (160 chars), tweet limits, JSON column limits, etc.",
       examples: "'Hello' = 5 chars, 5 bytes. '日本' = 2 chars but 6 bytes in UTF-8.",
-      faq: [],
+      faq: [
+        { q: "Why is the byte count higher than the character count?", a: "Because non-ASCII characters (like accented letters, emoji, or CJK characters) take more than one byte in UTF-8 encoding. For example, one emoji can be 4 bytes while counting as a single character." },
+        { q: "What is the character limit for an SMS message?", a: "A standard SMS is 160 characters when using GSM-7 encoding. If your message includes any character outside GSM-7 (like emoji), the limit drops to 70 characters per segment." },
+        { q: "How does Twitter/X count characters?", a: "X counts most Unicode characters as one, but URLs are always wrapped and counted as 23 characters regardless of their actual length. This tool's character count gives you the raw figure before any platform-specific rules apply." },
+        { q: "Does the word count include punctuation?", a: "Words are split on whitespace only, so 'hello,' counts as one word (including the comma). This matches how most word processors count." },
+      ],
     }}>
       <textarea className="input min-h-[160px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type or paste text…" />
       <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -81,7 +91,12 @@ export function LineCounter({ tool }: Props) {
       howTo: "Paste text — total and non-empty line counts update live.",
       formula: "Total lines: count of \\n-separated chunks (final line counted even without trailing newline). Non-empty: lines with at least one non-whitespace character.",
       examples: "Three lines with one blank → total 3, non-empty 2.",
-      faq: [],
+      faq: [
+        { q: "Does a trailing newline add an extra line?", a: "No. A final newline at the end of a file is standard but does not create an additional blank line in this counter." },
+        { q: "What counts as a non-empty line?", a: "Any line that contains at least one non-whitespace character. Lines with only spaces or tabs are counted as empty." },
+        { q: "How do I count lines in a file on the command line?", a: "Use wc -l filename on Linux/macOS or find /c /v \"\" filename on Windows. This tool is useful when you don't have terminal access." },
+        { q: "What is the difference between CRLF and LF line endings?", a: "LF (\\n) is used on Unix/Linux/macOS; CRLF (\\r\\n) is the Windows standard. This tool handles both, so paste from any operating system and the count will be accurate." },
+      ],
     }}>
       <textarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-3 grid grid-cols-2 gap-2">
@@ -106,7 +121,12 @@ export function TextReverser({ tool }: Props) {
       howTo: "Pick reversal mode (characters, words, or lines), type text, and the result updates instantly.",
       formula: "Characters: reverse Unicode code points. Words: keep whitespace tokens but reverse word order. Lines: reverse the array of lines.",
       examples: '"Hello, world" → chars: "dlrow ,olleH". Words: "world Hello,".',
-      faq: [],
+      faq: [
+        { q: "Is reversed text the same as a mirror image?", a: "Character reversal produces the same characters in the opposite order, but it is not a true visual mirror. To create a mirrored image you would also need to flip each letter horizontally, which requires a font or image editor." },
+        { q: "Does reversing words preserve punctuation?", a: "Yes. Punctuation attached to a word stays with that word. So 'Hello, world!' reversed by words gives 'world! Hello,'." },
+        { q: "What is word reversal useful for?", a: "Common uses include reversing a numbered list order, flipping bullet points, or creating simple text puzzles." },
+        { q: "Can I reverse a multiline poem or list?", a: "Yes — use the Lines mode to flip the order of lines while keeping each individual line intact." },
+      ],
     }}>
       <div className="flex gap-2 mb-3">
         {(["chars", "words", "lines"] as const).map((m) => (
@@ -190,7 +210,12 @@ export function FindReplace({ tool }: Props) {
       howTo: "Paste text, enter what to find and what to replace with. Toggle regex mode to use patterns (capture groups: $1, $2…).",
       formula: "Plain mode escapes special regex characters so you find literal text. Regex mode uses your pattern as-is. Replacement supports $1..$9 backreferences.",
       examples: 'Plain: find "color" → "colour" replaces every occurrence. Regex: find "(\\w+)@(\\w+)" → replace "$2/$1".',
-      faq: [],
+      faq: [
+        { q: "What is the difference between plain and regex mode?", a: "In plain mode, special regex characters like . and * are treated as literal text. In regex mode, your find string is interpreted as a regular expression, giving you pattern matching, wildcards, and capture groups." },
+        { q: "How do I use backreferences in the replacement?", a: "Switch on regex mode, wrap the part you want to reuse in parentheses in the Find field, then reference it as $1, $2, etc. in the Replace field. For example, find '(\\d+)-(\\d+)' and replace with '$2-$1' to swap two numbers." },
+        { q: "Does this replace all occurrences or just the first?", a: "All occurrences are replaced in a single pass, equivalent to using the global flag in a regular expression." },
+        { q: "How do I do a case-insensitive find?", a: "Uncheck the Case sensitive option. This makes the search ignore letter case so 'apple', 'Apple', and 'APPLE' all match." },
+      ],
     }}>
       <textarea className="input min-h-[120px]" placeholder="Source text" value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-3 grid sm:grid-cols-2 gap-3">
@@ -234,7 +259,12 @@ export function TextDiff({ tool }: Props) {
       howTo: "Paste two versions of text. Lines unique to the first are marked −, lines unique to the second are marked +.",
       formula: "Longest common subsequence (LCS) algorithm — O(n × m) time and space. Suitable for short documents.",
       examples: "Compare two configs to spot what changed; compare two paragraphs to see edits.",
-      faq: [],
+      faq: [
+        { q: "What does the diff output mean?", a: "Lines prefixed with − exist only in the original text; lines prefixed with + exist only in the modified text. Lines with no prefix are identical in both versions." },
+        { q: "Does this tool do word-level or character-level diffing?", a: "This tool diffs at the line level. For a word-by-word comparison, break your content onto separate lines (one word or phrase per line) before pasting." },
+        { q: "What algorithm is used?", a: "The Longest Common Subsequence (LCS) algorithm, the same technique used by the Unix diff utility and most version control systems." },
+        { q: "Is my pasted text sent to a server?", a: "No. All diffing runs entirely in your browser. Nothing you paste leaves your device." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <textarea className="input min-h-[180px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} placeholder="Original" />
@@ -272,7 +302,12 @@ export function RemoveDuplicates({ tool }: Props) {
       howTo: "Paste a list. Duplicates after the first occurrence are removed; original order is preserved.",
       formula: "Maintains a Set of seen keys; first occurrence wins. Optional trim and case-insensitive matching.",
       examples: "Removing duplicates from a list of email addresses, log entries, or config keys.",
-      faq: [],
+      faq: [
+        { q: "Does removing duplicates change the order of the remaining lines?", a: "No. The original order is preserved — only the second and subsequent occurrences of a duplicate are removed, keeping the first one in place." },
+        { q: "What does the 'Trim whitespace' option do?", a: "It strips leading and trailing spaces from each line before comparing, so '  apple' and 'apple  ' are treated as the same entry even though they look different." },
+        { q: "Can I remove duplicates case-insensitively?", a: "Yes. Uncheck Case sensitive and entries like 'Apple', 'apple', and 'APPLE' will all be treated as the same value." },
+        { q: "How do I remove duplicate words (not lines)?", a: "Put each word on its own line first — for example by replacing spaces with newlines in a text editor — then paste the result here." },
+      ],
     }}>
       <textarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} placeholder="One item per line…" />
       <div className="mt-2 flex gap-3 text-sm">
@@ -304,7 +339,12 @@ export function SortLines({ tool }: Props) {
       howTo: "Paste lines and pick a sort: alphabetical, reverse, numeric, or random shuffle.",
       formula: "Default sort uses lexicographic order (Unicode code points). Numeric mode parses each line as a float.",
       examples: '["b","a","c"] sorted asc → ["a","b","c"]. ["10","9","2"] numeric → ["2","9","10"].',
-      faq: [],
+      faq: [
+        { q: "Why does alphabetical sort put '10' before '9'?", a: "Alphabetical (A→Z) sort compares characters left to right, so '1' comes before '9' making '10' sort first. Use Numeric mode to sort by actual number value." },
+        { q: "Is the sort case-sensitive?", a: "Yes. Uppercase letters sort before lowercase in Unicode order (A–Z before a–z). If you need case-insensitive sorting, convert your text to the same case first with the Case Converter tool." },
+        { q: "What algorithm does the shuffle use?", a: "Fisher-Yates (Knuth) shuffle — a well-known algorithm that produces an unbiased random permutation of the lines." },
+        { q: "Can I sort a CSV or TSV by a specific column?", a: "Not directly — this tool sorts whole lines. For column-based sorting, paste only the column you want to sort, sort it, then re-combine." },
+      ],
     }}>
       <div className="flex gap-2 mb-3 flex-wrap">
         {(["asc", "desc", "numeric", "shuffle"] as const).map((m) => (
@@ -326,7 +366,12 @@ export function TextToSlug({ tool }: Props) {
       howTo: "Type any title or sentence — a clean, URL-safe slug appears below.",
       formula: "Lowercase, NFD-normalize to strip diacritics, replace non-alphanumeric runs with a single hyphen, trim leading/trailing hyphens.",
       examples: '"My Daily Tools — The Best!" → "my-daily-tools-the-best".',
-      faq: [],
+      faq: [
+        { q: "What is a URL slug?", a: "A slug is the human-readable part of a URL that identifies a page, typically derived from the page title. For example, a post titled 'Best Coffee Recipes' might have the slug best-coffee-recipes." },
+        { q: "Why are hyphens used instead of spaces in slugs?", a: "Spaces are not valid in URLs without encoding (they become %20). Hyphens are the standard word separator for slugs because they are URL-safe, readable, and treated as word separators by search engines." },
+        { q: "Does this handle accented characters like é or ü?", a: "Yes. Accented letters are decomposed using Unicode NFD normalization and the diacritic marks are stripped, so 'café' becomes 'cafe'." },
+        { q: "What is the maximum recommended length for a URL slug?", a: "Most SEO guides recommend keeping slugs under 60–75 characters (roughly 3–5 keywords). Shorter slugs are easier to share and less likely to be truncated." },
+      ],
     }}>
       <input className="input" value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-4 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-4 flex items-center justify-between gap-3">

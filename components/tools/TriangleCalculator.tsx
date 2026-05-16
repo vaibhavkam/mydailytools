@@ -22,7 +22,12 @@ export default function TriangleCalculator({ tool }: { tool: Tool & { categorySl
       howTo: "Enter three side lengths. We compute area, perimeter, and the three interior angles.",
       formula: "Area: Heron's formula, A = √(s(s−a)(s−b)(s−c)) where s = (a+b+c)/2. Angles: law of cosines, e.g. cos(A) = (b² + c² − a²) / (2bc).",
       examples: "Sides 3, 4, 5 → area 6, angles 36.87°, 53.13°, 90° (right triangle).",
-      faq: [],
+      faq: [
+        { q: "What is Heron's formula?", a: "Heron's formula computes a triangle's area from its three side lengths without needing the height: A = √(s(s−a)(s−b)(s−c)), where s is the semi-perimeter (a+b+c)/2." },
+        { q: "How do I know if three sides form a valid triangle?", a: "The triangle inequality requires that each side must be less than the sum of the other two. If 3, 4, 5 are the sides, all pass: 3+4 > 5, 3+5 > 4, 4+5 > 3." },
+        { q: "How are the angles computed?", a: "Using the law of cosines: cos(A) = (b² + c² − a²) / (2bc). This works for any triangle, not just right triangles." },
+        { q: "What is a right triangle and how can I spot one here?", a: "A right triangle has one 90° angle. If one of the computed angles equals exactly 90°, the triangle is a right triangle. The classic 3-4-5 triangle is a well-known example." },
+      ],
     }}>
       <div className="grid sm:grid-cols-3 gap-3">
         <div><label className="label">a</label><input className="input" value={a} onChange={(e) => setA(e.target.value)} /></div>

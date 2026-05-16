@@ -28,7 +28,12 @@ export default function CircleCalculator({ tool }: { tool: Tool & { categorySlug
       howTo: "Enter any one of radius, diameter, circumference, or area — the other three compute instantly.",
       formula: "C = 2πr. A = πr². d = 2r. r = √(A/π) when starting from area.",
       examples: "Radius 5 → diameter 10, circumference 31.416, area 78.54.",
-      faq: [],
+      faq: [
+        { q: "What is the relationship between radius and diameter?", a: "Diameter is exactly twice the radius. If you know one, you know the other. Radius is the distance from the center to the edge; diameter is the full width through the center." },
+        { q: "How is circumference calculated from radius?", a: "Circumference = 2πr, where π ≈ 3.14159. For a circle with radius 5, the circumference is 2 × π × 5 ≈ 31.416." },
+        { q: "How do I find the radius if I only know the area?", a: "Rearrange A = πr² to get r = √(A / π). Select 'area' as your input and type the area — the calculator does this automatically." },
+        { q: "What units does this calculator use?", a: "The calculator is unit-agnostic. If you enter the radius in centimeters, the area comes out in cm² and the circumference in cm. Just be consistent with your inputs." },
+      ],
     }}>
       <div className="flex flex-wrap gap-2 mb-3">
         {(["radius", "diameter", "circumference", "area"] as Field[]).map((f) => (

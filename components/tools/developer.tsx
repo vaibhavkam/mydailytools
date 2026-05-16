@@ -100,7 +100,12 @@ export function XmlFormatter({ tool }: Props) {
       howTo: "Paste XML to pretty-print and validate. Errors point to the first parse failure.",
       formula: "Validation: DOMParser. Pretty-print: insert newlines and 2-space indent at each tag boundary, preserving text content.",
       examples: '<root><a>1</a></root> formats with each tag on its own line.',
-      faq: [],
+      faq: [
+        { q: "What XML dialects does this support?", a: "Any well-formed XML — RSS, SVG, XHTML, SOAP, and custom schemas all work as long as the syntax is valid." },
+        { q: "Why does the formatter show an error on my file?", a: "XML is strict: every tag must be closed, attribute values must be quoted, and special characters like & must be escaped as &amp;. The error message points to the first violation." },
+        { q: "Does this validate against a schema (XSD/DTD)?", a: "No — it checks well-formedness only, not schema validity. For full XSD validation you need a server-side tool." },
+        { q: "Is my XML sent to a server?", a: "No. Parsing and formatting happen entirely in your browser using the built-in DOMParser API." },
+      ],
     }}>
       <textarea className="input min-h-[180px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} />
       {out.ok ? <textarea className="input min-h-[180px] font-mono text-xs mt-3" value={out.text} readOnly />
@@ -135,7 +140,12 @@ export function HtmlEntities({ tool }: Props) {
       howTo: "Paste raw HTML on the left to encode special characters; paste encoded text on the right to decode entities back.",
       formula: "Encoding: replace & < > \" ' with named or numeric entities. Decoding: leverage the browser's HTML parser via a textarea element.",
       examples: '"<div>" → "&lt;div&gt;". "&amp;" → "&".',
-      faq: [],
+      faq: [
+        { q: "Which characters get encoded?", a: "The five characters that are special in HTML: & < > \" and ' — encoded as &amp; &lt; &gt; &quot; and &#39; respectively." },
+        { q: "When do I need to encode HTML entities?", a: "Any time you display user-supplied text inside HTML, or when you want to show literal HTML tags as visible text rather than rendered markup." },
+        { q: "Does encoding handle Unicode characters?", a: "This tool only encodes the five core HTML special characters. Unicode code points above ASCII are left as-is, which is fine for UTF-8 pages." },
+        { q: "Can I decode numeric entities like &#169;?", a: "Yes — paste encoded text in the right panel and the browser's parser resolves both named entities (&copy;) and numeric ones (&#169;) to their character equivalents." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div>
@@ -182,7 +192,12 @@ export function RegexTester({ tool }: Props) {
       howTo: "Enter a regular expression and flags, then test against any input. Each match shows its index and capture groups.",
       formula: "JavaScript regex syntax (PCRE-like, but not identical). Common flags: g (global), i (case-insensitive), m (multi-line), s (dotall).",
       examples: 'Pattern: \\d{3}-\\d{4} matches "555-1234". Pattern with capture: (\\w+)@(\\w+\\.\\w+) extracts user and domain.',
-      faq: [],
+      faq: [
+        { q: "What flags can I use?", a: "JavaScript supports g (global — find all matches), i (case-insensitive), m (multiline — ^ and $ match line boundaries), s (dotall — dot matches newlines), and u (Unicode mode)." },
+        { q: "Why does my regex match nothing?", a: "Common causes: forgetting to escape special characters like . + * ? ( ) [ ] { } ^ $ | \\ — prepend a backslash to match them literally." },
+        { q: "How do I extract a specific part of a match?", a: "Wrap the part you want in parentheses to create a capture group. The tool displays each group's value alongside the full match." },
+        { q: "Is JavaScript regex the same as PCRE?", a: "Mostly, but not identical. JavaScript lacks some PCRE features (lookbehind support improved in ES2018, no possessive quantifiers or atomic groups). Code tested here may need small adjustments for Python/PHP/Perl." },
+      ],
     }}>
       <div className="grid sm:grid-cols-[1fr_auto] gap-3">
         <input className="input font-mono" value={pattern} onChange={(e) => setPattern(e.target.value)} />
@@ -220,7 +235,12 @@ export function ColorPicker({ tool }: Props) {
       howTo: "Pick a color or paste a hex code; HEX, RGB, HSL, and OKLCH update simultaneously.",
       formula: "RGB ⇄ HSL via the standard conversions. We display rounded values for legibility.",
       examples: "#6366f1 = rgb(99, 102, 241) = hsl(238, 84%, 67%).",
-      faq: [],
+      faq: [
+        { q: "What color formats does this show?", a: "HEX (#RRGGBB), RGB (0–255 per channel), and HSL (hue 0–360°, saturation and lightness as percentages)." },
+        { q: "What is the difference between HSL and HSB/HSV?", a: "HSL and HSB/HSV both use hue and saturation, but their third axis differs: HSL uses lightness (50% = pure color), HSB uses brightness (100% = pure color). Most CSS workflows use HSL." },
+        { q: "Can I paste a color in formats other than hex?", a: "The text input accepts 6-digit hex codes only. Use the native color wheel to pick any color visually." },
+        { q: "Does this tool store my selected colors?", a: "No — everything stays in your browser's memory and is gone when you close the tab." },
+      ],
     }}>
       <div className="grid sm:grid-cols-[auto_1fr] gap-4 items-center">
         <input type="color" value={hex} onChange={(e) => setHex(e.target.value)} className="h-24 w-24 rounded-xl cursor-pointer" />
@@ -270,7 +290,12 @@ export function HexRgb({ tool }: Props) {
       howTo: "Type a hex code or adjust RGB sliders; both representations stay in sync.",
       formula: "Each hex pair encodes one byte (0–255). #RRGGBB uses 6 hex digits = 24 bits.",
       examples: "#FF0000 = rgb(255, 0, 0) = pure red.",
-      faq: [],
+      faq: [
+        { q: "What does each hex pair represent?", a: "A 6-digit hex color (#RRGGBB) has three pairs: first two digits are red, next two are green, last two are blue. Each pair ranges from 00 (0) to FF (255)." },
+        { q: "What is the shorthand 3-digit hex format?", a: "#RGB is shorthand for #RRGGBB when each pair has identical digits — #F0A is the same as #FF00AA. This tool always shows the full 6-digit form." },
+        { q: "How do I add transparency (alpha)?", a: "Use 8-digit hex (#RRGGBBAA) in CSS — the last two digits set opacity from 00 (transparent) to FF (opaque). This tool works with 6-digit codes; alpha isn't shown." },
+        { q: "Are hex color codes case-sensitive?", a: "No. #6366f1 and #6366F1 are identical. Most style guides prefer lowercase." },
+      ],
     }}>
       <div><label className="label">HEX</label><input className="input font-mono" value={hex} onChange={(e) => setHexValue(e.target.value)} /></div>
       <div className="mt-3 grid sm:grid-cols-3 gap-3">

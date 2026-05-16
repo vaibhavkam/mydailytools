@@ -118,7 +118,11 @@ export function DiscountCalculator({ tool }: Props) {
       howTo: "Enter the original price and discount percent. Saving and final price compute instantly.",
       formula: "Discount = price × (percent ÷ 100). Final = price − discount.",
       examples: "100 at 25% off = 25 saved, 75 final.",
-      faq: [],
+      faq: [
+        { q: "How do I calculate a discount percentage?", a: "Divide the amount you save by the original price, then multiply by 100. For example, saving 25 on a 100 item is a 25% discount." },
+        { q: "What if I have a stacked discount?", a: "Apply them sequentially, not additively. A 20% off then 10% off is not 30% off — it's 28% off (100 → 80 → 72)." },
+        { q: "Can I use this to find the original price from the sale price?", a: "Yes — enter the original price field as the unknown and work backwards, or rearrange: original = final ÷ (1 − discount/100)." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div><label className="label">Original price ({sym})</label><input className="input" value={price} onChange={(e) => setPrice(e.target.value)} /></div>
