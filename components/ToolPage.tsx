@@ -26,7 +26,17 @@ export function ToolPage({
 }) {
   const cat = findCategory(tool.categorySlug)!;
   const url = `${SITE.url}/tools/${tool.slug}/`;
-  const related = cat.tools.filter((t) => t.slug !== tool.slug).slice(0, 6);
+
+  // Score candidate tools by keyword-word overlap so semantically close tools
+  // appear first (e.g. JSON Formatter → JSON↔CSV before Color Picker).
+  const toolWords = new Set(tool.keywords.join(" ").toLowerCase().split(/\s+/).filter(w => w.length > 2));
+  const scoreRelevance = (t: Tool) =>
+    t.keywords.join(" ").toLowerCase().split(/\s+/).filter(w => toolWords.has(w)).length;
+
+  const related = [...cat.tools]
+    .filter((t) => t.slug !== tool.slug)
+    .sort((a, b) => scoreRelevance(b) - scoreRelevance(a))
+    .slice(0, 6);
 
   const jsonLd = [
     toolJsonLd({ name: tool.title, description: tool.description, url }),
