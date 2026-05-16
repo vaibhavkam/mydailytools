@@ -318,7 +318,12 @@ export function AspectRatio({ tool }: Props) {
       howTo: "Enter your source dimensions. Then enter ONE of target width or target height — the other is computed to maintain the same ratio.",
       formula: "Ratio = source width ÷ source height. Target height = target width ÷ ratio (and vice versa).",
       examples: "1920×1080 source = 16:9. Target width 1280 → height 720.",
-      faq: [],
+      faq: [
+        { q: "What aspect ratio is 1920×1080?", a: "1920×1080 is 16:9, the standard widescreen ratio used by most HD and 4K monitors, TVs, and video platforms like YouTube." },
+        { q: "How do I keep the aspect ratio when resizing an image?", a: "Enter your original width and height as the source. Then type only the new width (or only the new height) and leave the other field blank — the calculator fills in the correct value automatically." },
+        { q: "What is 4:3 in pixels?", a: "Common 4:3 sizes are 640×480, 800×600, and 1024×768. Enter any of those as the source and the calculator will confirm the 4:3 ratio." },
+        { q: "How do I calculate aspect ratio for a custom size?", a: "Enter the width and height in the source fields. The calculator simplifies the ratio to its lowest whole-number form (e.g. 1280×800 → 8:5) and shows the decimal equivalent." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div><label className="label">Source width</label><input className="input" value={w} onChange={(e) => setW(e.target.value)} /></div>

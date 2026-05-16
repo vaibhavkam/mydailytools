@@ -206,7 +206,12 @@ export function CapacitanceCalculator({ tool }: Props) {
     return { parallel, series, tau };
   }, [vals, R]);
   return (
-    <ToolPage tool={tool} content={{ howTo: "Enter capacitances (µF) separated by commas. We compute the parallel sum, series equivalent, and the RC time constant for the parallel set.", formula: "Parallel: C_total = ΣC. Series: 1/C = Σ(1/C). τ = RC (seconds).", examples: "10, 22, 47 µF parallel = 79 µF, series ≈ 6.07 µF.", faq: [] }}>
+    <ToolPage tool={tool} content={{ howTo: "Enter capacitances (µF) separated by commas. We compute the parallel sum, series equivalent, and the RC time constant for the parallel set.", formula: "Parallel: C_total = ΣC. Series: 1/C = Σ(1/C). τ = RC (seconds).", examples: "10, 22, 47 µF parallel = 79 µF, series ≈ 6.07 µF.", faq: [
+        { q: "Why is parallel capacitance larger than any single capacitor?", a: "Parallel capacitors share the same voltage and their plate areas effectively add together, so total capacitance is the sum of all values." },
+        { q: "Why is series capacitance smaller than the smallest capacitor?", a: "In series the charge must flow through each capacitor in turn. The reciprocal formula (1/C_total = Σ 1/Cₙ) means the result is always less than the smallest value." },
+        { q: "What is the RC time constant (τ) used for?", a: "τ = RC tells you how quickly a capacitor charges or discharges through a resistor. After one τ the capacitor reaches ~63% of its final voltage; after 5τ it is considered fully charged." },
+        { q: "What unit should I enter — µF, nF, or pF?", a: "Enter all values in the same unit (µF by default). The results will be in that same unit. If your capacitors are in nF, divide by 1000 to convert to µF first." },
+      ] }}>
       <div className="grid gap-3">
         <div><label className="label">Capacitances (µF)</label><input className="input" value={vals} onChange={(e) => setVals(e.target.value)} /></div>
         <div><label className="label">R (Ω) for time constant</label><input className="input" value={R} onChange={(e) => setR(e.target.value)} /></div>
