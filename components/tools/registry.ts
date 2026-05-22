@@ -104,6 +104,7 @@ const REGISTRY: Record<string, ComponentType<ToolProps>> = {
   "json-to-csv": dynamic(() => import("./JsonCsv")),
   "json-to-typescript": dynamic(() => import("./JsonToTypescript")),
   "token-counter": dynamic(() => import("./TokenCounter")),
+  "llm-schema-validator": dynamic(() => import("./LlmSchemaValidator")),
   "sql-formatter": dynamic(() => import("./SqlFormatter")),
   "markdown-preview": dynamic(() => import("./MarkdownPreview")),
   "jwt-generator": dynamic(() => import("./JwtGenerator")),

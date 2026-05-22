@@ -37,6 +37,7 @@ export const CATEGORIES: Category[] = [
       { slug: "json-to-typescript", title: "JSON to TypeScript", description: "Generate TypeScript interfaces from sample JSON.", keywords: ["json to typescript", "json to interface"], status: "live" },
       // AI / LLM dev cluster
       { slug: "token-counter", title: "Token Counter for GPT, Claude, Llama", description: "Count tokens for ChatGPT, GPT-4o, Claude, Llama, and Gemini before you hit context limits. Shows per-model count, character count, and approximate API cost. Runs in your browser.", keywords: ["token counter", "gpt token counter", "tiktoken", "openai token counter", "claude tokenizer", "llm token counter"], status: "live" },
+      { slug: "llm-schema-validator", title: "LLM JSON Schema Validator", description: "Validate JSON Schemas for OpenAI strict mode, function calling, Anthropic tool use, and Gemini controlled generation. Find vendor-specific incompatibilities before you ship.", keywords: ["llm json schema", "openai structured outputs", "openai strict mode", "anthropic tool schema", "gemini controlled generation", "json schema validator"], status: "live" },
       // JWT cluster
       { slug: "jwt-decoder", title: "JWT Decoder", description: "Decode JSON Web Tokens and inspect payload.", keywords: ["jwt decoder"], status: "live" },
       { slug: "jwt-generator", title: "JWT Generator", description: "Sign JSON Web Tokens with HS256/HS384/HS512.", keywords: ["jwt generator", "jwt signer"], status: "live" },
