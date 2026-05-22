@@ -121,7 +121,7 @@ export const CATEGORIES: Category[] = [
       { slug: "week-number", title: "Week Number", description: "ISO week number for any date.", keywords: ["week number"], status: "live" },
       // Conversion cluster
       { slug: "unix-timestamp-converter", title: "Unix Timestamp Converter", description: "Epoch to date and date to epoch.", keywords: ["unix timestamp converter"], status: "live" },
-      { slug: "timezone-converter", title: "Timezone Converter", description: "Convert times across IANA timezones.", keywords: ["timezone converter"], status: "live" },
+      { slug: "timezone-converter", title: "Time Zone Converter", description: "Convert any time across world time zones. DST-aware, supports all IANA zones (America/New_York, Asia/Kolkata, etc.). No sign-up, runs in your browser.", keywords: ["timezone converter", "time zone converter", "world clock converter"], status: "live" },
       // Timers
       { slug: "countdown-timer", title: "Countdown Timer", description: "Live countdown to any future date.", keywords: ["countdown timer"], status: "live" },
       { slug: "stopwatch", title: "Stopwatch", description: "Web stopwatch with laps.", keywords: ["online stopwatch"], status: "live" },

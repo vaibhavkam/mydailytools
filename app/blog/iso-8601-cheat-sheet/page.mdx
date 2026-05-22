@@ -62,6 +62,52 @@ You can also add fractional seconds:
 2026-05-03T16:30:00.123456789    nanoseconds
 ```
 
+## HH:MM time format examples (18:00, 09:30, 23:59)
+
+ISO 8601 times are always 24-hour. No `AM`/`PM`. Leading zeros are required on the hour.
+
+```
+18:00         valid — 6:00 PM
+09:30         valid — 9:30 AM (leading zero required)
+9:30          invalid — hour must be zero-padded
+23:59         valid — one minute before midnight
+6:00 PM       not ISO 8601 (12-hour clock not allowed)
+```
+
+So `18:00` in ISO 8601 is the same instant as `6:00 PM` in 12-hour notation. The format is `HH:MM` for hour-minute and `HH:MM:SS` if you need seconds.
+
+## Is `24:00` a valid time in ISO 8601?
+
+**Yes — but only to represent the end of a day.** This is one of the most-misunderstood parts of the standard.
+
+The original ISO 8601:2004 explicitly allows `24:00:00` as a valid time notation, meaning "midnight at the end of the day" — the same instant as `00:00:00` of the *next* day:
+
+```
+2026-05-03T24:00:00     valid — end of May 3rd = start of May 4th
+2026-05-04T00:00:00     same instant, different notation
+2026-05-03T24:00:01     invalid — nothing after 24:00 on that date
+2026-05-03T24:30:00     invalid — minutes/seconds must be 00 when hour is 24
+```
+
+The newer ISO 8601-1:2019 revision **deprecated `24:00`** in favor of always using `00:00` of the following day. Most modern parsers (JavaScript `Date`, Python `datetime`, Postgres `timestamptz`) reject `24:00` outright. RFC 3339 also forbids it.
+
+**Practical advice:** Don't emit `24:00` in new code. If you receive it, normalize to `00:00` of the next day before further processing.
+
+## `00:00` vs `24:00`: is it the beginning or end of day?
+
+Both notations exist precisely because the moment of midnight is ambiguous in everyday speech. ISO 8601 resolves it:
+
+- **`00:00:00`** = the **beginning** of the day (the first instant)
+- **`24:00:00`** = the **end** of the day (the last instant — equal to `00:00:00` of the next day)
+
+So `2026-05-03T00:00:00Z` and `2026-05-03T24:00:00Z` are *different* instants on the same calendar day. The first is when May 3rd starts; the second is when it ends.
+
+This matters in:
+
+- **Billing periods:** "May 3rd" usually means `2026-05-03T00:00:00Z` to `2026-05-04T00:00:00Z` (a 24-hour interval where the end is exclusive).
+- **Calendar events that run "all day":** `start=2026-05-03T00:00:00Z` and `end=2026-05-04T00:00:00Z` is the standard convention; some systems wrongly use `end=2026-05-03T23:59:59Z` and lose the last second.
+- **Cron jobs:** `00:00` triggers at midnight at the start of the date; this is almost always what people mean.
+
 ## The timezone — the part everybody gets wrong
 
 A timestamp without a timezone is ambiguous. ISO 8601 gives you three ways to specify it:
