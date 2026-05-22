@@ -160,6 +160,7 @@ Repeated patterns from past sessions:
 - **Tool URL 404s on production** → CloudFront Function detached or distribution not yet `Deployed`. See RUNBOOK.md.
 - **Sitemap or build script can't find slugs** → `lib/tools.ts` likely got corrupted by a regex find/replace. Open it, look for malformed syntax near the top.
 - **Tool pages stuck on "Crawled - currently not indexed" in Search Console** → almost always `TOOL_LASTMOD` in `scripts/generate-sitemap.mjs` wasn't bumped after a content edit, so Google thinks nothing changed and skips recrawl. See ADR-011.
+- **`/tools/[slug]` bundle suddenly balloons by 1MB+ after adding a tool** → the new tool component has a `import { ... } from "heavy-package"` at the top. Even with `dynamic()` in the registry, the heavy package gets promoted into a shared chunk loaded by every tool page. Fix: load it inside the component via `useEffect` + `await import(...)`. See `components/tools/TokenCounter.tsx` for the pattern.
 
 ---
 

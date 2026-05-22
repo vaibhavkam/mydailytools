@@ -35,6 +35,8 @@ export const CATEGORIES: Category[] = [
       { slug: "json-to-csv", title: "JSON ↔ CSV Converter", description: "Convert between JSON arrays and CSV with header detection.", keywords: ["json to csv", "csv to json"], status: "live" },
       { slug: "yaml-to-json", title: "YAML ↔ JSON", description: "Convert YAML to JSON and back.", keywords: ["yaml to json"], status: "live" },
       { slug: "json-to-typescript", title: "JSON to TypeScript", description: "Generate TypeScript interfaces from sample JSON.", keywords: ["json to typescript", "json to interface"], status: "live" },
+      // AI / LLM dev cluster
+      { slug: "token-counter", title: "Token Counter for GPT, Claude, Llama", description: "Count tokens for ChatGPT, GPT-4o, Claude, Llama, and Gemini before you hit context limits. Shows per-model count, character count, and approximate API cost. Runs in your browser.", keywords: ["token counter", "gpt token counter", "tiktoken", "openai token counter", "claude tokenizer", "llm token counter"], status: "live" },
       // JWT cluster
       { slug: "jwt-decoder", title: "JWT Decoder", description: "Decode JSON Web Tokens and inspect payload.", keywords: ["jwt decoder"], status: "live" },
       { slug: "jwt-generator", title: "JWT Generator", description: "Sign JSON Web Tokens with HS256/HS384/HS512.", keywords: ["jwt generator", "jwt signer"], status: "live" },

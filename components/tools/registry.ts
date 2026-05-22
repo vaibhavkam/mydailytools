@@ -103,6 +103,7 @@ const REGISTRY: Record<string, ComponentType<ToolProps>> = {
   "cron-expression-parser": dynamic(() => import("./CronExpressionParser")),
   "json-to-csv": dynamic(() => import("./JsonCsv")),
   "json-to-typescript": dynamic(() => import("./JsonToTypescript")),
+  "token-counter": dynamic(() => import("./TokenCounter")),
   "sql-formatter": dynamic(() => import("./SqlFormatter")),
   "markdown-preview": dynamic(() => import("./MarkdownPreview")),
   "jwt-generator": dynamic(() => import("./JwtGenerator")),
