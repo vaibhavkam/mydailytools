@@ -1,0 +1,148 @@
+import { BlogPost } from "@/components/BlogPost";
+import { findPost } from "@/lib/posts";
+import { buildMetadata } from "@/lib/seo";
+
+export const post = findPost("llm-token-counting-guide");
+
+export const metadata = buildMetadata({
+  title: post.title,
+  description: post.description,
+  path: `/blog/${post.slug}/`,
+  keywords: post.tags,
+});
+
+export default function Layout({ children }) {
+  return <BlogPost post={post}>{children}</BlogPost>;
+}
+
+If you've ever stared at an LLM bill or wondered why the same prompt costs different amounts on different models, the answer is tokens. Tokens are how every modern LLM API meters input and output — and every model family counts them differently. Here's what you actually need to know.
+
+## What is an LLM token, exactly?
+
+A token is a chunk of text — usually a word, a piece of a word, or a single character of punctuation — that the model treats as one unit. Tokenization is the step that converts your raw text into a sequence of integers before the model sees it.
+
+Some intuitions that hold most of the time:
+
+- One English word averages **1.3 tokens**. Common words ("the", "is") are one token; longer or rarer words ("decentralized") split into 2–4.
+- One punctuation mark is **1 token**, including spaces.
+- One **emoji or non-Latin character** can be 1–5 tokens depending on the model.
+- **Code** uses more tokens than prose. A typical line of JavaScript runs 8–15 tokens.
+
+For a 250-word email, expect 300–350 tokens. For a 1000-line code file, expect 4,000–8,000 tokens.
+
+Want exact numbers? Drop your text into the [Token Counter](/tools/token-counter/) — it runs in your browser and gives you counts for every major model.
+
+## Why do GPT, Claude, and Llama count the same text differently?
+
+Every model family ships its own tokenizer. They're trained on different data, optimize for different goals (multilingual coverage, code density, efficiency), and use different vocabulary sizes.
+
+| Model family | Tokenizer | Vocabulary size | Notes |
+| --- | --- | --- | --- |
+| GPT-3.5, GPT-4 | cl100k_base (BPE) | ~100,000 | OpenAI's mainstay for two model generations |
+| GPT-4o, GPT-4o mini | o200k_base (BPE) | ~200,000 | Newer, much better on multilingual and code |
+| Claude (all versions) | Anthropic proprietary | Not public | Tokenizer not released as a runnable library |
+| Llama 3.x | Tiktoken-derived (BPE) | 128,000 | Open-source variant of OpenAI's approach |
+| Gemini | SentencePiece (BPE) | ~256,000 | Google's own training pipeline |
+
+This means **the same paragraph can be 95 tokens in GPT-4o and 110 tokens in GPT-3.5** — same model family, different tokenizers. Across families the spread is larger.
+
+Practical impact: if you're benchmarking model costs, count tokens *per model*, not once and divide. The [Token Counter](/tools/token-counter/) shows all of them side-by-side.
+
+## How many tokens are in one English word?
+
+The widely-cited rule is **1 word ≈ 1.3 tokens** for English prose. This holds on average across GPT, Claude, and Llama for typical text.
+
+But the rule lies in three common cases:
+
+- **Code:** 1 word ≈ 2 tokens. Identifiers like `getUserById` split aggressively.
+- **Non-English (Latin scripts):** 1 word ≈ 1.5–2.0 tokens. Modern tokenizers are better at this than they used to be, but a Spanish sentence still costs more than English.
+- **Non-Latin scripts (Chinese, Japanese, Arabic, Hindi):** 1 character ≈ 2–4 tokens. A 200-character Chinese paragraph can be 600 tokens. GPT-4o's o200k tokenizer dramatically improves this over cl100k.
+
+A safer back-of-envelope for mixed content: **1 token ≈ 4 characters of English text**, or **1 token ≈ 2 characters of code or non-Latin text**.
+
+## How `24:00` becomes 3 tokens (and other surprises)
+
+Some specific strings tokenize in non-obvious ways:
+
+```
+"hello"          → 1 token
+"helloworld"     → 2 tokens (hello, world)
+"hello world"    → 2 tokens (hello, " world")
+"24:00"          → 3 tokens (24, :, 00)
+"https://"       → 2 tokens (https, ://)
+"{}"             → 1 token (the literal pair)
+"function()"     → 4 tokens (function, (), and bookend spaces)
+"🚀"             → 4 tokens (single emoji, four bytes)
+"日本語"          → 6 tokens in cl100k, 3 in o200k
+```
+
+The takeaways: **leading spaces are part of the next token**, common punctuation pairs are single tokens, and emoji are surprisingly expensive. If your prompts include a lot of structured output (JSON, XML), the brackets and colons add up.
+
+## Token cost cheat sheet by model
+
+Input prices per 1 million tokens, as of May 2026. Output is typically 3–5× input.
+
+| Model | $/1M input | Context window |
+| --- | --- | --- |
+| GPT (latest) | $5.00 | 1M tokens |
+| GPT-5.4 (mid-tier) | $2.50 | 400K tokens |
+| GPT-5.4 mini | $0.50 | 400K tokens |
+| Claude Opus | $5.00 | 200K tokens |
+| Claude Sonnet | $3.00 | 200K tokens |
+| Claude Haiku | $1.00 | 200K tokens |
+| Gemini Pro | $2.00 | 2M tokens |
+| Gemini Flash | $1.50 | 1M tokens |
+| Llama 3 70B (self-hosted) | $0 (compute only) | 128K tokens |
+
+Prices change — for live rates pulled from OpenRouter, see the [Token Counter](/tools/token-counter/) and click "Refresh prices."
+
+A 5,000-token prompt costs:
+
+- GPT (latest): **$0.025** per call
+- Claude Sonnet: **$0.015** per call
+- Gemini Flash: **$0.0075** per call
+
+That doesn't sound like much — until you're running 10,000 calls a day. Then it's $250, $150, and $75 per day respectively for the same workload. Model choice is real money at scale.
+
+## How to count tokens before sending an API request
+
+Three options ranked by accuracy:
+
+1. **The vendor's official tokenizer.** Exact, but each vendor ships their own library, and Anthropic and Google don't publish theirs at all. OpenAI ships [tiktoken](https://github.com/openai/tiktoken) (Python + JS port). Llama's tokenizer ships with the model weights.
+
+2. **A browser-based tool with real tokenizers.** Our [Token Counter](/tools/token-counter/) uses real tiktoken for OpenAI models (exact counts) and calibrated approximations for Claude, Llama, and Gemini (~10% accurate). Zero setup, no API key.
+
+3. **A chars-per-token heuristic.** Divide character count by 4 (English) or 2 (code). Fast but easily off by 20% on non-Latin text or unusual content.
+
+For production code that needs to budget tokens precisely (truncating long histories, splitting documents for RAG), use option 1 — the official tokenizer library. For ad-hoc "will this prompt fit" checks, option 2 is fine.
+
+## Why your context window matters more than your token budget
+
+The context window is the maximum number of tokens (input + output) the model can process in a single call. Exceed it and the API rejects the request.
+
+Common pitfalls:
+
+- **System prompts accumulate.** Every turn sends the full system prompt again. A 2,000-token system prompt × 10 turns = 20,000 tokens of system prompt billing alone.
+- **Chat history accumulates.** A 20-turn conversation with 200-token turns is 4,000 tokens of history per call — and you pay to send it every time.
+- **Document context dominates.** RAG pipelines often send 8,000–16,000 tokens of retrieved chunks per query. The user's actual question is rounding error.
+
+A 200K-context model isn't infinite — it's a budget you spend across system prompt + history + retrieved context + user input + reserved space for the response. Keep ~20% headroom for the output.
+
+## Common mistakes that blow up token costs
+
+1. **Sending the entire chat history every turn.** Use summarization to compress old turns once they're beyond, say, 5 turns back.
+2. **Embedding model documentation in every system prompt.** Move it to a tool description that only loads when the tool is called.
+3. **Returning verbose JSON when the same answer fits in 50 tokens.** Constrain output explicitly: "Respond in 1–2 sentences" cuts most replies by 60%.
+4. **Using the strongest model for tasks that don't need it.** Most classification, extraction, and rewriting tasks work fine on Haiku, GPT-5.4 mini, or Gemini Flash at 1/5 the cost.
+5. **Not caching prompt prefixes.** Most providers now charge 10× less for repeated prompt prefixes. If your system prompt is stable, structure your calls to take advantage.
+
+## Quick reference
+
+| You need to... | Use |
+| --- | --- |
+| Count tokens for one prompt across multiple models | [Token Counter](/tools/token-counter/) |
+| Validate a JSON Schema for OpenAI strict mode | [LLM JSON Schema Validator](/tools/llm-schema-validator/) |
+| Plan API costs at scale | Multiply token count × $/1M × expected calls × 3–5 (for output) |
+| Decide between models | Run the same 100 prompts through each, compare cost and quality |
+
+Token math is unglamorous but every LLM-app developer ends up doing it. Internalize the rough rules — one English word ≈ 1.3 tokens, output is 3–5× input cost, system prompts accumulate — and you'll dodge most of the bill shock.

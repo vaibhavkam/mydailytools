@@ -16,6 +16,15 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "llm-token-counting-guide",
+    title: "Token Counting Across LLM APIs: GPT, Claude, Llama, and Gemini Explained",
+    description: "A practical guide to LLM tokens — how they work, why every model counts them differently, what real cost calculations look like at scale, and how to count tokens before sending a request.",
+    date: "2026-05-22",
+    tags: ["llm", "ai", "tokens", "developer", "reference"],
+    relatedTools: ["token-counter", "llm-schema-validator", "json-formatter"],
+    readingTimeMin: 9,
+  },
+  {
     slug: "regex-cheat-sheet",
     title: "Regex Cheat Sheet: Patterns Every Developer Should Know",
     description: "A practical reference for regular expressions — character classes, quantifiers, anchors, groups, and lookaheads — with ready-to-use patterns for emails, URLs, dates, and more.",
