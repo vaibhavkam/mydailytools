@@ -6,6 +6,8 @@ import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { VENDORS, checkVendor, type Finding, type VendorId } from "@/lib/llm-schema-rules";
 
+const DEFAULT_VENDOR: VendorId = "anthropic-tool";
+
 // ajv is ~120kB. Static-import would promote it into the common chunk per
 // the failure mode captured in CLAUDE.md after the Token Counter incident.
 // Load on demand inside the component.
@@ -58,6 +60,7 @@ export default function LlmSchemaValidator({ tool }: { tool: Tool & { categorySl
   const [schemaText, setSchemaText] = useState(SAMPLE_SCHEMA);
   const [dataText, setDataText] = useState(SAMPLE_DATA);
   const [ajv, setAjv] = useState<{ compile: (schema: object) => Validator } | null>(null);
+  const [selectedVendor, setSelectedVendor] = useState<VendorId>(DEFAULT_VENDOR);
 
   useEffect(() => {
     let cancelled = false;
@@ -181,19 +184,50 @@ export default function LlmSchemaValidator({ tool }: { tool: Tool & { categorySl
         )}
 
         <div className="rounded-xl border border-[rgb(var(--border))] overflow-hidden">
-          <div className="flex items-center justify-between px-3 py-2 border-b border-[rgb(var(--border))] bg-[rgb(var(--bg-muted,250,250,252))]">
-            <div className="text-xs font-medium">LLM provider compatibility</div>
-            <button onClick={copyFindings} className="btn-ghost min-tap text-xs"><Copy className="h-3.5 w-3.5" /> Copy report</button>
+          <div className="flex items-center justify-between px-3 py-2 border-b border-[rgb(var(--border))] bg-[rgb(var(--bg-muted,250,250,252))] gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
+              <label htmlFor="vendor-select" className="text-xs font-medium">Check against:</label>
+              <select
+                id="vendor-select"
+                value={selectedVendor}
+                onChange={(e) => setSelectedVendor(e.target.value as VendorId)}
+                className="text-xs rounded-md border border-[rgb(var(--border))] bg-[rgb(var(--bg))] px-2 py-1"
+              >
+                {VENDORS.map((v) => (
+                  <option key={v.id} value={v.id}>{v.label}</option>
+                ))}
+              </select>
+            </div>
+            <button onClick={copyFindings} className="btn-ghost min-tap text-xs"><Copy className="h-3.5 w-3.5" /> Copy full report</button>
           </div>
           {vendorFindings ? (
-            <div className="divide-y divide-[rgb(var(--border))]">
-              {VENDORS.map((v) => {
-                const findings = vendorFindings[v.id];
+            <>
+              <div className="flex flex-wrap gap-1.5 px-3 py-2 border-b border-[rgb(var(--border))] bg-[rgb(var(--bg-muted,250,250,252))]/40 text-[11px]">
+                <span className="text-[rgb(var(--fg-muted))] mr-1">Other vendors:</span>
+                {VENDORS.filter((v) => v.id !== selectedVendor).map((v) => {
+                  const findings = vendorFindings[v.id];
+                  const errors = findings.filter((f) => f.severity === "error").length;
+                  const ok = errors === 0;
+                  return (
+                    <button
+                      key={v.id}
+                      onClick={() => setSelectedVendor(v.id)}
+                      className={`px-2 py-0.5 rounded-full border ${ok ? "border-emerald-300 text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/30" : "border-red-300 text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/30"} hover:opacity-80 transition`}
+                      title={`Click to view ${v.label} details`}
+                    >
+                      {v.label.replace(/^(OpenAI|Anthropic|Google) /, "").replace(/^Gemini /, "")} {ok ? "✓" : `✗${errors}`}
+                    </button>
+                  );
+                })}
+              </div>
+              {(() => {
+                const v = VENDORS.find((x) => x.id === selectedVendor)!;
+                const findings = vendorFindings[selectedVendor];
                 const errors = findings.filter((f) => f.severity === "error").length;
                 const warnings = findings.filter((f) => f.severity === "warning").length;
                 const ok = errors === 0;
                 return (
-                  <div key={v.id} className="p-3">
+                  <div className="p-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2">
                         {ok ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : <AlertCircle className="h-4 w-4 text-red-600" />}
@@ -225,8 +259,8 @@ export default function LlmSchemaValidator({ tool }: { tool: Tool & { categorySl
                     )}
                   </div>
                 );
-              })}
-            </div>
+              })()}
+            </>
           ) : (
             <div className="p-3 text-xs text-[rgb(var(--fg-muted))]">Fix the schema parse error above to see vendor compatibility.</div>
           )}
