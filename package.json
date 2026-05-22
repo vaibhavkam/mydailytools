@@ -20,6 +20,7 @@
     "clsx": "^2.1.1",
     "cron-parser": "^5.5.0",
     "cronstrue": "^3.14.0",
+    "fast-xml-parser": "^5.8.0",
     "gpt-tokenizer": "^3.4.0",
     "gray-matter": "^4.0.3",
     "jose": "^6.2.3",

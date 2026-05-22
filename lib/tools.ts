@@ -30,10 +30,22 @@ export const CATEGORIES: Category[] = [
     blurb: "Tools every web developer needs.",
     icon: "Code2",
     tools: [
-      // JSON / data-format cluster
-      { slug: "json-formatter", title: "JSON Formatter", description: "Pretty-print, minify, and validate JSON.", keywords: ["json formatter", "json validator"], status: "live" },
-      { slug: "json-to-csv", title: "JSON ↔ CSV Converter", description: "Convert between JSON arrays and CSV with header detection.", keywords: ["json to csv", "csv to json"], status: "live" },
-      { slug: "yaml-to-json", title: "YAML ↔ JSON", description: "Convert YAML to JSON and back.", keywords: ["yaml to json"], status: "live" },
+      // Data formats — JSON / YAML / CSV / XML cluster
+      // Formatters first, then converters (paired by direction — both URLs render the same widget; see CONTRIBUTING.md).
+      { slug: "json-formatter", title: "JSON Formatter", description: "Pretty-print, minify, and validate JSON. Detects syntax errors with line numbers and supports nested structures of any depth.", keywords: ["json formatter", "json validator", "json beautifier", "json prettifier"], status: "live" },
+      { slug: "xml-formatter", title: "XML Formatter", description: "Format, indent, and validate XML documents. Detects malformed tags and unbalanced elements with clear error messages.", keywords: ["xml formatter", "xml validator", "xml beautifier"], status: "live" },
+      { slug: "json-to-csv", title: "JSON to CSV Converter", description: "Convert JSON arrays to CSV with automatic header detection from object keys. Handles nested values and arbitrary delimiters.", keywords: ["json to csv", "json to csv converter", "convert json to csv"], status: "live" },
+      { slug: "csv-to-json", title: "CSV to JSON Converter", description: "Convert CSV to a JSON array of objects. Uses the first row as keys, handles quoted values, and detects common delimiters automatically.", keywords: ["csv to json", "csv to json converter", "convert csv to json"], status: "live" },
+      { slug: "yaml-to-json", title: "YAML to JSON Converter", description: "Convert YAML to JSON for APIs, config files, and pipelines. Supports indented mappings, sequences, scalars, and nested objects.", keywords: ["yaml to json", "yaml to json converter", "yml to json"], status: "live" },
+      { slug: "json-to-yaml", title: "JSON to YAML Converter", description: "Convert JSON to clean indented YAML for Kubernetes manifests, Docker Compose, CI configs, and Helm charts. Preserves nested structures.", keywords: ["json to yaml", "json to yml", "json to yaml converter"], status: "live" },
+      { slug: "json-to-xml", title: "JSON to XML Converter", description: "Convert JSON objects and arrays to well-formed XML. Maps object keys to elements, array items to repeated elements, with optional root wrapper.", keywords: ["json to xml", "json to xml converter", "convert json to xml"], status: "live" },
+      { slug: "xml-to-json", title: "XML to JSON Converter", description: "Convert XML to JSON for legacy API integration, SOAP responses, and config migration. Handles attributes, namespaces, and text content.", keywords: ["xml to json", "xml to json converter", "convert xml to json", "soap to json"], status: "live" },
+      { slug: "csv-to-xml", title: "CSV to XML Converter", description: "Convert CSV rows into XML elements with column headers as tag names. Useful for Excel exports, legacy systems, and ETL pipelines.", keywords: ["csv to xml", "csv to xml converter", "convert csv to xml"], status: "live" },
+      { slug: "xml-to-csv", title: "XML to CSV Converter", description: "Flatten repeated XML elements into CSV rows with attributes and child text as columns. Great for opening XML data in Excel or Sheets.", keywords: ["xml to csv", "xml to csv converter", "convert xml to csv"], status: "live" },
+      { slug: "yaml-to-csv", title: "YAML to CSV Converter", description: "Convert YAML arrays of records to CSV. Flattens nested objects with dot-notation column names so spreadsheet tools can read structured YAML data.", keywords: ["yaml to csv", "yaml to csv converter"], status: "live" },
+      { slug: "csv-to-yaml", title: "CSV to YAML Converter", description: "Convert CSV to YAML for use in config files, Ansible playbooks, and Kubernetes ConfigMaps. Uses the header row as YAML keys.", keywords: ["csv to yaml", "csv to yaml converter"], status: "live" },
+      { slug: "yaml-to-xml", title: "YAML to XML Converter", description: "Convert YAML to well-formed XML for legacy integrations. Preserves nested mappings and sequences as nested elements with text values.", keywords: ["yaml to xml", "yaml to xml converter"], status: "live" },
+      { slug: "xml-to-yaml", title: "XML to YAML Converter", description: "Convert XML documents to clean indented YAML. Handles attributes, repeated elements, and text content; great for migrating legacy configs.", keywords: ["xml to yaml", "xml to yaml converter"], status: "live" },
       { slug: "json-to-typescript", title: "JSON to TypeScript", description: "Generate TypeScript interfaces from sample JSON.", keywords: ["json to typescript", "json to interface"], status: "live" },
       // AI / LLM dev cluster
       { slug: "token-counter", title: "Token Counter for GPT, Claude, Llama", description: "Count tokens for ChatGPT, GPT-4o, Claude, Llama, and Gemini before you hit context limits. Shows per-model count, character count, and approximate API cost. Runs in your browser.", keywords: ["token counter", "gpt token counter", "tiktoken", "openai token counter", "claude tokenizer", "llm token counter"], status: "live" },
@@ -54,7 +66,6 @@ export const CATEGORIES: Category[] = [
       { slug: "html-encoder", title: "HTML Entities Encoder", description: "Encode and decode HTML entities.", keywords: ["html entities encoder"], status: "live" },
       // HTML / markup cluster
       { slug: "html-editor", title: "HTML Editor", description: "Live preview HTML with formatted source.", keywords: ["html editor"], status: "live" },
-      { slug: "xml-formatter", title: "XML Formatter", description: "Format and validate XML documents.", keywords: ["xml formatter"], status: "live" },
       { slug: "markdown-preview", title: "Markdown Preview", description: "Live markdown editor with GitHub-flavored rendering.", keywords: ["markdown preview", "markdown editor"], status: "live" },
       // CSS / JS / color cluster
       { slug: "color-picker", title: "Color Picker", description: "Pick colors and copy in HEX, RGB, HSL, OKLCH.", keywords: ["color picker", "hex color", "hex to rgb", "rgb to hex"], status: "live" },

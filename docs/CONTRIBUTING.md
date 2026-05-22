@@ -139,6 +139,20 @@ Add a new entry to `CATEGORIES` in `lib/tools.ts` with `slug`, `name`, `blurb`, 
 
 The next build will generate `/your-category/index.html` automatically.
 
+### Adding a converter (X → Y)
+
+Converters between two data formats must be **two-way and dual-URL**. A single widget converts both ways; we expose it at two distinct URLs so each direction can rank for its own search query (`json to xml`, `xml to json`). One URL fighting for two queries gets out-ranked by sites that have dedicated pages.
+
+For format conversions in the JSON / YAML / CSV / XML family, the infrastructure is already built:
+
+1. Add `parse*` / `to*` to `lib/data-formats.ts` if the format is new.
+2. Add two entries in `lib/tools.ts` — one per direction (`a-to-b` and `b-to-a`). Each gets its own title, meta description, and keywords. Don't share copy between them — that triggers Google's duplicate-content de-ranking.
+3. Add both slugs to `SLUG_DIRECTION` in `components/tools/DataFormatConverter.tsx` mapping each to `{ from, to }`.
+4. Add per-slug `howTo` / `formula` / `examples` / `faq` to `CONTENT_BY_SLUG` in the same file — distinct framing per direction.
+5. Register both slugs in `components/tools/registry.ts` pointing at `DataFormatConverter`.
+
+For non-format converters (unit converters, encoders, etc.), the same two-way / dual-URL principle applies, but the widget needs to handle both directions internally. The component reads `tool.slug` to decide the default orientation.
+
 ### Adding a redirect for a moved/deleted slug
 
 Edit `SLUG_REDIRECTS` in `lib/tools.ts`:
