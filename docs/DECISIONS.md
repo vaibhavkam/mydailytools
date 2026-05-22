@@ -246,9 +246,40 @@ Users have to leave the site to donate. Acceptable; their flow is clear and the 
 
 ---
 
+## ADR-011 — Sitemap `lastmod` tracks content date, not build date
+
+**Date**: 2026-05-22 · **Status**: accepted · **Context**: SEO / indexing
+
+### Decision
+
+`scripts/generate-sitemap.mjs` emits a shared `TOOL_LASTMOD` constant as the `<lastmod>` value for every tool URL. Bump this constant whenever the *content* of tool pages changes (FAQs, meta descriptions, examples). Do **not** bump it for code-only changes (refactors, bundle updates, dependency bumps).
+
+Static pages (homepage, /about, /tools, category pages) use the build date — those genuinely change with every deploy. Blog posts use their `date:` field from `lib/posts.ts`. Tool pages are the only thing using the frozen constant.
+
+### Why
+
+Initial impulse was to set tool `lastmod` to `today` on every build — fresh dates surely help recrawl, right? It doesn't. Google treats `lastmod` as a recrawl hint, and a sitemap where every URL claims to have changed today is interpreted as noise — Google starts ignoring the field entirely. Worse, you lose the ability to signal *real* changes.
+
+The other extreme — a permanently frozen date set once at site launch — has the opposite problem: Google sees "nothing has changed since 2026-05-04" and deprioritizes recrawl of pages that *did* change. We hit this in May 2026: three tool pages had FAQ content added but were stuck flagged as "Crawled - currently not indexed" in Search Console because the frozen lastmod told Google to skip them.
+
+A single shared `TOOL_LASTMOD` you bump on content changes is the sweet spot: stable enough that Google trusts the signal, mutable enough to actually trigger recrawl when the content moves.
+
+### Tradeoff
+
+It's a manual step — easy to forget. The mitigation is convention: any PR that changes a tool's `description`, `keywords`, or the `content` prop passed to `<ToolPage>` should also bump `TOOL_LASTMOD`. A pre-commit hook could enforce this but isn't worth the complexity at single-developer scale; a `// See ADR-011` comment next to the constant is enough.
+
+The dual cost of getting it wrong:
+
+- **Forgot to bump** → recrawl is delayed by weeks until Google's own discovery cycle catches up. Recoverable.
+- **Bumped without real content change** → cried wolf; future bumps trust the signal less. Recoverable but burns goodwill.
+
+The first is the more common failure and the less expensive one.
+
+---
+
 ## How to add a new ADR
 
-1. Bump the number (next: ADR-011)
+1. Bump the number (next: ADR-012)
 2. Use the same template (Date, Status, Context, Decision, Why, Tradeoff)
 3. Append to this file
 4. Reference from code with a comment: `// See ADR-011`

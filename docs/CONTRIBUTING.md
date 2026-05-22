@@ -14,13 +14,17 @@ Inside the appropriate category's `tools: [...]` array, add an object:
 {
   slug: "your-new-tool",                    // URL: /tools/your-new-tool/
   title: "Your New Tool",                   // Visible <h1> and link text
-  description: "One-line description.",     // Used for <meta description> and tool-card subtitle
+  description: "120–155 char description.", // <meta description> and tool-card subtitle
   keywords: ["primary keyword", "secondary keyword"],
   status: "live",                           // "live" or "stub"
 }
 ```
 
 Place it where it logically belongs in the category's order. The order in the file is the visible order on category pages.
+
+The `description` field gets used verbatim as the `<meta description>` Google shows in search results, so write it for the SERP, not just for the card. Aim for **120–155 characters**, mention a concrete use case (DST-aware, supports negative numbers, no sign-up, etc.) so searchers have a reason to click, and cover common spelling variants in `keywords` if the term has more than one form (e.g. "time zone" vs "timezone", "color" vs "colour"). One-line "Convert X to Y." descriptions rank but don't get clicked.
+
+After bumping or rewriting descriptions on existing tools, also bump `TOOL_LASTMOD` in `scripts/generate-sitemap.mjs` so Google knows to recrawl. See [ADR-011](DECISIONS.md#adr-011--sitemap-lastmod-tracks-content-date-not-build-date).
 
 ### Step 2 — Create the React component
 
@@ -156,6 +160,16 @@ The `app/tools/[slug]/page.tsx` handler reads this and emits a redirect HTML pag
 4. Push.
 
 Sitemap auto-includes it. Footer doesn't need editing — `/blog/` index lists all posts.
+
+### Writing for the SERP
+
+Don't write speculatively. Wait for Search Console to show ~50+ impressions on related queries before writing a post — those queries tell you what people are actually searching for and which phrasing to use.
+
+When you do write, match search intent literally:
+
+- Use H2/H3 headings that contain the user's question **word-for-word**. Google often pulls a matching heading as the snippet, and a snippet that mirrors the query gets 3–5× the CTR of a generic one.
+- Cover common variants and edge cases the original post glosses over. "Is `24:00` valid in ISO 8601?" is searched far more than "ISO 8601 time format" — answer the specific question with its own heading, not buried in a paragraph.
+- Don't pad. A 6-line section answering one specific question outranks a 30-line section that touches the topic vaguely.
 
 ## Coding conventions
 

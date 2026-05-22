@@ -159,6 +159,7 @@ Repeated patterns from past sessions:
 - **CSS not loading on `localhost:3000`** → stale `?v=` cache in dev mode. Fix: kill dev server, `rm -rf .next`, restart.
 - **Tool URL 404s on production** → CloudFront Function detached or distribution not yet `Deployed`. See RUNBOOK.md.
 - **Sitemap or build script can't find slugs** → `lib/tools.ts` likely got corrupted by a regex find/replace. Open it, look for malformed syntax near the top.
+- **Tool pages stuck on "Crawled - currently not indexed" in Search Console** → almost always `TOOL_LASTMOD` in `scripts/generate-sitemap.mjs` wasn't bumped after a content edit, so Google thinks nothing changed and skips recrawl. See ADR-011.
 
 ---
 
@@ -170,6 +171,7 @@ Repeated patterns from past sessions:
 - **Tool widgets get a `<ToolPage>` wrapper** for SEO content. Don't render bare widgets.
 - **Tailwind classes only.** No CSS modules, no styled-components.
 - **`lib/tools.ts` order = visible order.** When asked to reorder, edit the array order in place; don't add a separate `displayOrder` field.
+- **Tool `description` is a SERP snippet, not a caption.** Write 120–155 chars with a concrete use case, not a one-liner. Cover spelling variants ("time zone" + "timezone") in `keywords`. After bumping descriptions, bump `TOOL_LASTMOD` (ADR-011).
 
 ---
 
@@ -190,4 +192,4 @@ Keep this file under ~250 lines. If it bloats, prune older "abandoned" items tha
 
 ---
 
-Last updated: 2026-05-04
+Last updated: 2026-05-22
