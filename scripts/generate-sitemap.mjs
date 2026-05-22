@@ -44,7 +44,7 @@ const today = new Date().toISOString().slice(0, 10);
 // Category pages are also build-time artifacts — their content changes when tools are
 // added, so build date is appropriate.
 // Tool pages are stable once live; use a fixed date that won't thrash on every build.
-const TOOL_LASTMOD = "2026-05-04";
+const TOOL_LASTMOD = "2026-05-16";
 
 const staticPaths = ["/", "/tools/", "/blog/", "/about/", "/contact/", "/support/", "/sitemap-html/", "/privacy/", "/terms/"];
 const urls = [
