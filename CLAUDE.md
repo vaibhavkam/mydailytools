@@ -110,6 +110,10 @@ The IDs above are also referenced in `docs/INFRA.md` and the GitHub Actions secr
 
 ---
 
+## Carve-outs from upstream advisories
+
+- **Next.js RSC CVEs (CVE-2025-55183 / 55184 / 67779)** don't affect this site. Both advisories require a running Next.js process serving HTTP requests; we deploy with `output: "export"` (ADR-001), so the only thing in production is static HTML on CloudFront. There is no Next.js runtime in prod to attack. The deprecation warning from `npm warn deprecated next@14.2.5` will keep showing in CI logs — accept the noise rather than chasing a non-issue. If/when we ever drop static export, revisit this and upgrade to the latest 14.2.x patch.
+
 ## Things tried and abandoned
 
 Don't re-pitch these unless circumstances change:
