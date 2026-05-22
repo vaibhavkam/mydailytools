@@ -97,6 +97,7 @@ const REGISTRY: Record<string, ComponentType<ToolProps>> = {
   "color-picker": dynamic(() => import("./developer").then((m) => ({ default: m.ColorPicker }))),
   "htaccess-generator": dynamic(() => import("./developer").then((m) => ({ default: m.HtaccessGenerator }))),
   "jwt-decoder": dynamic(() => import("./developer").then((m) => ({ default: m.JwtDecoder }))),
+  "yaml-formatter": dynamic(() => import("./YamlFormatter")),
   "yaml-to-json": dynamic(() => import("./DataFormatConverter")),
   "json-to-yaml": dynamic(() => import("./DataFormatConverter")),
   "json-to-xml": dynamic(() => import("./DataFormatConverter")),
