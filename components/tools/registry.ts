@@ -112,6 +112,9 @@ const REGISTRY: Record<string, ComponentType<ToolProps>> = {
   // Tier 1+2 dev/network tools
   "cron-expression-parser": dynamic(() => import("./CronExpressionParser")),
   "json-to-csv": dynamic(() => import("./DataFormatConverter")),
+  "json-diff": dynamic(() => import("./JsonDiff")),
+  "curl-to-code": dynamic(() => import("./CurlToCode")),
+  "http-status-codes": dynamic(() => import("./HttpStatusReference")),
   "csv-to-json": dynamic(() => import("./DataFormatConverter")),
   "json-to-typescript": dynamic(() => import("./JsonToTypescript")),
   "token-counter": dynamic(() => import("./TokenCounter")),
