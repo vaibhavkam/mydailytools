@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Copy, ArrowLeftRight } from "lucide-react";
+import { Copy, ArrowLeftRight, Download } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { type Format, SAMPLE_BY_FORMAT, getParser, getSerializer } from "@/lib/data-formats";
@@ -12,6 +12,33 @@ const FORMAT_LABELS: Record<Format, string> = {
   csv: "CSV",
   xml: "XML",
 };
+
+const FORMAT_EXTENSIONS: Record<Format, string> = {
+  json: "json",
+  yaml: "yaml",
+  csv: "csv",
+  xml: "xml",
+};
+
+const FORMAT_MIME: Record<Format, string> = {
+  json: "application/json",
+  yaml: "application/yaml",   // RFC 9512 (2024)
+  csv: "text/csv",
+  xml: "application/xml",
+};
+
+function downloadText(content: string, filename: string, mime: string) {
+  const blob = new Blob([content], { type: `${mime};charset=utf-8` });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  // Revoke after a tick so Safari/Firefox have time to start the download.
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 // Map every supported slug to (from, to). Both directions of a pair use the
 // same component but boot with the orientation that matches the slug — a user
@@ -205,6 +232,12 @@ export default function DataFormatConverter({ tool }: { tool: Tool & { categoryS
     if (output) navigator.clipboard.writeText(output);
   }
 
+  function downloadOutput() {
+    if (!output) return;
+    const ext = FORMAT_EXTENSIONS[to];
+    downloadText(output, `converted.${ext}`, FORMAT_MIME[to]);
+  }
+
   const fromLabel = FORMAT_LABELS[from];
   const toLabel = FORMAT_LABELS[to];
 
@@ -233,9 +266,14 @@ export default function DataFormatConverter({ tool }: { tool: Tool & { categoryS
           <div>
             <div className="flex items-center justify-between">
               <label className="label !mb-0">{toLabel} output</label>
-              <button onClick={copyOutput} disabled={!output} className="btn-ghost text-xs disabled:opacity-50">
-                <Copy className="h-3.5 w-3.5" /> Copy
-              </button>
+              <div className="flex gap-1">
+                <button onClick={copyOutput} disabled={!output} className="btn-ghost text-xs disabled:opacity-50">
+                  <Copy className="h-3.5 w-3.5" /> Copy
+                </button>
+                <button onClick={downloadOutput} disabled={!output} className="btn-ghost text-xs disabled:opacity-50" aria-label={`Download as .${FORMAT_EXTENSIONS[to]}`}>
+                  <Download className="h-3.5 w-3.5" /> Download
+                </button>
+              </div>
             </div>
             <textarea
               className="input min-h-[280px] font-mono text-xs mt-1.5"
