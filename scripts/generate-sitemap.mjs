@@ -45,7 +45,7 @@ const today = new Date().toISOString().slice(0, 10);
 // added, so build date is appropriate.
 // Tool pages share a frozen lastmod that you bump on content changes (FAQs, descriptions,
 // examples) but not on code-only changes. See ADR-011.
-const TOOL_LASTMOD = "2026-05-23";
+const TOOL_LASTMOD = "2026-05-24";
 
 const staticPaths = ["/", "/tools/", "/blog/", "/about/", "/contact/", "/support/", "/sitemap-html/", "/privacy/", "/terms/"];
 const urls = [

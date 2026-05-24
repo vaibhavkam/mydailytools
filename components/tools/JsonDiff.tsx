@@ -65,6 +65,140 @@ function renderValue(v: unknown): string {
   return String(v);
 }
 
+// Normalize: pretty-print with sorted keys at every level so the two outputs
+// can be compared line-for-line. Sorting is what makes the visual diff useful
+// — otherwise a key reordering creates a wall of noise.
+function sortKeysDeep(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortKeysDeep);
+  if (value !== null && typeof value === "object") {
+    const sorted: Record<string, unknown> = {};
+    for (const k of Object.keys(value as Record<string, unknown>).sort()) {
+      sorted[k] = sortKeysDeep((value as Record<string, unknown>)[k]);
+    }
+    return sorted;
+  }
+  return value;
+}
+
+// Walk and collect every leaf path so we can count "fields identical."
+function leafPaths(value: unknown, path = "$"): string[] {
+  if (Array.isArray(value)) {
+    if (value.length === 0) return [path];
+    return value.flatMap((item, i) => leafPaths(item, `${path}[${i}]`));
+  }
+  if (value !== null && typeof value === "object") {
+    const entries = Object.entries(value as Record<string, unknown>);
+    if (entries.length === 0) return [path];
+    return entries.flatMap(([k, v]) => leafPaths(v, `${path}.${k}`));
+  }
+  return [path];
+}
+
+// Build a per-line classification for the normalized output. For each line of
+// the sorted-pretty-printed JSON, decide whether that line is part of a diff
+// (and which kind) by looking at which JSONPaths the diff touched.
+type LineKind = "same" | "added" | "removed" | "changed";
+
+function classifyLines(normalized: string, changedPaths: { added: Set<string>; removed: Set<string>; changed: Set<string> }, side: "left" | "right"): LineKind[] {
+  // We re-stringify with a custom replacer that emits a sentinel comment per
+  // line — too invasive. Simpler approach: re-walk the value tracking a path
+  // stack as we render. JSON.stringify-with-indent produces predictable
+  // formatting, so we can track depth-by-line and match keys to paths.
+  //
+  // Best practical approach: parse the normalized text and identify the path
+  // at each line by tracking object-key context with a small state machine.
+  const lines = normalized.split("\n");
+  const out: LineKind[] = new Array(lines.length).fill("same");
+
+  // Stack of contexts: each entry is either {kind:'object', path} or {kind:'array', path, index}
+  type Ctx = { kind: "object" | "array"; path: string; index?: number };
+  const stack: Ctx[] = [];
+  let currentPath = "$";
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // Compute the path for THIS line before adjusting stack for opens/closes
+    // on this same line.
+    const top = stack[stack.length - 1];
+
+    // Detect object key: "key": ... (handle nested quotes via simple match)
+    const keyMatch = trimmed.match(/^"((?:[^"\\]|\\.)*)"\s*:/);
+    let lineKey: string | null = null;
+    if (keyMatch && top?.kind === "object") {
+      lineKey = JSON.parse(`"${keyMatch[1]}"`);
+      currentPath = `${top.path}.${lineKey}`;
+    } else if (top?.kind === "array") {
+      // For array items, the path is parent[index]. We bump index after each
+      // top-level child line — but a child can span multiple lines (nested
+      // object). We treat the line that contains the start of a child as
+      // index-bearing, and bump index when we see a closing brace at the
+      // array's depth or a top-level scalar.
+      currentPath = `${top.path}[${top.index ?? 0}]`;
+    }
+
+    // Classify this line against the change paths.
+    // - "added" lines (only present in right) — only meaningful for the right side
+    // - "removed" lines (only present in left) — only meaningful for the left side
+    // - "changed" — both sides, but the value differs
+    if (side === "left") {
+      if (changedPaths.removed.has(currentPath)) out[i] = "removed";
+      else if (changedPaths.changed.has(currentPath)) out[i] = "changed";
+    } else {
+      if (changedPaths.added.has(currentPath)) out[i] = "added";
+      else if (changedPaths.changed.has(currentPath)) out[i] = "changed";
+    }
+    // Also color descendant paths (e.g. when an entire object is added, every
+    // line of its body should be tinted too).
+    for (const p of (side === "left" ? changedPaths.removed : changedPaths.added)) {
+      if (currentPath.startsWith(p + ".") || currentPath.startsWith(p + "[")) {
+        out[i] = side === "left" ? "removed" : "added";
+        break;
+      }
+    }
+
+    // Update the stack based on what this line opens/closes.
+    // We track only structural braces/brackets at the END of the line for
+    // open, and at the START for close. Standard pretty-print places opens
+    // at end-of-line and closes on their own line, so this is reliable.
+    if (trimmed.endsWith("{")) {
+      stack.push({ kind: "object", path: currentPath });
+    } else if (trimmed.endsWith("[")) {
+      stack.push({ kind: "array", path: currentPath, index: 0 });
+    }
+    if (trimmed.startsWith("}") || trimmed.startsWith("]")) {
+      stack.pop();
+      // After popping, if we're now inside an array, bump its index because
+      // that nested structure was one array element.
+      const newTop = stack[stack.length - 1];
+      if (newTop?.kind === "array") newTop.index = (newTop.index ?? 0) + 1;
+    } else if (top?.kind === "array" && (trimmed.endsWith(",") || (i + 1 < lines.length && /^\s*[\]]/.test(lines[i + 1])))) {
+      // Top-level scalar element in an array — bump after this line if there
+      // was no nested structure opened.
+      if (!trimmed.endsWith("{") && !trimmed.endsWith("[")) {
+        top.index = (top.index ?? 0) + 1;
+      }
+    }
+  }
+
+  return out;
+}
+
+const KIND_BG: Record<LineKind, string> = {
+  same: "",
+  added: "bg-emerald-100/60 dark:bg-emerald-950/40",
+  removed: "bg-red-100/60 dark:bg-red-950/40",
+  changed: "bg-amber-100/60 dark:bg-amber-950/40",
+};
+
+const KIND_MARKER: Record<LineKind, string> = {
+  same: "  ",
+  added: "+ ",
+  removed: "- ",
+  changed: "~ ",
+};
+
 const SAMPLE_A = `{
   "id": 42,
   "name": "Alice",
@@ -95,7 +229,7 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
     let parsedA: unknown, parsedB: unknown;
     try { parsedA = JSON.parse(left); } catch (e: any) { return { error: `Left JSON: ${e.message}` }; }
     try { parsedB = JSON.parse(right); } catch (e: any) { return { error: `Right JSON: ${e.message}` }; }
-    return { changes: diff(parsedA, parsedB) };
+    return { changes: diff(parsedA, parsedB), parsedA, parsedB };
   }, [left, right]);
 
   function copyDiff() {
@@ -113,6 +247,36 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
     removed: result.changes.filter((c) => c.kind === "removed").length,
     changed: result.changes.filter((c) => c.kind === "changed").length,
   } : null;
+
+  // Normalized side-by-side view: pretty-printed, keys sorted at every level,
+  // with each line tinted based on whether it's part of a diff. Together with
+  // the path-based diff list above, this gives users both the structural view
+  // and the high-density list.
+  const sideBySide = useMemo(() => {
+    if (!result.changes || !("parsedA" in result)) return null;
+    const a = sortKeysDeep(result.parsedA);
+    const b = sortKeysDeep(result.parsedB);
+    const leftText = JSON.stringify(a, null, 2);
+    const rightText = JSON.stringify(b, null, 2);
+    const added = new Set(result.changes.filter((c) => c.kind === "added").map((c) => c.path));
+    const removed = new Set(result.changes.filter((c) => c.kind === "removed").map((c) => c.path));
+    const changed = new Set(result.changes.filter((c) => c.kind === "changed").map((c) => c.path));
+    const leftKinds = classifyLines(leftText, { added, removed, changed }, "left");
+    const rightKinds = classifyLines(rightText, { added, removed, changed }, "right");
+    const leafCountA = leafPaths(result.parsedA).length;
+    const leafCountB = leafPaths(result.parsedB).length;
+    const totalLeaves = Math.max(leafCountA, leafCountB);
+    const differingLeaves = added.size + removed.size + changed.size;
+    const identicalLeaves = Math.max(0, totalLeaves - differingLeaves);
+    return {
+      leftLines: leftText.split("\n"),
+      rightLines: rightText.split("\n"),
+      leftKinds,
+      rightKinds,
+      identicalLeaves,
+      totalLeaves,
+    };
+  }, [result]);
 
   return (
     <ToolPage
@@ -211,6 +375,44 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
                 ))}
               </ul>
             )}
+          </div>
+        )}
+
+        {sideBySide && (
+          <div className="rounded-xl border border-[rgb(var(--border))] overflow-hidden">
+            <div className="px-3 py-2 border-b border-[rgb(var(--border))] bg-[rgb(var(--bg-muted,250,250,252))] text-xs flex items-center justify-between gap-3 flex-wrap">
+              <span className="font-medium">Normalized side-by-side (keys sorted)</span>
+              <span className="text-[rgb(var(--fg-muted))]">
+                {sideBySide.identicalLeaves} of {sideBySide.totalLeaves} fields identical
+              </span>
+            </div>
+            <div className="grid lg:grid-cols-2 gap-px bg-[rgb(var(--border))]">
+              <pre className="bg-[rgb(var(--bg))] font-mono text-[11px] overflow-auto max-h-[480px] m-0">
+                {sideBySide.leftLines.map((line, i) => (
+                  <div
+                    key={i}
+                    className={`px-3 py-px ${KIND_BG[sideBySide.leftKinds[i]]}`}
+                  >
+                    <span className="select-none opacity-40 mr-2">{KIND_MARKER[sideBySide.leftKinds[i]]}</span>
+                    <span>{line || " "}</span>
+                  </div>
+                ))}
+              </pre>
+              <pre className="bg-[rgb(var(--bg))] font-mono text-[11px] overflow-auto max-h-[480px] m-0">
+                {sideBySide.rightLines.map((line, i) => (
+                  <div
+                    key={i}
+                    className={`px-3 py-px ${KIND_BG[sideBySide.rightKinds[i]]}`}
+                  >
+                    <span className="select-none opacity-40 mr-2">{KIND_MARKER[sideBySide.rightKinds[i]]}</span>
+                    <span>{line || " "}</span>
+                  </div>
+                ))}
+              </pre>
+            </div>
+            <div className="px-3 py-1.5 border-t border-[rgb(var(--border))] text-[10px] text-[rgb(var(--fg-muted))]">
+              Both inputs re-rendered with sorted keys and 2-space indent so a true line-for-line comparison is meaningful. Original input formatting in the textareas above is preserved.
+            </div>
           </div>
         )}
       </div>
