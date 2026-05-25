@@ -13,14 +13,15 @@ export const metadata = buildMetadata({
 });
 
 const FEATURED_SLUGS = [
-  "percentage-calculator",
   "json-formatter",
-  "password-generator",
-  "length-converter",
-  "word-counter",
-  "unix-timestamp-converter",
-  "qr-code-generator",
-  "color-picker",
+  "json-diff",
+  "regex-tester",
+  "url-encoder-decoder",
+  "text-diff",
+  "list-set-operations",
+  "days-between-dates",
+  "percentage-calculator",
+  "mortgage-calculator",
 ];
 
 export default function HomePage() {
