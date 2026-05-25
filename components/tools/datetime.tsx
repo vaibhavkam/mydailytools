@@ -47,7 +47,8 @@ export function DateCalculator({ tool }: Props) {
 // Timezone Converter
 export function TimezoneConverter({ tool }: Props) {
   const tzs = ["UTC", "America/New_York", "America/Los_Angeles", "America/Chicago", "Europe/London", "Europe/Paris", "Asia/Tokyo", "Asia/Kolkata", "Asia/Shanghai", "Australia/Sydney"];
-  const [time, setTime] = useState(new Date().toISOString().slice(0, 16));
+  const [time, setTime] = useState("");
+  useEffect(() => { setTime(new Date().toISOString().slice(0, 16)); }, []);
   const [from, setFrom] = useState("UTC");
   const r = useMemo(() => {
     const d = new Date(`${time}:00${tzOffset(from, time)}`);
@@ -89,11 +90,15 @@ function tzOffset(tz: string, isoLocal: string) {
 
 // Countdown Timer
 export function CountdownTimer({ tool }: Props) {
-  const [target, setTarget] = useState(() => {
-    const d = new Date(); d.setHours(d.getHours() + 24); return d.toISOString().slice(0, 16);
-  });
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => { const id = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(id); }, []);
+  const [target, setTarget] = useState("");
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    const d = new Date(); d.setHours(d.getHours() + 24);
+    setTarget(d.toISOString().slice(0, 16));
+    setNow(Date.now());
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
   const ms = Math.max(0, new Date(target).getTime() - now);
   const d = Math.floor(ms / 86400000);
   const h = Math.floor((ms / 3600000) % 24);
@@ -166,7 +171,8 @@ export function Stopwatch({ tool }: Props) {
 // Days Between Dates
 export function DaysBetween({ tool }: Props) {
   const [a, setA] = useState("2024-01-01");
-  const [b, setB] = useState(new Date().toISOString().slice(0, 10));
+  const [b, setB] = useState("");
+  useEffect(() => { setB(new Date().toISOString().slice(0, 10)); }, []);
   const r = useMemo(() => {
     const x = new Date(a), y = new Date(b);
     if (Number.isNaN(x.getTime()) || Number.isNaN(y.getTime())) return null;
@@ -200,7 +206,8 @@ export function DaysBetween({ tool }: Props) {
 
 // Week Number (ISO 8601)
 export function WeekNumber({ tool }: Props) {
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState("");
+  useEffect(() => { setDate(new Date().toISOString().slice(0, 10)); }, []);
   const r = useMemo(() => {
     const d = new Date(date);
     if (Number.isNaN(d.getTime())) return null;

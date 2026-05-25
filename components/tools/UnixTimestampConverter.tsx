@@ -5,12 +5,15 @@ import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 
 export default function UnixTimestampConverter({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
-  const [now, setNow] = useState(() => Math.floor(Date.now() / 1000));
-  const [tsInput, setTsInput] = useState(String(Math.floor(Date.now() / 1000)));
+  const [now, setNow] = useState(0);
+  const [tsInput, setTsInput] = useState("");
   const [dateInput, setDateInput] = useState("");
 
-  // Live "current epoch" ticker.
+  // Populate with current time on client only to avoid SSR/hydration mismatch.
   useEffect(() => {
+    const epoch = Math.floor(Date.now() / 1000);
+    setNow(epoch);
+    setTsInput(String(epoch));
     const id = setInterval(() => setNow(Math.floor(Date.now() / 1000)), 1000);
     return () => clearInterval(id);
   }, []);
