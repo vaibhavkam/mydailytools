@@ -44,10 +44,10 @@ export const POSTS: Post[] = [
   },
   {
     slug: "iso-8601-cheat-sheet",
-    title: "ISO 8601 Cheat Sheet: Timestamps, Durations, and Intervals You'll Actually Use",
-    description: "A practical reference for ISO 8601 — date, time, timezone, durations, and intervals — with copy-pasteable examples for the formats developers actually need.",
+    title: "ISO 8601 Cheat Sheet: Dates, Times, 24:00, Durations, and Intervals",
+    description: "A practical reference for ISO 8601 — date formats, time (including 24:00 end-of-day), timezone offsets, durations, and intervals — with copy-pasteable examples.",
     date: "2026-05-03",
-    tags: ["dates", "developer", "reference"],
+    tags: ["dates", "developer", "reference", "iso 8601", "timestamp"],
     relatedTools: ["unix-timestamp-converter", "timezone-converter", "date-calculator", "days-between-dates"],
     readingTimeMin: 7,
   },

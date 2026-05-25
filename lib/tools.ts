@@ -141,7 +141,7 @@ export const CATEGORIES: Category[] = [
       { slug: "week-number", title: "Week Number", description: "ISO week number for any date.", keywords: ["week number"], status: "live" },
       // Conversion cluster
       { slug: "unix-timestamp-converter", title: "Unix Timestamp Converter", description: "Epoch to date and date to epoch.", keywords: ["unix timestamp converter"], status: "live" },
-      { slug: "timezone-converter", title: "Time Zone Converter", description: "Convert any time across world time zones. DST-aware, supports all IANA zones (America/New_York, Asia/Kolkata, etc.). No sign-up, runs in your browser.", keywords: ["timezone converter", "time zone converter", "world clock converter"], status: "live" },
+      { slug: "timezone-converter", title: "Time Zone Converter", description: "Convert any date and time across 10 major world time zones instantly. DST-aware — covers New York, London, Tokyo, Kolkata, Sydney, and more. No sign-up needed.", keywords: ["timezone converter", "time zone converter", "world clock converter", "dst converter", "utc converter"], status: "live" },
       // Timers
       { slug: "countdown-timer", title: "Countdown Timer", description: "Live countdown to any future date.", keywords: ["countdown timer"], status: "live" },
       { slug: "stopwatch", title: "Stopwatch", description: "Web stopwatch with laps.", keywords: ["online stopwatch"], status: "live" },
@@ -155,7 +155,7 @@ export const CATEGORIES: Category[] = [
     tools: [
       // Basic arithmetic cluster
       { slug: "percentage-calculator", title: "Percentage Calculator", description: "Calculate percentages, percent change, and percent of a number instantly.", keywords: ["percentage calculator", "percent of number", "percent change"], status: "live" },
-      { slug: "average-calculator", title: "Average Calculator", description: "Compute mean, median, and mode for any list of numbers.", keywords: ["average calculator", "mean median mode"], status: "live" },
+      { slug: "average-calculator", title: "Average Calculator", description: "Calculate mean, median, mode, range, sum, min, and max for any list of numbers. Paste in grades, scores, or measurements — results update instantly.", keywords: ["average calculator", "mean median mode", "mean calculator", "median calculator"], status: "live" },
       { slug: "fraction-calculator", title: "Fraction Calculator", description: "Add, subtract, multiply, and divide fractions with step-by-step results.", keywords: ["fraction calculator", "add fractions", "simplify fractions"], status: "live" },
       { slug: "ratio-calculator", title: "Ratio Calculator", description: "Simplify, compare, and scale ratios.", keywords: ["ratio calculator", "simplify ratio"], status: "live" },
       { slug: "rounding-calculator", title: "Rounding Calculator", description: "Round to nearest, up, or down with custom precision.", keywords: ["rounding calculator", "round number"], status: "live" },

@@ -57,10 +57,16 @@ export function TimezoneConverter({ tool }: Props) {
   }, [time, from]);
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Pick a date/time and its source timezone. The same instant is shown in 10 common timezones.",
-      formula: "We construct a UTC timestamp from your input + selected source-zone offset, then format it via Intl.DateTimeFormat for each target zone.",
-      examples: "2026-05-02T14:00 in New York is 19:00 in London on the same day.",
-      faq: [{ q: "Does this handle DST?", a: "Yes — the IANA timezone database (built into the browser) accounts for daylight saving rules." }],
+      howTo: "Enter a date and time, select its source timezone, and instantly see that same moment in 10 major cities worldwide. Great for scheduling meetings across time zones or converting a server log timestamp to your local time.",
+      formula: "Your input is converted to a UTC instant using the source zone's current offset (including DST), then reformatted into each target timezone via the browser's built-in Intl.DateTimeFormat (IANA database).",
+      examples: "14:00 New York (EST, UTC−5) = 19:00 London = 20:00 Paris = 04:00 Tokyo next day. During US DST (EDT, UTC−4): 14:00 New York = 18:00 London.",
+      faq: [
+        { q: "Does this handle daylight saving time (DST)?", a: "Yes — the IANA timezone database built into every modern browser automatically applies DST rules for the selected date. Summer and winter times are handled correctly." },
+        { q: "What is UTC and why does it matter?", a: "UTC (Coordinated Universal Time) is the universal reference point. All other timezones are expressed as UTC±offset. Using UTC avoids DST ambiguity when storing or transmitting timestamps." },
+        { q: "How do I convert a Unix timestamp to a timezone?", a: "Use the Unix Timestamp Converter tool to turn the epoch number into a human date, then paste it here to see it in any timezone." },
+        { q: "Why do some cities show the same offset?", a: "Countries sometimes share a UTC offset but follow different DST schedules, so they can diverge at different times of year. For example, London and Lisbon are both UTC+0 in winter but Portugal observes DST while the UK also does — they stay in sync, but not all UTC+0 regions do." },
+        { q: "What is the difference between EST and EDT?", a: "EST (Eastern Standard Time) is UTC−5 and applies in winter. EDT (Eastern Daylight Time) is UTC−4 and applies in summer. 'ET' is the generic label used year-round when DST status is irrelevant." },
+      ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
         <div><label className="label">Date & time</label><input type="datetime-local" className="input" value={time} onChange={(e) => setTime(e.target.value)} /></div>

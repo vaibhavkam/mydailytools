@@ -22,14 +22,16 @@ export default function AverageCalculator({ tool }: { tool: Tool & { categorySlu
   }, [input]);
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Enter a list of numbers. Mean, median, mode, sum, min, and max compute live.",
-      formula: "Mean = Σx / n. Median = middle value (or average of two middles). Mode = most frequent value (none if all values are unique).",
-      examples: "5, 10, 12, 15, 20, 20, 25 → mean 15.29, median 15, mode 20.",
+      howTo: "Type or paste a list of numbers separated by commas, spaces, or new lines. Mean, median, mode, sum, min, max, and range all update instantly. Works for any size dataset — grades, scores, measurements, or financial figures.",
+      formula: "Mean (average) = sum of all values ÷ count. Median = middle value when sorted (or average of the two middle values for even-length sets). Mode = value(s) appearing most often. Range = max − min.",
+      examples: "Test scores 72, 85, 90, 90, 95 → mean 86.4, median 90, mode 90, range 23. Sales figures 1200, 1450, 980, 2100, 1450 → mean 1436, median 1450, mode 1450.",
       faq: [
-        { q: "What is the difference between mean, median, and mode?", a: "Mean is the sum divided by count. Median is the middle value when sorted. Mode is the most frequently occurring value. Use median when data has outliers that would skew the mean." },
-        { q: "Why is there no mode shown?", a: "Mode is only reported when at least one value appears more than once. If all values are unique, no mode exists." },
-        { q: "How do I enter my numbers?", a: "Separate numbers with commas, spaces, or newlines — any combination works. Duplicates are counted as separate data points." },
-        { q: "What is the range?", a: "Range is the difference between the maximum and minimum values. It gives a simple measure of how spread out the data is." },
+        { q: "What is the difference between mean, median, and mode?", a: "Mean (arithmetic average) is the sum divided by count — sensitive to outliers. Median is the middle value when sorted — robust to extreme values. Mode is the most frequent value — useful for categorical or discrete data. For skewed data like salaries or house prices, median is usually more meaningful than mean." },
+        { q: "When should I use median instead of mean?", a: "Use median when your data has outliers or is skewed. For example, average household income uses median because a few very high earners would inflate the mean and misrepresent the typical household." },
+        { q: "Why is there no mode shown?", a: "Mode is only reported when at least one value appears more than once. If all values are unique, there is no mode by definition." },
+        { q: "How do I enter my numbers?", a: "Separate numbers with commas, spaces, or newlines — any combination works. Negative numbers and decimals are supported. Duplicates are counted as separate data points." },
+        { q: "What is the range?", a: "Range = maximum − minimum. It is the simplest measure of spread. For a more robust measure of spread, consider standard deviation (which accounts for all values, not just the extremes)." },
+        { q: "Can I calculate the average of percentages?", a: "You can average percentages directly if each percentage is based on the same sample size. If sample sizes differ, use a weighted average instead — multiply each percentage by its sample size, sum those, then divide by the total sample size." },
       ],
     }}>
       <label className="label" htmlFor="avg">Numbers</label>
