@@ -325,32 +325,42 @@ export function RemoveDuplicates({ tool }: Props) {
 // Sort Lines
 export function SortLines({ tool }: Props) {
   const [text, setText] = useState("");
-  const [mode, setMode] = useState<"asc" | "desc" | "numeric" | "shuffle">("asc");
+  const [mode, setMode] = useState<"asc" | "desc" | "numeric-asc" | "numeric-desc" | "shuffle">("asc");
   const out = useMemo(() => {
     const lines = text.split(/\r?\n/);
     if (mode === "asc") return [...lines].sort().join("\n");
     if (mode === "desc") return [...lines].sort().reverse().join("\n");
-    if (mode === "numeric") return [...lines].sort((a, b) => parseFloat(a) - parseFloat(b)).join("\n");
+    if (mode === "numeric-asc") return [...lines].sort((a, b) => parseFloat(a) - parseFloat(b)).join("\n");
+    if (mode === "numeric-desc") return [...lines].sort((a, b) => parseFloat(b) - parseFloat(a)).join("\n");
     // shuffle (Fisher-Yates)
     const arr = [...lines];
     for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
     return arr.join("\n");
   }, [text, mode]);
+
+  const MODES: { value: typeof mode; label: string }[] = [
+    { value: "asc", label: "A → Z" },
+    { value: "desc", label: "Z → A" },
+    { value: "numeric-asc", label: "1 → 9" },
+    { value: "numeric-desc", label: "9 → 1" },
+    { value: "shuffle", label: "Shuffle" },
+  ];
+
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Paste your list — one item per line — then pick a sort mode: A→Z alphabetical, Z→A reverse, Numeric (by number value), or Shuffle (random). Results appear instantly in the output box. Works for names, words, URLs, or any line-separated data.",
-      formula: "A→Z and Z→A use lexicographic (Unicode) order. Numeric parses each line as a float so 10 sorts after 9, not before. Shuffle uses the Fisher-Yates algorithm for an unbiased random order.",
-      examples: "Names: Alice, Charlie, Bob → Alice, Bob, Charlie. Numbers: 10, 9, 2 → 2, 9, 10 (numeric mode). Reverse alpha: zebra, mango, apple → zebra, mango, apple.",
+      howTo: "Paste your list — one item per line — then pick a sort mode: A→Z or Z→A for alphabetical, 1→9 or 9→1 for numeric order, or Shuffle for random. Results appear instantly.",
+      formula: "A→Z and Z→A use lexicographic (Unicode) order. 1→9 and 9→1 parse each line as a float so 10 sorts after 9, not before. Shuffle uses the Fisher-Yates algorithm.",
+      examples: "Names: Alice, Charlie, Bob → Alice, Bob, Charlie. Numbers: 10, 9, 2 → 2, 9, 10 (1→9 mode) or 10, 9, 2 (9→1 mode).",
       faq: [
-        { q: "Why does alphabetical sort put '10' before '9'?", a: "Alphabetical (A→Z) sort compares characters left to right, so '1' comes before '9' making '10' sort first. Use Numeric mode to sort by actual number value." },
-        { q: "Is the sort case-sensitive?", a: "Yes. Uppercase letters sort before lowercase in Unicode order (A–Z before a–z). If you need case-insensitive sorting, convert your text to the same case first with the Case Converter tool." },
-        { q: "What algorithm does the shuffle use?", a: "Fisher-Yates (Knuth) shuffle — a well-known algorithm that produces an unbiased random permutation of the lines." },
-        { q: "Can I sort a CSV or TSV by a specific column?", a: "Not directly — this tool sorts whole lines. For column-based sorting, paste only the column you want to sort, sort it, then re-combine." },
+        { q: "Why does A→Z put '10' before '9'?", a: "Alphabetical sort compares characters left to right, so '1' comes before '9'. Use 1→9 or 9→1 to sort by actual number value." },
+        { q: "Is alphabetical sort case-sensitive?", a: "Yes — uppercase letters sort before lowercase in Unicode order. Convert to the same case first using the Case Converter tool if needed." },
+        { q: "What algorithm does Shuffle use?", a: "Fisher-Yates (Knuth) shuffle — produces an unbiased random permutation of the lines." },
+        { q: "Can I sort by a specific column in CSV data?", a: "Not directly — this tool sorts whole lines. Extract the column first with the Column Picker tool, sort it, then re-combine." },
       ],
     }}>
       <div className="flex gap-2 mb-3 flex-wrap">
-        {(["asc", "desc", "numeric", "shuffle"] as const).map((m) => (
-          <button key={m} onClick={() => setMode(m)} className={`min-tap rounded-xl px-3 py-2 text-sm capitalize ${mode === m ? "bg-brand-gradient text-white shadow-glow" : "btn-ghost"}`}>{m === "asc" ? "A → Z" : m === "desc" ? "Z → A" : m}</button>
+        {MODES.map(({ value, label }) => (
+          <button key={value} onClick={() => setMode(value)} className={`min-tap rounded-xl px-3 py-2 text-sm ${mode === value ? "bg-brand-gradient text-white shadow-glow" : "btn-ghost"}`}>{label}</button>
         ))}
       </div>
       <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
