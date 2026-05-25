@@ -1,4 +1,4 @@
-# Deploying MyDailyTools to AWS S3 + CloudFront
+# Deploying MyDailyTool to AWS S3 + CloudFront
 
 This site builds to a static `out/` folder. The cheapest production-grade host for that on AWS is **S3 (origin) + CloudFront (CDN) + Route 53 (DNS) + ACM (HTTPS)**. Estimated cost for a small site: **$1–5/month**.
 

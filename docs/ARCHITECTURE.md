@@ -1,6 +1,6 @@
 # Architecture
 
-Logical design and code-level decisions for MyDailyTools. For physical infrastructure (AWS, DNS, CDN), see [INFRA.md](INFRA.md).
+Logical design and code-level decisions for MyDailyTool. For physical infrastructure (AWS, DNS, CDN), see [INFRA.md](INFRA.md).
 
 ## What this site is
 

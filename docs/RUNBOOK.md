@@ -1,6 +1,6 @@
 # Runbook
 
-Operations playbook for MyDailyTools. Read [INFRA.md](INFRA.md) for the topology this assumes.
+Operations playbook for MyDailyTool. Read [INFRA.md](INFRA.md) for the topology this assumes.
 
 ## When to use this doc
 

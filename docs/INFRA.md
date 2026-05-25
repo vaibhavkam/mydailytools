@@ -1,6 +1,6 @@
 # Infrastructure
 
-Physical deployment of MyDailyTools on AWS. Read [ARCHITECTURE.md](ARCHITECTURE.md) first for the logical design.
+Physical deployment of MyDailyTool on AWS. Read [ARCHITECTURE.md](ARCHITECTURE.md) first for the logical design.
 
 ## Topology
 

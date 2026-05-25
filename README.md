@@ -1,4 +1,4 @@
-# MyDailyTools
+# MyDailyTool
 
 A static website hosting **168 free online tools** — calculators, converters, developer utilities, and text helpers — at [mydailytool.com](https://mydailytool.com).
 
