@@ -44,7 +44,7 @@ export default function HomePage() {
           <Sparkles className="h-3.5 w-3.5" /> {ALL_TOOLS.length}+ free tools, zero signup
         </span>
         <h1 className="mt-5 text-4xl md:text-6xl font-bold tracking-tight text-balance">
-          Every tool you need for the <span className="bg-brand-gradient bg-clip-text text-transparent">daily web</span>
+          Every tool you need for <span className="bg-brand-gradient bg-clip-text text-transparent">your everyday work</span>
         </h1>
         <p className="mt-5 max-w-2xl mx-auto text-lg text-[rgb(var(--fg-muted))] text-balance">
           Calculators, converters, developer utilities, and text tools — all running locally in your browser. Fast, private, and free.
