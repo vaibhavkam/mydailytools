@@ -70,10 +70,6 @@ export default function HomePage() {
         ))}
       </section>
 
-      <RecentToolsSection />
-
-      <AdSlot slot="header" />
-
       {/* FEATURED TOOLS */}
       <section className="mt-12">
         <div className="flex items-end justify-between mb-5">
@@ -94,6 +90,10 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <RecentToolsSection />
+
+      <AdSlot slot="header" />
 
       {/* CATEGORY SHOWCASE */}
       <section className="mt-16">
