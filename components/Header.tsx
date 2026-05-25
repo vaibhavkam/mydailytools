@@ -25,7 +25,7 @@ export function Header() {
           <Link href="/tools/" className="btn-ghost">All tools</Link>
         </nav>
         <div className="flex items-center gap-1">
-          <CommandPaletteTrigger className="hidden sm:inline-flex" />
+          <CommandPaletteTrigger className="inline-flex" />
           <LocalePicker className="hidden sm:inline-flex" />
           <Link
             href="/support/"
