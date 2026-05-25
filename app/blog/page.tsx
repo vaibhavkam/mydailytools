@@ -6,8 +6,8 @@ import { SITE } from "@/lib/tools";
 import { POSTS_BY_DATE } from "@/lib/posts";
 
 export const metadata = buildMetadata({
-  title: "Blog",
-  description: `Practical articles on developer tools, web standards, and the math behind everyday calculators — from the team building ${SITE.name}.`,
+  title: "Developer Tools Blog & References",
+  description: `Practical references for developers — regex patterns, JSON formatting, ISO 8601 dates, LLM token counting, and more. In-depth guides from the team building ${SITE.name}.`,
   path: "/blog/",
 });
 

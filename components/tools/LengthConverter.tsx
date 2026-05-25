@@ -39,8 +39,10 @@ export default function LengthConverter({ tool }: { tool: Tool & { categorySlug:
         examples:
           "100 m = 328.084 ft = 109.361 yd = 0.0621 mi. 1 mile = 1609.344 m = 1.609 km. 1 inch = 25.4 mm exactly.",
         faq: [
-          { q: "Why is the value not exactly equal when I round-trip?", a: "Floating-point math introduces tiny rounding. We display 6 significant digits by default." },
-          { q: "What's a nautical mile?", a: "An international unit used in maritime and aviation contexts: 1 nmi = 1852 m." },
+          { q: "How many feet are in a meter?", a: "1 meter = 3.28084 feet. Conversely, 1 foot = 0.3048 meters exactly — this has been the international definition since 1959." },
+          { q: "How many kilometers are in a mile?", a: "1 mile = 1.60934 km. A quick mental approximation: multiply miles by 1.6 to get km, or divide km by 1.6 to get miles." },
+          { q: "What's a nautical mile?", a: "1 nautical mile = 1852 meters exactly. It corresponds to 1 arcminute of latitude and is used in maritime and aviation navigation." },
+          { q: "Why is the value not exactly equal when I round-trip?", a: "Floating-point arithmetic introduces tiny rounding errors. We display 6 significant digits; the underlying value may vary in the last few decimal places." },
         ],
       }}
     >

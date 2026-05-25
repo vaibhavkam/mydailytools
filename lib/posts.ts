@@ -17,8 +17,8 @@ export type Post = {
 export const POSTS: Post[] = [
   {
     slug: "llm-token-counting-guide",
-    title: "Token Counting Across LLM APIs: GPT, Claude, Llama, and Gemini Explained",
-    description: "A practical guide to LLM tokens — how they work, why every model counts them differently, what real cost calculations look like at scale, and how to count tokens before sending a request.",
+    title: "LLM Token Counting: GPT, Claude, Llama & Gemini Explained",
+    description: "A practical guide to LLM tokens — how they work, why each model counts differently, real cost calculations at scale, and how to count tokens before sending a request.",
     date: "2026-05-22",
     tags: ["llm", "ai", "tokens", "developer", "reference"],
     relatedTools: ["token-counter", "llm-schema-validator", "json-formatter"],
@@ -26,8 +26,8 @@ export const POSTS: Post[] = [
   },
   {
     slug: "regex-cheat-sheet",
-    title: "Regex Cheat Sheet: Patterns Every Developer Should Know",
-    description: "A practical reference for regular expressions — character classes, quantifiers, anchors, groups, and lookaheads — with ready-to-use patterns for emails, URLs, dates, and more.",
+    title: "Regex Cheat Sheet: Patterns Every Dev Should Know",
+    description: "A practical regex reference — character classes, quantifiers, anchors, groups, and lookaheads — with ready-to-use patterns for emails, URLs, dates, and more.",
     date: "2026-05-08",
     tags: ["regex", "developer", "reference"],
     relatedTools: ["regex-tester", "find-and-replace", "url-encoder-decoder", "json-formatter"],
@@ -35,8 +35,8 @@ export const POSTS: Post[] = [
   },
   {
     slug: "json-formatting-guide",
-    title: "JSON Formatting Guide: Pretty-Print, Minify, and Validate Like a Pro",
-    description: "Everything you need to know about formatting JSON — indentation rules, minification for production, common validation errors, and how to convert between JSON and other formats.",
+    title: "JSON Formatting Guide: Pretty-Print & Validate Like a Pro",
+    description: "Everything you need to know about JSON formatting — indentation rules, minification for production, common validation errors, and how to convert between JSON and other formats.",
     date: "2026-05-06",
     tags: ["json", "developer", "reference"],
     relatedTools: ["json-formatter", "json-to-csv", "yaml-to-json", "json-to-typescript"],
@@ -44,7 +44,7 @@ export const POSTS: Post[] = [
   },
   {
     slug: "iso-8601-cheat-sheet",
-    title: "ISO 8601 Cheat Sheet: Dates, Times, 24:00, Durations, and Intervals",
+    title: "ISO 8601 Date & Time Format Cheat Sheet (2026)",
     description: "A practical reference for ISO 8601 — date formats, time (including 24:00 end-of-day), timezone offsets, durations, and intervals — with copy-pasteable examples.",
     date: "2026-05-03",
     tags: ["dates", "developer", "reference", "iso 8601", "timestamp"],

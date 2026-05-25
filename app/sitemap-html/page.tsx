@@ -5,12 +5,16 @@ import { buildMetadata } from "@/lib/seo";
 
 // HTML sitemap — a single page listing every tool, organized by category.
 // Distinct from /sitemap.xml: this one is for human visitors and reinforces
-// internal linking signals to crawlers.
-export const metadata = buildMetadata({
-  title: "Sitemap",
-  description: `Browse every tool available on ${SITE.name}, organized by category.`,
-  path: "/sitemap-html/",
-});
+// internal linking signals to crawlers. Excluded from search index to avoid
+// duplicate content; the canonical tool and category pages handle discovery.
+export const metadata = {
+  ...buildMetadata({
+    title: "Sitemap",
+    description: `Browse every tool available on ${SITE.name}, organized by category.`,
+    path: "/sitemap-html/",
+  }),
+  robots: { index: false, follow: true },
+};
 
 export default function SitemapHtmlPage() {
   return (

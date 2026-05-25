@@ -4,8 +4,8 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { buildMetadata, itemListJsonLd } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "All Tools",
-  description: `Browse all ${ALL_TOOLS.length}+ free online tools at MyDailyTool — calculators, converters, developer utilities, and more.`,
+  title: "Free Online Tools Directory",
+  description: `Browse all ${ALL_TOOLS.length}+ free online tools at MyDailyTool — calculators, unit converters, developer utilities, text tools, and more. No signup required, runs in your browser.`,
   path: "/tools/",
 });
 

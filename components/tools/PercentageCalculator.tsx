@@ -33,8 +33,9 @@ export default function PercentageCalculator({ tool }: { tool: Tool & { category
         examples:
           "20% of 150 is 30. 45 is 60% of 75. The percent change from 80 to 100 is +25%.",
         faq: [
-          { q: "How is percent change calculated?", a: "Subtract the old value from the new value, divide by the absolute value of the old, then multiply by 100." },
-          { q: "Why does the result use absolute value of the old number?", a: "It keeps the sign of the change meaningful when the starting value is negative." },
+          { q: "What's the difference between the three modes?", a: "'X% of Y' finds a portion (e.g. 20% of 150 = 30). 'X is what % of Y' finds the ratio (e.g. 30 is 20% of 150). '% change' compares two values (e.g. from 80 to 100 is +25%)." },
+          { q: "How is percent change calculated?", a: "Formula: ((New − Old) ÷ |Old|) × 100. Dividing by the absolute value of Old keeps the sign meaningful even when the starting value is negative." },
+          { q: "What does a negative percent change mean?", a: "A negative result means the value decreased. For example, a change from 100 to 75 is −25% — a 25% decrease." },
           { q: "Is my data sent to a server?", a: "No. Every calculation runs locally in your browser. Nothing leaves your device." },
         ],
       }}

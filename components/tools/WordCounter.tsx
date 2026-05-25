@@ -40,8 +40,10 @@ export default function WordCounter({ tool }: { tool: Tool & { categorySlug: str
         examples:
           'A 500-word article reads in about 2–3 minutes. The string "Hello, world." has 2 words, 13 characters (12 without space), and 1 sentence.',
         faq: [
-          { q: "Are sentences detected perfectly?", a: "We use a simple rule (.!? + whitespace). Edge cases like 'Mr. Smith' may inflate the count slightly." },
-          { q: "Is my text uploaded?", a: "No, it's all measured in your browser and never leaves your device." },
+          { q: "How is reading time calculated?", a: "We divide the word count by 225 — the average adult silent reading speed in words per minute. The result rounds up to a minimum of 1 minute. For technical content, actual reading time may be longer." },
+          { q: "Are sentences detected perfectly?", a: "We use a punctuation rule: .!? followed by whitespace or end-of-text counts as one sentence. Edge cases like 'Dr. Smith' or 'e.g.' may inflate the count slightly." },
+          { q: "Does the character count include spaces?", a: "Yes — 'Characters' includes all spaces and newlines. 'No spaces' strips all whitespace first, which matches Twitter/X character counting for most text." },
+          { q: "Is my text uploaded anywhere?", a: "No. All counting happens locally in your browser. Nothing is sent to any server." },
         ],
       }}
     >

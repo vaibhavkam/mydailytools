@@ -43,8 +43,10 @@ export default function UnixTimestampConverter({ tool }: { tool: Tool & { catego
         formula: "Unix time = seconds since 1970-01-01T00:00:00Z. Milliseconds is ×1000. We auto-detect 10-digit (seconds) vs 13-digit (milliseconds) input.",
         examples: "1714665600 → 2024-05-02T16:00:00Z. The new millennium (2000-01-01T00:00:00Z) is 946684800.",
         faq: [
-          { q: "What about the year 2038 problem?", a: "32-bit signed Unix time overflows in 2038. JavaScript uses 64-bit floats, so this tool works far past 2038." },
-          { q: "Which timezone?", a: "Unix time is timezone-independent (always UTC). We show your local interpretation for convenience." },
+          { q: "What is a Unix timestamp?", a: "A Unix timestamp is the number of seconds (or milliseconds) elapsed since 1970-01-01T00:00:00Z — also called the Unix epoch. It's the standard way most programming languages and databases store time internally." },
+          { q: "Seconds or milliseconds — how do I tell?", a: "10-digit numbers are seconds (e.g. 1714665600). 13-digit numbers are milliseconds (e.g. 1714665600000). This tool detects both automatically." },
+          { q: "What about the year 2038 problem?", a: "32-bit signed Unix time overflows in January 2038. JavaScript uses 64-bit floats, so this tool handles timestamps far beyond 2038 — past the year 275,760." },
+          { q: "Which timezone does this use?", a: "Unix time is always UTC — it has no timezone. This tool shows both UTC and your local browser timezone so you can see both interpretations at once." },
         ],
       }}
     >

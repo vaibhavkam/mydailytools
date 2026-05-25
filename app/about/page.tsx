@@ -3,8 +3,8 @@ import { buildMetadata } from "@/lib/seo";
 import { SITE, ALL_TOOLS } from "@/lib/tools";
 
 export const metadata = buildMetadata({
-  title: "About",
-  description: `About ${SITE.name} — who we are and how the site works.`,
+  title: "About MyDailyTool — Free Browser Tools, No Signup",
+  description: `MyDailyTool is a free collection of 168+ online tools — calculators, unit converters, developer utilities, and text helpers — built for speed and privacy. No signup, no tracking.`,
   path: "/about/",
 });
 

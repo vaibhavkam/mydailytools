@@ -36,9 +36,10 @@ export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: s
         examples:
           'Input: {"a":1,"b":[2,3]}. Pretty (2-space): two-line nested layout. Minified: {"a":1,"b":[2,3]} unchanged. Invalid input like {a:1} is rejected with a syntax error.',
         faq: [
-          { q: "Does this send my JSON to a server?", a: "No. The browser parses and formats it locally — nothing is uploaded." },
-          { q: "Will it sort my keys?", a: "No, key order is preserved exactly as in the input." },
-          { q: "What's the largest JSON I can format?", a: "Practical limit is your browser's memory — typically tens of megabytes." },
+          { q: "Does this send my JSON to a server?", a: "No. The browser parses and formats it locally using JSON.parse and JSON.stringify — nothing is uploaded." },
+          { q: "Will it sort my keys?", a: "No. Key order is preserved exactly as in the input. JSON.stringify maintains insertion order in all modern JavaScript engines." },
+          { q: "What's the difference between formatting and validating?", a: "Formatting only runs if the JSON is valid — so a successful format also means the input is valid JSON. Validation errors show the exact position and reason for the failure." },
+          { q: "What's the largest JSON I can format?", a: "Practical limit is your browser's available memory — typically tens of megabytes. For very large files, consider a native tool like jq instead." },
         ],
       }}
     >

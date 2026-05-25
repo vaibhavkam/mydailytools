@@ -45,8 +45,10 @@ export default function BmiCalculator({ tool }: { tool: Tool & { categorySlug: s
         formula: "Metric: BMI = weight (kg) ÷ height (m)². Imperial: BMI = (weight (lbs) ÷ height (in)²) × 703. WHO categories: < 18.5 underweight, 18.5–24.9 healthy, 25–29.9 overweight, ≥ 30 obese.",
         examples: "A 170 cm person weighing 65 kg has a BMI of 22.5 (healthy). A 5'7\" person at 145 lbs is BMI 22.7.",
         faq: [
-          { q: "Is BMI accurate for athletes?", a: "Not very. Muscular people often score 'overweight' despite low body fat. Use BMI as a quick check, not a diagnosis." },
-          { q: "What about children?", a: "Children use age- and sex-specific BMI percentiles, not the adult cutoffs above. Consult a pediatrician for accurate readings." },
+          { q: "What is a healthy BMI range?", a: "The WHO defines: below 18.5 = underweight, 18.5–24.9 = healthy weight, 25–29.9 = overweight, 30 or above = obese. These thresholds apply to most adults but have limitations." },
+          { q: "Is BMI accurate for athletes?", a: "Not very. Muscular people often score 'overweight' despite low body fat, because BMI doesn't distinguish muscle from fat. Use it as a screening tool, not a definitive assessment." },
+          { q: "What about children?", a: "Children use age- and sex-specific BMI percentiles, not the adult cutoffs above. The same raw BMI value has a different meaning at different ages. Consult a pediatrician." },
+          { q: "Does BMI differ by ethnicity?", a: "Yes. Some health organizations recommend lower overweight thresholds for South Asian, East Asian, and other populations due to differences in body composition at equivalent BMI values." },
         ],
       }}
     >

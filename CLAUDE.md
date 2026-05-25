@@ -176,7 +176,18 @@ Repeated patterns from past sessions:
 - **Tool widgets get a `<ToolPage>` wrapper** for SEO content. Don't render bare widgets.
 - **Tailwind classes only.** No CSS modules, no styled-components.
 - **`lib/tools.ts` order = visible order.** When asked to reorder, edit the array order in place; don't add a separate `displayOrder` field.
-- **Tool `description` is a SERP snippet, not a caption.** Write 120–155 chars with a concrete use case, not a one-liner. Cover spelling variants ("time zone" + "timezone") in `keywords`. After bumping descriptions, bump `TOOL_LASTMOD` (ADR-011).
+- **Tool `description` is a SERP snippet, not a caption.** Write 120–160 chars with a concrete use case, not a one-liner. Cover spelling variants ("time zone" + "timezone") in `keywords`. After bumping descriptions, bump `TOOL_LASTMOD` (ADR-011).
+- **FAQ content on tool pages.** Every `<ToolPage>` should pass `content.faq` with at least 2–3 Q&As. FAQs generate FAQ rich results in Google and anchor long-tail queries. Thin FAQs (1 entry) are almost as bad as none — the structured data fires but there's nothing useful for Google to show.
+- **Blog post titles ≤ 50 chars, descriptions ≤ 160 chars.** Same SERP constraints as tool pages. `lib/posts.ts` is the source; titles are used for both the `<title>` tag and the on-page H1. Long titles get truncated in SERPs.
+
+## SEO constraints to maintain
+
+These were audited 2026-05-25 and fixed. Don't regress them:
+
+- **Category pages (`app/[category]/page.tsx`)** use a `CATEGORY_SEO` lookup for per-category titles and descriptions. When adding a new category to `lib/tools.ts`, add a matching entry to `CATEGORY_SEO` in that file — the generic template (`${cat.name} Tools`) produces titles that are too short and descriptions that are too sparse.
+- **Tool descriptions in `lib/tools.ts`** must be 120–160 chars. One-liners ("Add or remove sales tax.") are not acceptable — Google auto-generates its own snippet from the page body instead, defeating keyword targeting.
+- **`/sitemap-html/` is noindexed** (`robots: { index: false }` in `app/sitemap-html/page.tsx`). Keep it that way — it's a utility page with no unique content.
+- **`TOOL_LASTMOD` in `scripts/generate-sitemap.mjs`** must be bumped whenever tool descriptions, FAQs, or how-to content changes. Google won't recrawl if the date is stale.
 
 ---
 
@@ -197,4 +208,4 @@ Keep this file under ~250 lines. If it bloats, prune older "abandoned" items tha
 
 ---
 
-Last updated: 2026-05-22
+Last updated: 2026-05-25
