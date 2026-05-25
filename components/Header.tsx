@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Coffee } from "lucide-react";
+import { Menu, X, Coffee, Search } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
-import { CommandPaletteTrigger } from "./CommandPalette";
+import { CommandPaletteTrigger, CommandPalette } from "./CommandPalette";
 import { LocalePicker } from "./LocalePicker";
 import { CATEGORIES } from "@/lib/tools";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 glass">
@@ -25,7 +26,7 @@ export function Header() {
           <Link href="/tools/" className="btn-ghost">All tools</Link>
         </nav>
         <div className="flex items-center gap-1">
-          <CommandPaletteTrigger className="inline-flex" />
+          <CommandPaletteTrigger className="hidden sm:inline-flex" />
           <LocalePicker className="hidden sm:inline-flex" />
           <Link
             href="/support/"
@@ -49,6 +50,12 @@ export function Header() {
       {open && (
         <div className="md:hidden border-t border-[rgb(var(--border))] bg-[rgb(var(--bg-elevated))]">
           <div className="container py-3 grid grid-cols-2 gap-2">
+            <button
+              className="btn-ghost col-span-2 flex items-center gap-2"
+              onClick={() => { setSearchOpen(true); setOpen(false); }}
+            >
+              <Search className="h-4 w-4" /> Search tools
+            </button>
             {CATEGORIES.map((c) => (
               <Link key={c.slug} href={`/${c.slug}/`} className="btn-ghost" onClick={() => setOpen(false)}>
                 {c.name}
@@ -58,6 +65,7 @@ export function Header() {
           </div>
         </div>
       )}
+      <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }
