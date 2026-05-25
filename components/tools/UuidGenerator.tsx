@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Copy, RefreshCw } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
@@ -21,7 +21,12 @@ function uuidv4(): string {
 export default function UuidGenerator({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [count, setCount] = useState(5);
   const [uppercase, setUppercase] = useState(false);
-  const [list, setList] = useState<string[]>(() => Array.from({ length: 5 }, uuidv4));
+  // Start empty to avoid SSR/client hydration mismatch (random values differ between server and client).
+  const [list, setList] = useState<string[]>([]);
+
+  useEffect(() => {
+    setList(Array.from({ length: 5 }, uuidv4));
+  }, []);
 
   function regen(n = count) {
     setList(Array.from({ length: n }, uuidv4));
