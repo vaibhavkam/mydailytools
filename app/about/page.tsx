@@ -4,7 +4,7 @@ import { SITE, ALL_TOOLS } from "@/lib/tools";
 
 export const metadata = buildMetadata({
   title: "About MyDailyTool — Free Browser Tools, No Signup",
-  description: `MyDailyTool is a free collection of 168+ online tools — calculators, unit converters, developer utilities, and text helpers — built for speed and privacy. No signup, no tracking.`,
+  description: `MyDailyTool is a free collection of ${ALL_TOOLS.length}+ online tools — calculators, unit converters, developer utilities, and text helpers — built for speed and privacy. No signup, no tracking.`,
   path: "/about/",
 });
 

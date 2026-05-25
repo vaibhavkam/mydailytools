@@ -15,7 +15,7 @@ gotchas — not project documentation. For project docs, read in this order:
 
 ## Project at a glance
 
-- **MyDailyTools** — static site of 168 free online tools at https://mydailytool.com
+- **MyDailyTools** — static site of 184 free online tools at https://mydailytool.com (count is `ALL_TOOLS.length` — never hardcode it in UI)
 - Owner: Vaibhav Kamble (personal project, not Intuit)
 - AWS account: `314138869784` (personal; Intuit account is separate, never deploy to it)
 - GitHub repo: https://github.com/vaibhavkam/mydailytools (private)
