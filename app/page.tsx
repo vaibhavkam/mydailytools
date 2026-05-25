@@ -56,19 +56,18 @@ export default function HomePage() {
       </section>
 
       {/* TRUST SIGNALS */}
-      <section className="mt-12 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-[rgb(var(--fg-muted))]">
         {[
-          { icon: Zap, t: "Instant", d: "Runs entirely in your browser. No round-trips, no waiting." },
-          { icon: Shield, t: "Private", d: "We never see your data. No upload, no tracking on tool inputs." },
-          { icon: Sparkles, t: "Free forever", d: "Every tool, every feature, no paywall, no signup." },
-        ].map(({ icon: Icon, t, d }) => (
-          <div key={t} className="card p-5">
-            <Icon className="h-5 w-5 text-brand-600" />
-            <h3 className="mt-2 font-semibold">{t}</h3>
-            <p className="text-sm text-[rgb(var(--fg-muted))]">{d}</p>
-          </div>
+          { icon: Zap, label: "Instant — runs in your browser" },
+          { icon: Shield, label: "Private — your data never leaves" },
+          { icon: Sparkles, label: "Free forever — no signup" },
+        ].map(({ icon: Icon, label }) => (
+          <span key={label} className="inline-flex items-center gap-1.5">
+            <Icon className="h-3.5 w-3.5 text-brand-600 shrink-0" />
+            {label}
+          </span>
         ))}
-      </section>
+      </div>
 
       {/* FEATURED TOOLS */}
       <section className="mt-12">
