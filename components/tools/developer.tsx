@@ -51,9 +51,19 @@ export function CssMinifier({ tool }: Props) {
       examples: "A 500 byte stylesheet often shrinks to 350–400 bytes (~25% smaller).",
       faq: [{ q: "Is this lossless?", a: "Yes — it only removes whitespace and comments. CSS rules and values are preserved exactly." }],
     }}>
-      <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={css} onChange={(e) => setCss(e.target.value)} />
-      <div className="mt-2 text-xs text-[rgb(var(--fg-muted))]">Saved {ratio}% ({css.length} → {min.length} bytes)</div>
-      <AutoTextarea className="input min-h-[320px] font-mono text-xs mt-2" value={min} readOnly />
+      <div className="grid gap-4">
+        <div>
+          <label className="label">Input CSS</label>
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={css} onChange={(e) => setCss(e.target.value)} />
+        </div>
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="label !mb-0">Minified <span className="text-[rgb(var(--fg-muted))] font-normal">— saved {ratio}% ({css.length} → {min.length} bytes)</span></label>
+            <button onClick={() => navigator.clipboard.writeText(min)} className="btn-ghost text-xs">Copy</button>
+          </div>
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={min} readOnly />
+        </div>
+      </div>
     </ToolPage>
   );
 }
@@ -78,8 +88,19 @@ console.log(add(2, 3));`);
       examples: "Useful for inline scripts in HTML where every byte matters.",
       faq: [{ q: "Is this safe for all JS?", a: "Mostly — but it can break code that relies on whitespace around regex literals or template strings. Check output before shipping." }],
     }}>
-      <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={js} onChange={(e) => setJs(e.target.value)} />
-      <AutoTextarea className="input min-h-[320px] font-mono text-xs mt-3" value={min} readOnly />
+      <div className="grid gap-4">
+        <div>
+          <label className="label">Input JavaScript</label>
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={js} onChange={(e) => setJs(e.target.value)} />
+        </div>
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="label !mb-0">Minified</label>
+            <button onClick={() => navigator.clipboard.writeText(min)} className="btn-ghost text-xs">Copy</button>
+          </div>
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={min} readOnly />
+        </div>
+      </div>
     </ToolPage>
   );
 }
@@ -108,9 +129,21 @@ export function XmlFormatter({ tool }: Props) {
         { q: "Is my XML sent to a server?", a: "No. Parsing and formatting happen entirely in your browser using the built-in DOMParser API." },
       ],
     }}>
-      <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} />
-      {out.ok ? <AutoTextarea className="input min-h-[320px] font-mono text-xs mt-3" value={out.text} readOnly />
-              : <p role="alert" className="mt-3 text-sm text-red-600">{out.msg}</p>}
+      <div className="grid gap-4">
+        <div>
+          <label className="label">Input XML</label>
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} />
+        </div>
+        {out.ok
+          ? <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="label !mb-0">Formatted XML</label>
+                <button onClick={() => navigator.clipboard.writeText(out.text ?? "")} className="btn-ghost text-xs">Copy</button>
+              </div>
+              <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={out.text ?? ""} readOnly />
+            </div>
+          : <p role="alert" className="text-sm text-red-600">{out.msg}</p>}
+      </div>
     </ToolPage>
   );
 }
