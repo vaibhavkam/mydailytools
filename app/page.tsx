@@ -53,21 +53,19 @@ export default function HomePage() {
           <Link href="/tools/" className="btn-primary min-tap">Browse all tools <ArrowRight className="h-4 w-4" /></Link>
           <Link href="/developer/" className="btn-ghost min-tap">For developers</Link>
         </div>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-sm text-[rgb(var(--fg-muted))]">
+          {[
+            { icon: Zap, label: "Instant — runs in your browser" },
+            { icon: Shield, label: "Private — your data never leaves" },
+            { icon: Sparkles, label: "Free forever — no signup" },
+          ].map(({ icon: Icon, label }) => (
+            <span key={label} className="inline-flex items-center gap-1.5">
+              <Icon className="h-3.5 w-3.5 text-brand-600 shrink-0" />
+              {label}
+            </span>
+          ))}
+        </div>
       </section>
-
-      {/* TRUST SIGNALS */}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-[rgb(var(--fg-muted))]">
-        {[
-          { icon: Zap, label: "Instant — runs in your browser" },
-          { icon: Shield, label: "Private — your data never leaves" },
-          { icon: Sparkles, label: "Free forever — no signup" },
-        ].map(({ icon: Icon, label }) => (
-          <span key={label} className="inline-flex items-center gap-1.5">
-            <Icon className="h-3.5 w-3.5 text-brand-600 shrink-0" />
-            {label}
-          </span>
-        ))}
-      </div>
 
       {/* FEATURED TOOLS */}
       <section className="mt-12">
