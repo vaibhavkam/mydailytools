@@ -37,16 +37,23 @@ export function CssMinifier({ tool }: Props) {
   color: white;
   padding: 8px 16px;
 }`);
-  const min = useMemo(() => css
-    .replace(/\/\*[\s\S]*?\*\//g, "")        // comments
-    .replace(/\s+/g, " ")                     // whitespace runs
-    .replace(/\s*([{}:;,>+~])\s*/g, "$1")     // around punctuation
-    .replace(/;}/g, "}")                      // trailing semicolons
-    .trim(), [css]);
-  const ratio = css.length ? Math.round((1 - min.length / css.length) * 100) : 0;
+  const [output, setOutput] = useState("");
+
+  function minify() {
+    const min = css
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\s+/g, " ")
+      .replace(/\s*([{}:;,>+~])\s*/g, "$1")
+      .replace(/;}/g, "}")
+      .trim();
+    setOutput(min);
+  }
+
+  const ratio = css.length && output ? Math.round((1 - output.length / css.length) * 100) : 0;
+
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Paste CSS on the left to see minified output and the savings ratio.",
+      howTo: "Paste CSS into the input box and press Minify to strip comments and whitespace.",
       formula: "Strips comments, collapses whitespace, removes unnecessary spaces around punctuation, and drops trailing semicolons before closing braces.",
       examples: "A 500 byte stylesheet often shrinks to 350–400 bytes (~25% smaller).",
       faq: [{ q: "Is this lossless?", a: "Yes — it only removes whitespace and comments. CSS rules and values are preserved exactly." }],
@@ -54,15 +61,20 @@ export function CssMinifier({ tool }: Props) {
       <div className="grid gap-4">
         <div>
           <label className="label">Input CSS</label>
-          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={css} onChange={(e) => setCss(e.target.value)} />
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={css} onChange={(e) => setCss(e.target.value)} spellCheck={false} />
         </div>
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="label !mb-0">Minified <span className="text-[rgb(var(--fg-muted))] font-normal">— saved {ratio}% ({css.length} → {min.length} bytes)</span></label>
-            <button onClick={() => navigator.clipboard.writeText(min)} className="btn-ghost text-xs">Copy</button>
+        <div className="flex gap-2">
+          <button onClick={minify} className="btn-primary min-tap">Minify</button>
+        </div>
+        {output && (
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="label !mb-0">Minified <span className="text-[rgb(var(--fg-muted))] font-normal">— saved {ratio}% ({css.length} → {output.length} bytes)</span></label>
+              <button onClick={() => navigator.clipboard.writeText(output)} className="btn-ghost text-xs">Copy</button>
+            </div>
+            <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={output} readOnly />
           </div>
-          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={min} readOnly />
-        </div>
+        )}
       </div>
     </ToolPage>
   );
@@ -75,15 +87,21 @@ export function JsMinifier({ tool }: Props) {
   return a + b;
 }
 console.log(add(2, 3));`);
-  const min = useMemo(() => js
-    .replace(/\/\/[^\n]*/g, "")
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\s*([{}();,:=<>+\-*/&|!?])\s*/g, "$1")
-    .replace(/\s+/g, " ")
-    .trim(), [js]);
+  const [output, setOutput] = useState("");
+
+  function minify() {
+    const min = js
+      .replace(/\/\/[^\n]*/g, "")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\s*([{}();,:=<>+\-*/&|!?])\s*/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim();
+    setOutput(min);
+  }
+
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Paste JavaScript; comments and whitespace are stripped. This is a *safe* minifier — it does not mangle identifiers or perform tree-shaking.",
+      howTo: "Paste JavaScript into the input box and press Minify. Comments and whitespace are stripped. This is a safe minifier — it does not mangle identifiers or perform tree-shaking.",
       formula: "Removes // and /* */ comments, collapses whitespace, removes spaces around operators and punctuation.",
       examples: "Useful for inline scripts in HTML where every byte matters.",
       faq: [{ q: "Is this safe for all JS?", a: "Mostly — but it can break code that relies on whitespace around regex literals or template strings. Check output before shipping." }],
@@ -91,15 +109,20 @@ console.log(add(2, 3));`);
       <div className="grid gap-4">
         <div>
           <label className="label">Input JavaScript</label>
-          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={js} onChange={(e) => setJs(e.target.value)} />
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={js} onChange={(e) => setJs(e.target.value)} spellCheck={false} />
         </div>
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="label !mb-0">Minified</label>
-            <button onClick={() => navigator.clipboard.writeText(min)} className="btn-ghost text-xs">Copy</button>
+        <div className="flex gap-2">
+          <button onClick={minify} className="btn-primary min-tap">Minify</button>
+        </div>
+        {output && (
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="label !mb-0">Minified</label>
+              <button onClick={() => navigator.clipboard.writeText(output)} className="btn-ghost text-xs">Copy</button>
+            </div>
+            <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={output} readOnly />
           </div>
-          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={min} readOnly />
-        </div>
+        )}
       </div>
     </ToolPage>
   );
@@ -108,18 +131,23 @@ console.log(add(2, 3));`);
 // XML Formatter
 export function XmlFormatter({ tool }: Props) {
   const [xml, setXml] = useState(`<root><item id="1">A</item><item id="2">B</item></root>`);
-  const out = useMemo(() => {
+  const [output, setOutput] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  function format() {
     try {
       const parser = new DOMParser();
       const doc = parser.parseFromString(xml, "application/xml");
       const err = doc.querySelector("parsererror");
-      if (err) return { ok: false, msg: err.textContent || "Parse error" };
-      return { ok: true, text: prettyXml(xml) };
-    } catch (e: any) { return { ok: false, msg: e.message }; }
-  }, [xml]);
+      if (err) { setError(err.textContent || "Parse error"); setOutput(""); return; }
+      setOutput(prettyXml(xml));
+      setError(null);
+    } catch (e: any) { setError(e.message); setOutput(""); }
+  }
+
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Paste XML to pretty-print and validate. Errors point to the first parse failure.",
+      howTo: "Paste XML into the input box and press Format to pretty-print and validate. Errors point to the first parse failure.",
       formula: "Validation: DOMParser. Pretty-print: insert newlines and 2-space indent at each tag boundary, preserving text content.",
       examples: '<root><a>1</a></root> formats with each tag on its own line.',
       faq: [
@@ -132,17 +160,21 @@ export function XmlFormatter({ tool }: Props) {
       <div className="grid gap-4">
         <div>
           <label className="label">Input XML</label>
-          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} />
+          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} spellCheck={false} />
         </div>
-        {out.ok
-          ? <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="label !mb-0">Formatted XML</label>
-                <button onClick={() => navigator.clipboard.writeText(out.text ?? "")} className="btn-ghost text-xs">Copy</button>
-              </div>
-              <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={out.text ?? ""} readOnly />
+        <div className="flex gap-2">
+          <button onClick={format} className="btn-primary min-tap">Format</button>
+        </div>
+        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+        {output && (
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="label !mb-0">Formatted XML</label>
+              <button onClick={() => navigator.clipboard.writeText(output)} className="btn-ghost text-xs">Copy</button>
             </div>
-          : <p role="alert" className="text-sm text-red-600">{out.msg}</p>}
+            <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={output} readOnly />
+          </div>
+        )}
       </div>
     </ToolPage>
   );
