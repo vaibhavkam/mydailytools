@@ -36,7 +36,7 @@ export default function HomePage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blob) }} />
       ))}
       {/* HERO */}
-      <section className="relative overflow-hidden rounded-3xl py-16 md:py-24 px-6 text-center bg-subtle-grid">
+      <section className="relative overflow-hidden rounded-3xl py-10 md:py-16 px-6 text-center bg-subtle-grid">
         <div className="absolute inset-0 -z-10 opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]">
           <div className="absolute inset-0 bg-brand-gradient blur-3xl" />
         </div>
@@ -68,7 +68,7 @@ export default function HomePage() {
       </section>
 
       {/* FEATURED TOOLS */}
-      <section className="mt-12">
+      <section className="mt-8">
         <div className="flex items-end justify-between mb-5">
           <h2 className="text-2xl font-semibold">Popular tools</h2>
           <Link href="/tools/" className="text-sm text-brand-600 hover:underline">View all →</Link>
