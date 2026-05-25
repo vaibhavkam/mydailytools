@@ -75,6 +75,10 @@ const CATEGORY_SEO: Record<string, { title: string; description: string }> = {
     title: "Free Electrical & Electronics Calculators",
     description: `${SITE.name} has 10 free electrical calculators — Ohm's law, watts to amps, voltage divider, resistor color code, capacitance, decibel, AWG wire size, and more. No signup.`,
   },
+  pdf: {
+    title: "Free PDF Tools Online — Merge, Split, Convert & More",
+    description: `${SITE.name} has 7 free PDF tools — merge PDFs, split by page range, convert to images, images to PDF, rotate pages, compress, and view metadata. No upload, runs in your browser.`,
+  },
 };
 
 export function generateMetadata({ params }: { params: { category: string } }) {

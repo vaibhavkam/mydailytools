@@ -379,6 +379,21 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
+    slug: "pdf",
+    name: "PDF Tools",
+    blurb: "Merge, split, convert, and edit PDF files — all in your browser.",
+    icon: "FileText",
+    tools: [
+      { slug: "pdf-merge", title: "PDF Merge", description: "Combine multiple PDF files into one document. Drag to reorder pages, then download the merged PDF — no upload, processed entirely in your browser.", keywords: ["merge pdf", "combine pdf", "pdf merger", "join pdf files", "merge pdf online"], status: "live" },
+      { slug: "pdf-split", title: "PDF Split", description: "Split a PDF by page ranges or extract individual pages. Enter ranges like 1-3,5,7-9 or extract every page as a separate file — processed in your browser.", keywords: ["split pdf", "pdf splitter", "extract pages pdf", "separate pdf pages", "pdf page extractor"], status: "live" },
+      { slug: "pdf-to-images", title: "PDF to Images", description: "Convert PDF pages to PNG or JPG images. Renders each page as a high-quality image you can download individually or as a ZIP — runs entirely in your browser.", keywords: ["pdf to image", "pdf to png", "pdf to jpg", "convert pdf to image", "pdf page to image"], status: "live" },
+      { slug: "images-to-pdf", title: "Images to PDF", description: "Convert JPG, PNG, or WebP images to a PDF document. Drag to reorder, choose page size and orientation, then download the PDF — no upload, runs in your browser.", keywords: ["images to pdf", "jpg to pdf", "png to pdf", "image to pdf converter", "photos to pdf"], status: "live" },
+      { slug: "pdf-rotate", title: "PDF Rotate", description: "Rotate PDF pages by 90°, 180°, or 270°. Apply rotation to all pages or specific pages — download the corrected PDF instantly, processed in your browser.", keywords: ["rotate pdf", "pdf rotate pages", "rotate pdf online", "turn pdf pages"], status: "live" },
+      { slug: "pdf-compress", title: "PDF Compress", description: "Reduce PDF file size by recompressing the document structure. No external server — compressed and downloaded directly in your browser.", keywords: ["compress pdf", "reduce pdf size", "pdf compressor", "shrink pdf", "pdf file size reducer"], status: "live" },
+      { slug: "pdf-metadata", title: "PDF Metadata Viewer", description: "View PDF metadata: title, author, creator, producer, creation date, modification date, and page count — instantly parsed in your browser without uploading anywhere.", keywords: ["pdf metadata", "pdf properties", "pdf info viewer", "view pdf metadata", "pdf author title"], status: "live" },
+    ],
+  },
+  {
     slug: "electrical",
     name: "Electrical & Electronics",
     blurb: "Practical calculators for circuits and electronics.",

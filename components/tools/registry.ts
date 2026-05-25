@@ -212,6 +212,15 @@ const REGISTRY: Record<string, ComponentType<ToolProps>> = {
   "days-between-dates": dynamic(() => import("./datetime").then((m) => ({ default: m.DaysBetween }))),
   "week-number": dynamic(() => import("./datetime").then((m) => ({ default: m.WeekNumber }))),
 
+  // PDF tools
+  "pdf-merge": dynamic(() => import("./pdf").then((m) => ({ default: m.PdfMerge }))),
+  "pdf-split": dynamic(() => import("./pdf").then((m) => ({ default: m.PdfSplit }))),
+  "pdf-to-images": dynamic(() => import("./pdf").then((m) => ({ default: m.PdfToImages }))),
+  "images-to-pdf": dynamic(() => import("./pdf").then((m) => ({ default: m.ImagesToPdf }))),
+  "pdf-rotate": dynamic(() => import("./pdf").then((m) => ({ default: m.PdfRotate }))),
+  "pdf-compress": dynamic(() => import("./pdf").then((m) => ({ default: m.PdfCompress }))),
+  "pdf-metadata": dynamic(() => import("./pdf").then((m) => ({ default: m.PdfMetadata }))),
+
   // Wave D — electrical
   "ohms-law-calculator": dynamic(() => import("./electrical").then((m) => ({ default: m.OhmsLaw }))),
   "voltage-divider-calculator": dynamic(() => import("./electrical").then((m) => ({ default: m.VoltageDivider }))),
