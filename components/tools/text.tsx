@@ -327,15 +327,22 @@ export function SortLines({ tool }: Props) {
   const [text, setText] = useState("");
   const [mode, setMode] = useState<"asc" | "desc" | "numeric-asc" | "numeric-desc" | "shuffle">("asc");
   const out = useMemo(() => {
-    const lines = text.split(/\r?\n/);
-    if (mode === "asc") return [...lines].sort().join("\n");
-    if (mode === "desc") return [...lines].sort().reverse().join("\n");
-    if (mode === "numeric-asc") return [...lines].sort((a, b) => parseFloat(a) - parseFloat(b)).join("\n");
-    if (mode === "numeric-desc") return [...lines].sort((a, b) => parseFloat(b) - parseFloat(a)).join("\n");
-    // shuffle (Fisher-Yates)
-    const arr = [...lines];
-    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
-    return arr.join("\n");
+    if (!text.trim()) return "";
+    // Auto-detect delimiter: use comma if no newlines and commas present
+    const isComma = !text.includes("\n") && text.includes(",");
+    const sep = isComma ? "," : "\n";
+    const items = text.split(sep).map((s) => s.trim()).filter(Boolean);
+    let sorted: string[];
+    if (mode === "asc") sorted = [...items].sort();
+    else if (mode === "desc") sorted = [...items].sort().reverse();
+    else if (mode === "numeric-asc") sorted = [...items].sort((a, b) => parseFloat(a) - parseFloat(b));
+    else if (mode === "numeric-desc") sorted = [...items].sort((a, b) => parseFloat(b) - parseFloat(a));
+    else {
+      // shuffle (Fisher-Yates)
+      sorted = [...items];
+      for (let i = sorted.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [sorted[i], sorted[j]] = [sorted[j], sorted[i]]; }
+    }
+    return isComma ? sorted.join(", ") : sorted.join("\n");
   }, [text, mode]);
 
   const MODES: { value: typeof mode; label: string }[] = [
@@ -348,7 +355,7 @@ export function SortLines({ tool }: Props) {
 
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Paste your list — one item per line — then pick a sort mode: A→Z or Z→A for alphabetical, 1→9 or 9→1 for numeric order, or Shuffle for random. Results appear instantly.",
+      howTo: "Paste your list — one item per line or comma-separated — then pick a sort mode. The output uses the same format as the input. Results appear instantly.",
       formula: "A→Z and Z→A use lexicographic (Unicode) order. 1→9 and 9→1 parse each line as a float so 10 sorts after 9, not before. Shuffle uses the Fisher-Yates algorithm.",
       examples: "Names: Alice, Charlie, Bob → Alice, Bob, Charlie. Numbers: 10, 9, 2 → 2, 9, 10 (1→9 mode) or 10, 9, 2 (9→1 mode).",
       faq: [
