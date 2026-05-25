@@ -21,7 +21,6 @@ const FEATURED_SLUGS = [
   "list-set-operations",
   "days-between-dates",
   "percentage-calculator",
-  "mortgage-calculator",
 ];
 
 export default function HomePage() {
