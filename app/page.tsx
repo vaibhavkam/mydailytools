@@ -47,11 +47,10 @@ export default function HomePage() {
           Every tool you need for the <span className="bg-brand-gradient bg-clip-text text-transparent">daily web</span>
         </h1>
         <p className="mt-5 max-w-2xl mx-auto text-lg text-[rgb(var(--fg-muted))] text-balance">
-          Calculators, converters, developer utilities, and text tools — all running locally in your browser. Fast, private, no ads on the tools themselves.
+          Calculators, converters, developer utilities, and text tools — all running locally in your browser. Fast, private, and free.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="/tools/" className="btn-primary min-tap">Browse all tools <ArrowRight className="h-4 w-4" /></Link>
-          <Link href="/converters/" className="btn-ghost min-tap">Unit converters</Link>
         </div>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-sm text-[rgb(var(--fg-muted))]">
           {[
