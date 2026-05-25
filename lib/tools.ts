@@ -242,7 +242,7 @@ export const CATEGORIES: Category[] = [
     tools: [
       // Security / ID cluster
       { slug: "password-generator", title: "Password Generator", description: "Strong, customizable passwords with strength meter.", keywords: ["password generator", "strong password"], status: "live" },
-      { slug: "uuid-generator", title: "UUID Generator", description: "v4 UUIDs in bulk.", keywords: ["uuid generator", "guid generator"], status: "live" },
+      { slug: "uuid-generator", title: "UUID Generator", description: "Generate random UUID v4 strings instantly — one or in bulk. Copy-paste ready GUIDs for databases, APIs, and unique identifiers.", keywords: ["uuid generator", "guid generator", "uuid v4", "random uuid"], status: "live" },
       // Code / barcode cluster
       { slug: "qr-code-generator", title: "QR Code Generator", description: "Generate QR codes for URLs, text, or contact cards.", keywords: ["qr code generator"], status: "live" },
       { slug: "barcode-generator", title: "Barcode Generator", description: "EAN, UPC, Code 128, and Code 39 barcodes.", keywords: ["barcode generator"], status: "live" },
@@ -272,7 +272,7 @@ export const CATEGORIES: Category[] = [
       { slug: "pixel-rem-converter", title: "PX ↔ REM Converter", description: "Convert between pixels and rems for any base font size.", keywords: ["px to rem", "rem converter"], status: "live" },
       { slug: "spacing-scale-generator", title: "Spacing Scale Generator", description: "Build a consistent spacing scale for design systems.", keywords: ["spacing scale generator"], status: "live" },
       // Layout
-      { slug: "aspect-ratio-calculator", title: "Aspect Ratio Calculator", description: "Compute width or height to maintain any aspect ratio (16:9, 4:3, custom).", keywords: ["aspect ratio calculator"], status: "live" },
+      { slug: "aspect-ratio-calculator", title: "Aspect Ratio Calculator", description: "Calculate width or height to preserve any aspect ratio — 16:9, 4:3, 1:1, or custom. Perfect for responsive images, video embeds, and UI layouts.", keywords: ["aspect ratio calculator", "aspect ratio", "image ratio", "video ratio"], status: "live" },
     ],
   },
   {
@@ -392,7 +392,7 @@ export const CATEGORIES: Category[] = [
       // Circuit components cluster
       { slug: "voltage-divider-calculator", title: "Voltage Divider", description: "Compute output voltage of a resistor divider.", keywords: ["voltage divider calculator"], status: "live" },
       { slug: "resistor-color-code", title: "Resistor Color Code", description: "Decode 4, 5, and 6-band resistors.", keywords: ["resistor color code"], status: "live" },
-      { slug: "capacitance-calculator", title: "Capacitance Calculator", description: "Series, parallel, and time-constant capacitor math.", keywords: ["capacitance calculator"], status: "live" },
+      { slug: "capacitance-calculator", title: "Capacitance Calculator", description: "Calculate total capacitance for series and parallel circuits, plus RC time constants. Useful for electronics design and circuit analysis.", keywords: ["capacitance calculator", "series capacitance", "parallel capacitance", "rc time constant"], status: "live" },
       { slug: "inductance-calculator", title: "Inductance Calculator", description: "Inductor reactance and energy.", keywords: ["inductance calculator"], status: "live" },
       // Signal / measurement
       { slug: "decibel-calculator", title: "Decibel Calculator", description: "dB from voltage, power, or amplitude ratios.", keywords: ["decibel calculator", "db calculator"], status: "live" },
