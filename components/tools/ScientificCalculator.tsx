@@ -175,13 +175,16 @@ export default function ScientificCalculator({ tool }: { tool: Tool & { category
 
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Tap buttons or type directly in the input. Press = or Enter to evaluate. 'Ans' inserts the last result.",
-      formula: "Whitelist-tokenised evaluator — input is parsed into safe Math.* calls only. ^ = power, n! = factorial, log = log₁₀, ln = natural log.",
-      examples: "5+3+12.5 = 20.5 · sin(30) in Deg = 0.5 · log(1000) = 3 · 2^10 = 1024 · 5! = 120",
+      howTo: "Tap the buttons or type directly in the input field. Hit = or press Enter to evaluate. Use Deg/Rad to switch angle mode for trig functions. 'Ans' recalls your last result so you can chain calculations. Use AC to reset the input and Clear to wipe the history.",
+      formula: "Expressions are parsed into a safe whitelist of Math.* operations. Supported: +, −, ×, ÷, ^ (power), % (modulo), n! (factorial), sqrt, cbrt, log (log₁₀), ln (natural log), exp, abs, floor, ceil, round, pow, and trig functions sin/cos/tan/asin/acos/atan. Constants: π and e.",
+      examples: "6×3 = 18 · sin(30) in Deg mode = 0.5 · log(1000) = 3 · 2^10 = 1024 · 5! = 120 · sqrt(2) ≈ 1.41421356237 · Ans+1 adds 1 to the previous result.",
       faq: [
-        { q: "What does 'Ans' do?", a: "Inserts the result of the last calculation so you can chain operations." },
-        { q: "Deg vs Rad?", a: "Toggles whether trig functions (sin, cos, tan) expect degrees or radians." },
-        { q: "Is it safe to evaluate expressions?", a: "Yes — only whitelisted math tokens are allowed. No access to JS globals." },
+        { q: "What does the Ans button do?", a: "Inserts the result of the last calculation into the input. Useful for chaining — e.g. calculate 5^2, then press Ans+10 to get 35." },
+        { q: "What is the difference between Deg and Rad?", a: "Deg mode treats trig inputs as degrees — sin(30) = 0.5. Rad mode treats them as radians — sin(π/6) = 0.5. Switch before entering your expression." },
+        { q: "What does AC do vs the ⌫ button?", a: "AC clears the entire input field. ⌫ deletes one character at a time, like a backspace key." },
+        { q: "How do I calculate a power like 2 to the power of 8?", a: "Use the xʸ button or type ^ directly — e.g. 2^8 = 256." },
+        { q: "How do I calculate a factorial?", a: "Type the number followed by the n! button — e.g. 5! = 120. Factorials are supported up to 170." },
+        { q: "What is the difference between log and ln?", a: "log computes the base-10 logarithm (log₁₀). ln computes the natural logarithm (base e). Example: log(1000) = 3, ln(e) = 1." },
       ],
     }}>
       <div className="rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--card))] overflow-hidden">
