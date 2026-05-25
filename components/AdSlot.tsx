@@ -25,23 +25,19 @@ export function AdSlot({ slot, label = "Advertisement" }: { slot: Slot; label?: 
   const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
   const adSlotId = process.env[`NEXT_PUBLIC_ADSENSE_SLOT_${slot.toUpperCase().replace("-", "_")}` as any];
 
+  if (!client || !adSlotId) return null;
+
   return (
     <div className={`my-6 ${dims.className}`} aria-label={label}>
       <div className="text-[10px] uppercase tracking-widest text-center text-[rgb(var(--fg-muted))] mb-1">{label}</div>
-      {client && adSlotId ? (
-        <ins
-          className={`adsbygoogle block ${dims.minH}`}
-          style={{ display: "block" }}
-          data-ad-client={client}
-          data-ad-slot={adSlotId}
-          data-ad-format={dims.format}
-          data-full-width-responsive="true"
-        />
-      ) : (
-        <div className={`rounded-xl border border-dashed border-[rgb(var(--border))] grid place-items-center text-xs text-[rgb(var(--fg-muted))] ${dims.minH}`}>
-          AdSense slot — {slot}
-        </div>
-      )}
+      <ins
+        className={`adsbygoogle block ${dims.minH}`}
+        style={{ display: "block" }}
+        data-ad-client={client}
+        data-ad-slot={adSlotId}
+        data-ad-format={dims.format}
+        data-full-width-responsive="true"
+      />
     </div>
   );
 }
