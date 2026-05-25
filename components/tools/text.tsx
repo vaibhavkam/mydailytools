@@ -336,9 +336,9 @@ export function SortLines({ tool }: Props) {
   }, [text, mode]);
   return (
     <ToolPage tool={tool} content={{
-      howTo: "Paste lines and pick a sort: alphabetical, reverse, numeric, or random shuffle.",
-      formula: "Default sort uses lexicographic order (Unicode code points). Numeric mode parses each line as a float.",
-      examples: '["b","a","c"] sorted asc → ["a","b","c"]. ["10","9","2"] numeric → ["2","9","10"].',
+      howTo: "Paste your list — one item per line — then pick a sort mode: A→Z alphabetical, Z→A reverse, Numeric (by number value), or Shuffle (random). Results appear instantly in the output box. Works for names, words, URLs, or any line-separated data.",
+      formula: "A→Z and Z→A use lexicographic (Unicode) order. Numeric parses each line as a float so 10 sorts after 9, not before. Shuffle uses the Fisher-Yates algorithm for an unbiased random order.",
+      examples: "Names: Alice, Charlie, Bob → Alice, Bob, Charlie. Numbers: 10, 9, 2 → 2, 9, 10 (numeric mode). Reverse alpha: zebra, mango, apple → zebra, mango, apple.",
       faq: [
         { q: "Why does alphabetical sort put '10' before '9'?", a: "Alphabetical (A→Z) sort compares characters left to right, so '1' comes before '9' making '10' sort first. Use Numeric mode to sort by actual number value." },
         { q: "Is the sort case-sensitive?", a: "Yes. Uppercase letters sort before lowercase in Unicode order (A–Z before a–z). If you need case-insensitive sorting, convert your text to the same case first with the Case Converter tool." },

@@ -97,7 +97,7 @@ export const CATEGORIES: Category[] = [
       // Search / replace
       { slug: "find-and-replace", title: "Find & Replace", description: "Bulk replace with optional regex.", keywords: ["find and replace text"], status: "live" },
       // Organization cluster
-      { slug: "sort-lines", title: "Sort Lines", description: "Alphabetical, reverse, numeric, or random.", keywords: ["sort lines", "sort text"], status: "live" },
+      { slug: "sort-lines", title: "Sort Lines / Sort List Online", description: "Sort a list of words, names, or numbers — alphabetically A→Z or Z→A, numerically, or randomly. Paste any list and get sorted results instantly.", keywords: ["sort list online", "sort words", "sort numbers", "sort lines", "alphabetical sorter", "sort text online"], status: "live" },
       { slug: "remove-duplicate-lines", title: "Remove Duplicate Lines", description: "Deduplicate a list, preserving order.", keywords: ["remove duplicate lines"], status: "live" },
       { slug: "text-diff", title: "Text Diff", description: "Side-by-side comparison of two texts.", keywords: ["text diff", "compare text"], status: "live" },
       // Generation cluster
