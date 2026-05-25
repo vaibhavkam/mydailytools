@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SignJWT } from "jose";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Alg = "HS256" | "HS384" | "HS512";
@@ -56,7 +57,7 @@ export default function JwtGenerator({ tool }: { tool: Tool & { categorySlug: st
         <div>
           <label className="label">Signed token</label>
           <AutoTextarea className="input min-h-[280px] font-mono text-xs" value={token} readOnly />
-          {token && <button onClick={() => navigator.clipboard.writeText(token)} className="mt-2 btn-ghost text-xs">Copy</button>}
+          {token && <button onClick={() => safeCopy(token)} className="mt-2 btn-ghost text-xs">Copy</button>}
         </div>
       </div>
     </ToolPage>

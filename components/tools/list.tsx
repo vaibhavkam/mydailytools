@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
@@ -16,7 +17,7 @@ function splitInput(text: string, opts: { trim: boolean; dropEmpty: boolean }) {
 
 function copyBtn(text: string) {
   return (
-    <button onClick={() => navigator.clipboard.writeText(text)} className="btn-ghost text-xs">Copy</button>
+    <button onClick={() => safeCopy(text)} className="btn-ghost text-xs">Copy</button>
   );
 }
 

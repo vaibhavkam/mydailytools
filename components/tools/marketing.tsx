@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { useLocale } from "@/lib/locale";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
@@ -263,7 +264,7 @@ export function UtmBuilder({ tool }: Props) {
       </div>
       <div className="mt-4 flex items-center gap-2">
         <code className="font-mono text-xs flex-1 rounded-lg bg-slate-50 dark:bg-slate-900 border border-[rgb(var(--border))] px-3 py-2 break-all">{out || "Invalid URL"}</code>
-        <button onClick={() => out && navigator.clipboard.writeText(out)} className="btn-ghost text-xs">Copy</button>
+        <button onClick={() => out && safeCopy(out)} className="btn-ghost text-xs">Copy</button>
       </div>
     </ToolPage>
   );

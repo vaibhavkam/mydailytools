@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Copy, Plus, Minus, ArrowRight, Equal } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 // Semantic JSON diff: compares values by path, ignoring key order. Returns a
@@ -240,7 +241,7 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
       if (c.kind === "removed") return `- ${c.path}  ${renderValue(c.value)}`;
       return `~ ${c.path}  ${renderValue(c.before)} -> ${renderValue(c.after)}`;
     });
-    navigator.clipboard.writeText(lines.join("\n"));
+    safeCopy(lines.join("\n"));
   }
 
   const summary = result.changes ? {

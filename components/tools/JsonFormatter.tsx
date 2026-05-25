@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
@@ -23,7 +24,7 @@ export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: s
   }
 
   function copy() {
-    if (output) navigator.clipboard.writeText(output);
+    if (output) safeCopy(output);
   }
 
   return (

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Copy } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 // ---------------------------------------------------------------------------
@@ -385,7 +386,7 @@ export default function CurlToCode({ tool }: { tool: Tool & { categorySlug: stri
   }, [parsed, lang]);
 
   function copy() {
-    if (code) navigator.clipboard.writeText(code);
+    if (code) safeCopy(code);
   }
 
   return (

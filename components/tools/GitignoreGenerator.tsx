@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 // Curated common gitignore templates. Not exhaustive (gitignore.io has thousands)
@@ -64,7 +65,7 @@ export default function GitignoreGenerator({ tool }: { tool: Tool & { categorySl
         ))}
       </div>
       <div className="mt-3 flex gap-2">
-        <button onClick={() => navigator.clipboard.writeText(out)} className="btn-ghost text-xs">Copy</button>
+        <button onClick={() => safeCopy(out)} className="btn-ghost text-xs">Copy</button>
         <button onClick={download} className="btn-primary min-tap">Download .gitignore</button>
       </div>
       <AutoTextarea className="input mt-3 min-h-[300px] font-mono text-xs" value={out} readOnly />

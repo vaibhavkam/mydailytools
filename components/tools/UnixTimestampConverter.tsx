@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 
 export default function UnixTimestampConverter({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [now, setNow] = useState(0);
@@ -56,7 +57,7 @@ export default function UnixTimestampConverter({ tool }: { tool: Tool & { catego
             <div className="text-xs text-[rgb(var(--fg-muted))]">Current Unix time</div>
             <div className="font-mono text-lg tabular-nums">{now}</div>
           </div>
-          <button onClick={() => navigator.clipboard.writeText(String(now))} className="btn-ghost text-xs">Copy</button>
+          <button onClick={() => safeCopy(String(now))} className="btn-ghost text-xs">Copy</button>
         </div>
 
         <div>

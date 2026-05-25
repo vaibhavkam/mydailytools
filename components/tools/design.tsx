@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
 
@@ -133,7 +134,7 @@ export function CssGradient({ tool }: Props) {
       </div>
       <div className="mt-3 flex items-center gap-2">
         <code className="font-mono text-xs flex-1 rounded-lg bg-slate-50 dark:bg-slate-900 border border-[rgb(var(--border))] px-3 py-2">background: {css};</code>
-        <button onClick={() => navigator.clipboard.writeText(`background: ${css};`)} className="btn-ghost text-xs">Copy</button>
+        <button onClick={() => safeCopy(`background: ${css};`)} className="btn-ghost text-xs">Copy</button>
       </div>
     </ToolPage>
   );
@@ -178,7 +179,7 @@ export function BoxShadowGenerator({ tool }: Props) {
       </div>
       <div className="mt-3 flex items-center gap-2">
         <code className="font-mono text-xs flex-1 rounded-lg bg-slate-50 dark:bg-slate-900 border border-[rgb(var(--border))] px-3 py-2">box-shadow: {css};</code>
-        <button onClick={() => navigator.clipboard.writeText(`box-shadow: ${css};`)} className="btn-ghost text-xs">Copy</button>
+        <button onClick={() => safeCopy(`box-shadow: ${css};`)} className="btn-ghost text-xs">Copy</button>
       </div>
     </ToolPage>
   );
@@ -222,7 +223,7 @@ export function BorderRadius({ tool }: Props) {
       )}
       <div className="mt-3 flex items-center gap-2">
         <code className="font-mono text-xs flex-1 rounded-lg bg-slate-50 dark:bg-slate-900 border border-[rgb(var(--border))] px-3 py-2">border-radius: {css};</code>
-        <button onClick={() => navigator.clipboard.writeText(`border-radius: ${css};`)} className="btn-ghost text-xs">Copy</button>
+        <button onClick={() => safeCopy(`border-radius: ${css};`)} className="btn-ghost text-xs">Copy</button>
       </div>
     </ToolPage>
   );
@@ -472,7 +473,7 @@ export function ImagePalette({ tool }: Props) {
           <img src={src} alt="source" className="rounded-xl border border-[rgb(var(--border))] max-w-[160px]" />
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {palette.map((c) => (
-              <button key={c} onClick={() => navigator.clipboard.writeText(c)} className="rounded-xl overflow-hidden border border-[rgb(var(--border))]">
+              <button key={c} onClick={() => safeCopy(c)} className="rounded-xl overflow-hidden border border-[rgb(var(--border))]">
                 <div className="h-16" style={{ background: c }} />
                 <div className="bg-[rgb(var(--bg-elevated))] py-1 text-xs font-mono">{c}</div>
               </button>

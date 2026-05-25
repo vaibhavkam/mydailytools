@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { parseYaml, toYaml } from "@/lib/data-formats";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
@@ -30,7 +31,7 @@ meta:
   }
 
   function copy() {
-    if (output) navigator.clipboard.writeText(output);
+    if (output) safeCopy(output);
   }
 
   return (

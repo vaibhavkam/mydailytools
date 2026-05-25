@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, ArrowLeftRight, Download } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { type Format, SAMPLE_BY_FORMAT, getParser, getSerializer } from "@/lib/data-formats";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
@@ -230,7 +231,7 @@ export default function DataFormatConverter({ tool }: { tool: Tool & { categoryS
   }
 
   function copyOutput() {
-    if (output) navigator.clipboard.writeText(output);
+    if (output) safeCopy(output);
   }
 
   function downloadOutput() {

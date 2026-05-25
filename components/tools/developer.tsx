@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
@@ -70,7 +71,7 @@ export function CssMinifier({ tool }: Props) {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="label !mb-0">Minified <span className="text-[rgb(var(--fg-muted))] font-normal">— saved {ratio}% ({css.length} → {output.length} bytes)</span></label>
-              <button onClick={() => navigator.clipboard.writeText(output)} className="btn-ghost text-xs">Copy</button>
+              <button onClick={() => safeCopy(output)} className="btn-ghost text-xs">Copy</button>
             </div>
             <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={output} readOnly />
           </div>
@@ -118,7 +119,7 @@ console.log(add(2, 3));`);
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="label !mb-0">Minified</label>
-              <button onClick={() => navigator.clipboard.writeText(output)} className="btn-ghost text-xs">Copy</button>
+              <button onClick={() => safeCopy(output)} className="btn-ghost text-xs">Copy</button>
             </div>
             <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={output} readOnly />
           </div>
@@ -170,7 +171,7 @@ export function XmlFormatter({ tool }: Props) {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="label !mb-0">Formatted XML</label>
-              <button onClick={() => navigator.clipboard.writeText(output)} className="btn-ghost text-xs">Copy</button>
+              <button onClick={() => safeCopy(output)} className="btn-ghost text-xs">Copy</button>
             </div>
             <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={output} readOnly />
           </div>

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, CheckCircle2, AlertCircle, AlertTriangle, Info, ExternalLink } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { VENDORS, checkVendor, type Finding, type VendorId } from "@/lib/llm-schema-rules";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
@@ -111,7 +112,7 @@ export default function LlmSchemaValidator({ tool }: { tool: Tool & { categorySl
       else for (const f of findings) lines.push(`${f.severity.toUpperCase()}: ${f.message} (at ${f.path})`);
       lines.push("");
     }
-    navigator.clipboard.writeText(lines.join("\n"));
+    safeCopy(lines.join("\n"));
   }
 
   return (

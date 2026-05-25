@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function UrlEncoderDecoder({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
@@ -47,7 +48,7 @@ export default function UrlEncoderDecoder({ tool }: { tool: Tool & { categorySlu
               <option value="uri">encodeURI</option>
             </select>
             <button onClick={doEncode} className="btn-primary min-tap">Encode →</button>
-            {out && <button onClick={() => navigator.clipboard.writeText(out)} className="btn-ghost text-xs">Copy</button>}
+            {out && <button onClick={() => safeCopy(out)} className="btn-ghost text-xs">Copy</button>}
           </div>
           {out && <AutoTextarea readOnly value={out} className="input min-h-[80px] font-mono text-xs mt-2" />}
         </section>
@@ -57,7 +58,7 @@ export default function UrlEncoderDecoder({ tool }: { tool: Tool & { categorySlu
           <AutoTextarea className="input min-h-[80px] font-mono text-xs" value={encIn} onChange={(e) => setEncIn(e.target.value)} />
           <div className="mt-2 flex gap-2">
             <button onClick={doDecode} className="btn-primary min-tap">Decode →</button>
-            {decoded && <button onClick={() => navigator.clipboard.writeText(decoded)} className="btn-ghost text-xs">Copy</button>}
+            {decoded && <button onClick={() => safeCopy(decoded)} className="btn-ghost text-xs">Copy</button>}
           </div>
           {decoded && <AutoTextarea readOnly value={decoded} className="input min-h-[80px] mt-2" />}
           {error && <p role="alert" className="mt-2 text-sm text-red-600">{error}</p>}

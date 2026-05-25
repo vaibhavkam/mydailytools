@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 const ALGOS = ["MD5", "SHA-1", "SHA-256", "SHA-512"] as const;
@@ -156,7 +157,7 @@ export default function HashGenerator({ tool }: { tool: Tool & { categorySlug: s
             <div key={a} className="rounded-xl border border-[rgb(var(--border))] p-3">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-semibold">{a}</span>
-                <button onClick={() => navigator.clipboard.writeText(hashes[a])} className="text-xs btn-ghost">Copy</button>
+                <button onClick={() => safeCopy(hashes[a])} className="text-xs btn-ghost">Copy</button>
               </div>
               <code className="font-mono text-xs break-all">{hashes[a]}</code>
             </div>

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
@@ -40,7 +41,7 @@ export function CaseConverter({ tool }: Props) {
           <li key={k} className="rounded-lg border border-[rgb(var(--border))] px-3 py-2 flex items-center gap-2">
             <span className="text-xs text-[rgb(var(--fg-muted))] w-32 shrink-0">{k}</span>
             <code className="font-mono text-sm flex-1 truncate">{v}</code>
-            <button onClick={() => navigator.clipboard.writeText(v)} className="text-xs btn-ghost shrink-0">Copy</button>
+            <button onClick={() => safeCopy(v)} className="text-xs btn-ghost shrink-0">Copy</button>
           </li>
         ))}
       </ul>
@@ -175,7 +176,7 @@ export function LoremIpsum({ tool }: Props) {
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={startWith} onChange={(e) => setStartWith(e.target.checked)} className="accent-brand-600" /> Start with &ldquo;Lorem ipsum&hellip;&rdquo;</label>
       </div>
       <AutoTextarea readOnly value={out} className="input min-h-[260px]" />
-      <button onClick={() => navigator.clipboard.writeText(out)} className="mt-2 btn-ghost text-xs">Copy</button>
+      <button onClick={() => safeCopy(out)} className="mt-2 btn-ghost text-xs">Copy</button>
     </ToolPage>
   );
 }
@@ -377,7 +378,7 @@ export function TextToSlug({ tool }: Props) {
       <input className="input" value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-4 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-4 flex items-center justify-between gap-3">
         <code className="font-mono text-lg break-all">{slug || "—"}</code>
-        <button onClick={() => navigator.clipboard.writeText(slug)} className="btn-ghost text-xs shrink-0">Copy</button>
+        <button onClick={() => safeCopy(slug)} className="btn-ghost text-xs shrink-0">Copy</button>
       </div>
     </ToolPage>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Copy, RefreshCw } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 
 const SETS = {
   lower: "abcdefghijklmnopqrstuvwxyz",
@@ -67,7 +68,7 @@ export default function PasswordGenerator({ tool }: { tool: Tool & { categorySlu
       <div className="grid gap-5">
         <div className="rounded-xl bg-slate-50 dark:bg-slate-900 border border-[rgb(var(--border))] px-4 py-3 flex items-center gap-2">
           <code className="font-mono text-base flex-1 truncate">{pw || " "}</code>
-          <button onClick={() => navigator.clipboard.writeText(pw)} aria-label="Copy password" className="btn-ghost min-tap">
+          <button onClick={() => safeCopy(pw)} aria-label="Copy password" className="btn-ghost min-tap">
             <Copy className="h-4 w-4" />
           </button>
           <button onClick={regen} aria-label="Regenerate" className="btn-ghost min-tap">

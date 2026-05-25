@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 // btoa/atob only handle Latin-1. We round-trip via TextEncoder/Decoder to support
@@ -51,7 +52,7 @@ export default function Base64EncoderDecoder({ tool }: { tool: Tool & { category
           <AutoTextarea className="input min-h-[100px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="Plain text" />
           <div className="mt-2 flex gap-2">
             <button onClick={doEncode} className="btn-primary min-tap">Encode →</button>
-            {encoded && <button onClick={() => navigator.clipboard.writeText(encoded)} className="btn-ghost text-xs">Copy</button>}
+            {encoded && <button onClick={() => safeCopy(encoded)} className="btn-ghost text-xs">Copy</button>}
           </div>
           {encoded && <AutoTextarea readOnly value={encoded} className="input min-h-[80px] font-mono text-xs mt-2" />}
         </section>
@@ -61,7 +62,7 @@ export default function Base64EncoderDecoder({ tool }: { tool: Tool & { category
           <AutoTextarea className="input min-h-[100px] font-mono text-xs" value={decodeIn} onChange={(e) => setDecodeIn(e.target.value)} placeholder="Base64 string" />
           <div className="mt-2 flex gap-2">
             <button onClick={doDecode} className="btn-primary min-tap">Decode →</button>
-            {decoded && <button onClick={() => navigator.clipboard.writeText(decoded)} className="btn-ghost text-xs">Copy</button>}
+            {decoded && <button onClick={() => safeCopy(decoded)} className="btn-ghost text-xs">Copy</button>}
           </div>
           {decoded && <AutoTextarea readOnly value={decoded} className="input min-h-[80px] mt-2" />}
           {error && <p role="alert" className="mt-2 text-sm text-red-600">{error}</p>}

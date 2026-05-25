@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Copy, Search } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 
 type StatusCode = {
   code: number;
@@ -482,7 +483,7 @@ export default function HttpStatusReference({ tool }: { tool: Tool & { categoryS
   }, [filtered]);
 
   function copyCode(c: StatusCode) {
-    navigator.clipboard.writeText(`${c.code} ${c.name} — ${c.summary}`);
+    safeCopy(`${c.code} ${c.name} — ${c.summary}`);
   }
 
   function scrollToCode(code: number) {

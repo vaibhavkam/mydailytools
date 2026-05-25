@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, RefreshCw } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 import { AutoTextarea } from "@/components/AutoTextarea";
 
 // Tokenizer encoding tables are ~1.5MB. Loading them via static imports puts
@@ -202,7 +203,7 @@ export default function TokenCounter({ tool }: { tool: Tool & { categorySlug: st
 
   function copyAllCounts() {
     const rows = results.map((r) => `${r.label}\t${r.tokens}${r.exact ? "" : " (approx)"}\t$${r.costPerCall.toFixed(6)}`);
-    navigator.clipboard.writeText(["Model\tTokens\tInput cost", ...rows].join("\n"));
+    safeCopy(["Model\tTokens\tInput cost", ...rows].join("\n"));
   }
 
   const priceLabel = (() => {

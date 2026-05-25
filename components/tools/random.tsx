@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Copy, RefreshCw } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
 
@@ -54,7 +55,7 @@ export function RandomNumberGenerator({ tool }: Props) {
       </div>
       <div className="mt-3 flex gap-2">
         <button onClick={gen} className="btn-primary min-tap"><RefreshCw className="h-4 w-4" /> Generate</button>
-        {out.length > 0 && <button onClick={() => navigator.clipboard.writeText(out.join(", "))} className="btn-ghost text-xs">Copy</button>}
+        {out.length > 0 && <button onClick={() => safeCopy(out.join(", "))} className="btn-ghost text-xs">Copy</button>}
       </div>
       {out.length > 0 && (
         <div className="mt-4 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-4 font-mono text-lg break-all">{out.join(", ")}</div>
@@ -155,7 +156,7 @@ export function RandomColorGenerator({ tool }: Props) {
       <button onClick={gen} className="btn-primary min-tap"><RefreshCw className="h-4 w-4" /> Generate</button>
       <div className="mt-4 grid grid-cols-5 gap-2">
         {colors.map((c) => (
-          <button key={c} onClick={() => navigator.clipboard.writeText(c)} className="rounded-xl overflow-hidden border border-[rgb(var(--border))]" style={{ background: c }}>
+          <button key={c} onClick={() => safeCopy(c)} className="rounded-xl overflow-hidden border border-[rgb(var(--border))]" style={{ background: c }}>
             <div className="h-20" />
             <div className="bg-[rgb(var(--bg-elevated))] py-1 text-xs font-mono">{c}</div>
           </button>
@@ -194,7 +195,7 @@ export function RandomNameGenerator({ tool }: Props) {
       <ul className="mt-4 grid sm:grid-cols-2 gap-2">
         {list.map((n, i) => (
           <li key={i}>
-            <button onClick={() => navigator.clipboard.writeText(n)} className="w-full text-left rounded-xl border border-[rgb(var(--border))] px-3 py-2 hover:border-brand-500/40 transition">
+            <button onClick={() => safeCopy(n)} className="w-full text-left rounded-xl border border-[rgb(var(--border))] px-3 py-2 hover:border-brand-500/40 transition">
               {n}
             </button>
           </li>

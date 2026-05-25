@@ -435,14 +435,26 @@ export function ImagesToPdf({ tool }: ToolProps) {
           imgEmbed = await pdf.embedPng(buf);
           imgW = imgEmbed.width; imgH = imgEmbed.height;
         } else if (isWebp) {
-          // Convert WebP via canvas → PNG blob → embed
+          // Convert WebP via canvas → PNG blob → embed.
+          // createImageBitmap with a Blob requires Safari 15+; wrap for older versions.
+          if (typeof createImageBitmap === "undefined") {
+            throw new Error("WebP conversion requires Safari 15 or newer.");
+          }
           const blob = new Blob([buf], { type: "image/webp" });
-          const bitmapImg = await createImageBitmap(blob);
+          let bitmapImg: ImageBitmap;
+          try {
+            bitmapImg = await createImageBitmap(blob);
+          } catch {
+            throw new Error(`Could not decode WebP image "${file.name}". Try converting it to PNG or JPG first.`);
+          }
           const cv = document.createElement("canvas");
           cv.width = bitmapImg.width; cv.height = bitmapImg.height;
           cv.getContext("2d")!.drawImage(bitmapImg, 0, 0);
-          const pngBuf = await new Promise<ArrayBuffer>((res) =>
-            cv.toBlob((b) => b!.arrayBuffer().then(res), "image/png")
+          const pngBuf = await new Promise<ArrayBuffer>((res, rej) =>
+            cv.toBlob((b) => {
+              if (!b) { rej(new Error("Failed to convert WebP to PNG (toBlob returned null).")); return; }
+              b.arrayBuffer().then(res);
+            }, "image/png")
           );
           imgEmbed = await pdf.embedPng(pngBuf);
           imgW = imgEmbed.width; imgH = imgEmbed.height;

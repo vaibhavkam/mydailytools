@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Copy, RefreshCw } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { safeCopy } from "@/lib/clipboard";
 
 function uuidv4(): string {
   // crypto.randomUUID is available in all evergreen browsers and Node 19+.
@@ -33,7 +34,7 @@ export default function UuidGenerator({ tool }: { tool: Tool & { categorySlug: s
   }
 
   function copyAll() {
-    navigator.clipboard.writeText(format(list).join("\n"));
+    safeCopy(format(list).join("\n"));
   }
 
   function format(arr: string[]) {
@@ -73,7 +74,7 @@ export default function UuidGenerator({ tool }: { tool: Tool & { categorySlug: s
           {format(list).map((u, i) => (
             <li key={i} className="rounded-lg border border-[rgb(var(--border))] px-3 py-2 flex items-center justify-between gap-2">
               <span className="truncate">{u}</span>
-              <button onClick={() => navigator.clipboard.writeText(u)} aria-label="Copy" className="opacity-60 hover:opacity-100">
+              <button onClick={() => safeCopy(u)} aria-label="Copy" className="opacity-60 hover:opacity-100">
                 <Copy className="h-3.5 w-3.5" />
               </button>
             </li>
