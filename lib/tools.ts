@@ -427,7 +427,7 @@ export function findCategory(slug: string) {
 }
 
 export const SITE = {
-  name: "MyDailyTools",
+  name: "MyDailyTool",
   domain: "mydailytool.com",
   url: "https://mydailytool.com",
   tagline: "Free online tools for everyday tasks",

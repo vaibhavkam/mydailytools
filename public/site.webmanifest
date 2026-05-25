@@ -1,6 +1,6 @@
 {
-  "name": "MyDailyTools",
-  "short_name": "MyDailyTools",
+  "name": "MyDailyTool",
+  "short_name": "MyDailyTool",
   "description": "Free online tools for everyday tasks",
   "start_url": "/",
   "display": "standalone",

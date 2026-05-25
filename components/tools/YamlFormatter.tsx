@@ -6,7 +6,7 @@ import type { Tool } from "@/lib/tools";
 import { parseYaml, toYaml } from "@/lib/data-formats";
 
 export default function YamlFormatter({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
-  const [input, setInput] = useState(`name: MyDailyTools
+  const [input, setInput] = useState(`name: MyDailyTool
 version: 1.0
 features:
   - fast

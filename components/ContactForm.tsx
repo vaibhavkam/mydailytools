@@ -33,7 +33,7 @@ export function ContactForm() {
 
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
-      <input type="hidden" name="subject" value="MyDailyTools contact form" />
+      <input type="hidden" name="subject" value="MyDailyTool contact form" />
       {/* honeypot for bots */}
       <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} aria-hidden="true" />
       <div>

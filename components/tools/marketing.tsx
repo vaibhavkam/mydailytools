@@ -273,7 +273,7 @@ export function UtmBuilder({ tool }: Props) {
 // =====================================================================
 export function SerpPreview({ tool }: Props) {
   const { fmtCurrency: fmt, currencySymbol } = useLocale(); const sym = currencySymbol();
-  const [title, setTitle] = useState("MyDailyTools — Free Online Calculators & Developer Utilities");
+  const [title, setTitle] = useState("MyDailyTool — Free Online Calculators & Developer Utilities");
   const [url, setUrl] = useState("https://mydailytool.com/tools/percentage-calculator/");
   const [desc, setDesc] = useState("Calculate percentages, percent change, and percent of a number instantly. 100+ free tools, runs entirely in your browser.");
   // Google truncates titles around 580 px wide and meta descriptions around 920 px;

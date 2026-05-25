@@ -29,7 +29,7 @@ export function Header() {
           <LocalePicker className="hidden sm:inline-flex" />
           <Link
             href="/support/"
-            aria-label="Support MyDailyTools — buy me a coffee"
+            aria-label="Support MyDailyTool — buy me a coffee"
             className="min-tap inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-white bg-brand-gradient shadow-glow hover:opacity-90 transition"
           >
             <Coffee className="h-4 w-4" />

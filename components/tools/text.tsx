@@ -8,7 +8,7 @@ type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
 
 // Case Converter
 export function CaseConverter({ tool }: Props) {
-  const [text, setText] = useState("Hello world from MyDailyTools");
+  const [text, setText] = useState("Hello world from MyDailyTool");
   const transforms = {
     "UPPERCASE": text.toUpperCase(),
     "lowercase": text.toLowerCase(),

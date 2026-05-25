@@ -5,7 +5,7 @@ import { marked } from "marked";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 
-const STARTER = `# MyDailyTools
+const STARTER = `# MyDailyTool
 
 A live-rendered **markdown** editor.
 

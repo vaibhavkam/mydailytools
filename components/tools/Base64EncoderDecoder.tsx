@@ -16,7 +16,7 @@ function decodeUtf8(b64: string) {
 }
 
 export default function Base64EncoderDecoder({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
-  const [text, setText] = useState("Hello, MyDailyTools! 👋");
+  const [text, setText] = useState("Hello, MyDailyTool! 👋");
   const [encoded, setEncoded] = useState("");
   const [decoded, setDecoded] = useState("");
   const [decodeIn, setDecodeIn] = useState("SGVsbG8sIE15RGFpbHlUb29scyEg8J+Riw==");

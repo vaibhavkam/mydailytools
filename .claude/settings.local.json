@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git -c commit.gpgsign=false commit -m ' *)",
+      "Bash(unset GITHUB_TOKEN)",
+      "Bash(git push *)",
+      "Bash(awk -F'status:' '{print $2}')",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(npm view *)",
+      "WebFetch(domain:openrouter.ai)",
+      "Skill(schedule)",
+      "Bash(uuidgen)",
+      "Bash(mkdir -p /Users/vkamble/Documents/mydailytool-medium-drafts)",
+      "Read(//Users/vkamble/Documents/**)",
+      "WebFetch(domain:www.forbes.com)",
+      "Bash(python3 intu_dcf_scenarios.py)",
+      "Read(//private/tmp/**)",
+      "Bash(unzip -o /Users/vkamble/Downloads/mydailytool.com-Coverage-2026-05-25.zip -d coverage-report)",
+      "Bash(node *)",
+      "Bash(unzip -o /Users/vkamble/Downloads/mydailytool.com-Performance-on-Search-2026-05-25.zip -d search-perf)",
+      "Bash(whois mydailytools.com)"
+    ]
+  }
+}

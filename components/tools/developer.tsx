@@ -392,7 +392,7 @@ export function JwtDecoder({ tool }: Props) {
 
 // YAML to JSON (and back). Minimal YAML — supports the safe subset most config files use.
 export function YamlJson({ tool }: Props) {
-  const [yaml, setYaml] = useState("name: MyDailyTools\nversion: 1.0\nfeatures:\n  - fast\n  - free\n  - private\nmeta:\n  count: 110");
+  const [yaml, setYaml] = useState("name: MyDailyTool\nversion: 1.0\nfeatures:\n  - fast\n  - free\n  - private\nmeta:\n  count: 110");
   const [json, setJson] = useState("");
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {

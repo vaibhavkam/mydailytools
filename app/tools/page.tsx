@@ -5,7 +5,7 @@ import { buildMetadata, itemListJsonLd } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "All Tools",
-  description: `Browse all ${ALL_TOOLS.length}+ free online tools at MyDailyTools — calculators, converters, developer utilities, and more.`,
+  description: `Browse all ${ALL_TOOLS.length}+ free online tools at MyDailyTool — calculators, converters, developer utilities, and more.`,
   path: "/tools/",
 });
 
