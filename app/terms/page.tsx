@@ -13,7 +13,7 @@ export default function TermsPage() {
     <article className="max-w-3xl prose-tool">
       <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Terms" }]} />
       <h1 className="mt-3 text-3xl md:text-4xl font-bold !mb-2">Terms of Service</h1>
-      <p className="text-sm text-[rgb(var(--fg-muted))]">Last updated: {new Date().toISOString().slice(0, 10)}</p>
+      <p className="text-sm text-[rgb(var(--fg-muted))]">Last updated: 2026-05-25</p>
 
       <h2>1. Acceptance</h2>
       <p>By using {SITE.name}, you agree to these terms.</p>
@@ -42,7 +42,7 @@ export default function TermsPage() {
       </p>
 
       <h2>6. Governing law</h2>
-      <p>These terms are governed by the laws of your jurisdiction of residence to the extent permitted; otherwise, by U.S. law.</p>
+      <p>These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts of India.</p>
 
       <h2>7. Changes</h2>
       <p>We may revise these terms; the “Last updated” date will reflect changes.</p>
