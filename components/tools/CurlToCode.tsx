@@ -409,7 +409,7 @@ export default function CurlToCode({ tool }: { tool: Tool & { categorySlug: stri
           <label className="label" htmlFor="curl-in">curl command</label>
           <AutoTextarea
             id="curl-in"
-            className="input font-mono text-xs min-h-[180px]"
+            className="input font-mono text-xs min-h-[320px]"
             value={curl}
             onChange={(e) => setCurl(e.target.value)}
             spellCheck={false}
@@ -443,7 +443,7 @@ export default function CurlToCode({ tool }: { tool: Tool & { categorySlug: stri
 
             <div>
               <label className="label" htmlFor="code-out">Code</label>
-              <pre className="input font-mono text-xs min-h-[260px] overflow-auto whitespace-pre" id="code-out">{code}</pre>
+              <pre className="input font-mono text-xs min-h-[360px] overflow-auto whitespace-pre" id="code-out">{code}</pre>
             </div>
 
             <details className="text-xs text-[rgb(var(--fg-muted))]">

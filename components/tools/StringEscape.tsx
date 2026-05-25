@@ -55,13 +55,13 @@ export default function StringEscape({ tool }: { tool: Tool & { categorySlug: st
       <div className="grid lg:grid-cols-2 gap-3">
         <div>
           <label className="label">Raw → Escaped</label>
-          <AutoTextarea className="input min-h-[160px]" value={text} onChange={(e) => setText(e.target.value)} />
-          <AutoTextarea readOnly value={escaped} className="input min-h-[120px] font-mono text-xs mt-2" />
+          <AutoTextarea className="input min-h-[280px]" value={text} onChange={(e) => setText(e.target.value)} />
+          <AutoTextarea readOnly value={escaped} className="input min-h-[200px] font-mono text-xs mt-2" />
         </div>
         <div>
           <label className="label">Escaped → Raw</label>
-          <AutoTextarea className="input min-h-[160px] font-mono text-xs" value={back} onChange={(e) => setBack(e.target.value)} />
-          <AutoTextarea readOnly value={unescaped} className="input min-h-[120px] mt-2" />
+          <AutoTextarea className="input min-h-[280px] font-mono text-xs" value={back} onChange={(e) => setBack(e.target.value)} />
+          <AutoTextarea readOnly value={unescaped} className="input min-h-[200px] mt-2" />
         </div>
       </div>
     </ToolPage>

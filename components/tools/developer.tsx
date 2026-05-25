@@ -51,9 +51,9 @@ export function CssMinifier({ tool }: Props) {
       examples: "A 500 byte stylesheet often shrinks to 350–400 bytes (~25% smaller).",
       faq: [{ q: "Is this lossless?", a: "Yes — it only removes whitespace and comments. CSS rules and values are preserved exactly." }],
     }}>
-      <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={css} onChange={(e) => setCss(e.target.value)} />
+      <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={css} onChange={(e) => setCss(e.target.value)} />
       <div className="mt-2 text-xs text-[rgb(var(--fg-muted))]">Saved {ratio}% ({css.length} → {min.length} bytes)</div>
-      <AutoTextarea className="input min-h-[180px] font-mono text-xs mt-2" value={min} readOnly />
+      <AutoTextarea className="input min-h-[320px] font-mono text-xs mt-2" value={min} readOnly />
     </ToolPage>
   );
 }
@@ -78,8 +78,8 @@ console.log(add(2, 3));`);
       examples: "Useful for inline scripts in HTML where every byte matters.",
       faq: [{ q: "Is this safe for all JS?", a: "Mostly — but it can break code that relies on whitespace around regex literals or template strings. Check output before shipping." }],
     }}>
-      <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={js} onChange={(e) => setJs(e.target.value)} />
-      <AutoTextarea className="input min-h-[180px] font-mono text-xs mt-3" value={min} readOnly />
+      <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={js} onChange={(e) => setJs(e.target.value)} />
+      <AutoTextarea className="input min-h-[320px] font-mono text-xs mt-3" value={min} readOnly />
     </ToolPage>
   );
 }
@@ -108,8 +108,8 @@ export function XmlFormatter({ tool }: Props) {
         { q: "Is my XML sent to a server?", a: "No. Parsing and formatting happen entirely in your browser using the built-in DOMParser API." },
       ],
     }}>
-      <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} />
-      {out.ok ? <AutoTextarea className="input min-h-[180px] font-mono text-xs mt-3" value={out.text} readOnly />
+      <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} />
+      {out.ok ? <AutoTextarea className="input min-h-[320px] font-mono text-xs mt-3" value={out.text} readOnly />
               : <p role="alert" className="mt-3 text-sm text-red-600">{out.msg}</p>}
     </ToolPage>
   );
@@ -151,13 +151,13 @@ export function HtmlEntities({ tool }: Props) {
       <div className="grid sm:grid-cols-2 gap-3">
         <div>
           <label className="label">Raw HTML</label>
-          <AutoTextarea className="input min-h-[140px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
-          <AutoTextarea className="input min-h-[100px] font-mono text-xs mt-2" value={encoded} readOnly />
+          <AutoTextarea className="input min-h-[280px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+          <AutoTextarea className="input min-h-[200px] font-mono text-xs mt-2" value={encoded} readOnly />
         </div>
         <div>
           <label className="label">Encoded</label>
-          <AutoTextarea className="input min-h-[140px] font-mono text-xs" value={enc} onChange={(e) => setEnc(e.target.value)} />
-          <AutoTextarea className="input min-h-[100px] font-mono text-xs mt-2" value={decoded} readOnly />
+          <AutoTextarea className="input min-h-[280px] font-mono text-xs" value={enc} onChange={(e) => setEnc(e.target.value)} />
+          <AutoTextarea className="input min-h-[200px] font-mono text-xs mt-2" value={decoded} readOnly />
         </div>
       </div>
     </ToolPage>
@@ -204,7 +204,7 @@ export function RegexTester({ tool }: Props) {
         <input className="input font-mono" value={pattern} onChange={(e) => setPattern(e.target.value)} />
         <input className="input font-mono w-24" value={flags} onChange={(e) => setFlags(e.target.value)} placeholder="gimsuy" />
       </div>
-      <AutoTextarea className="input min-h-[140px] mt-3 font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[280px] mt-3 font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
       {error && <p role="alert" className="mt-2 text-sm text-red-600">{error}</p>}
       <div className="mt-3 text-sm">
         <div className="text-[rgb(var(--fg-muted))] mb-2">{matches.length} match(es)</div>
@@ -353,7 +353,7 @@ export function HtaccessGenerator({ tool }: Props) {
         ))}
       </div>
       <div><label className="label">Domain</label><input className="input" value={opts.customDomain} onChange={(e) => setOpts({ ...opts, customDomain: e.target.value })} /></div>
-      <AutoTextarea className="input mt-3 min-h-[260px] font-mono text-xs" value={out} readOnly />
+      <AutoTextarea className="input mt-3 min-h-[360px] font-mono text-xs" value={out} readOnly />
     </ToolPage>
   );
 }
@@ -380,7 +380,7 @@ export function JwtDecoder({ tool }: Props) {
       examples: "A typical JWT header is { alg, typ }; payload is { sub, iat, exp, ... }.",
       faq: [{ q: "Does this verify the signature?", a: "No. Verifying needs the secret/public key, which would be a security risk to enter into a public web tool." }],
     }}>
-      <AutoTextarea className="input min-h-[100px] font-mono text-xs" value={token} onChange={(e) => setToken(e.target.value)} />
+      <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={token} onChange={(e) => setToken(e.target.value)} />
       {"error" in r ? <p role="alert" className="mt-3 text-sm text-red-600">{r.error}</p> : (
         <div className="mt-3 grid lg:grid-cols-2 gap-3">
           <div><div className="text-xs font-semibold mb-1">Header</div><pre className="rounded-xl border border-[rgb(var(--border))] p-3 text-xs font-mono whitespace-pre-wrap">{r.header}</pre></div>
@@ -408,8 +408,8 @@ export function YamlJson({ tool }: Props) {
       faq: [{ q: "Why not full YAML?", a: "Full YAML is famously tricky (and unsafe with anchor expansion). We support the parts you actually use day-to-day." }],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
-        <AutoTextarea className="input min-h-[260px] font-mono text-xs" value={yaml} onChange={(e) => setYaml(e.target.value)} />
-        {error ? <p role="alert" className="text-sm text-red-600">{error}</p> : <AutoTextarea className="input min-h-[260px] font-mono text-xs" value={json} readOnly />}
+        <AutoTextarea className="input min-h-[360px] font-mono text-xs" value={yaml} onChange={(e) => setYaml(e.target.value)} />
+        {error ? <p role="alert" className="text-sm text-red-600">{error}</p> : <AutoTextarea className="input min-h-[360px] font-mono text-xs" value={json} readOnly />}
       </div>
     </ToolPage>
   );

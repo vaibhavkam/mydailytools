@@ -301,7 +301,7 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
             <label className="label" htmlFor="json-left">Left (before / expected)</label>
             <AutoTextarea
               id="json-left"
-              className="input min-h-[260px] font-mono text-xs"
+              className="input min-h-[360px] font-mono text-xs"
               value={left}
               onChange={(e) => setLeft(e.target.value)}
               spellCheck={false}
@@ -311,7 +311,7 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
             <label className="label" htmlFor="json-right">Right (after / actual)</label>
             <AutoTextarea
               id="json-right"
-              className="input min-h-[260px] font-mono text-xs"
+              className="input min-h-[360px] font-mono text-xs"
               value={right}
               onChange={(e) => setRight(e.target.value)}
               spellCheck={false}

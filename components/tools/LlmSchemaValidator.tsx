@@ -5,6 +5,7 @@ import { Copy, CheckCircle2, AlertCircle, AlertTriangle, Info, ExternalLink } fr
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { VENDORS, checkVendor, type Finding, type VendorId } from "@/lib/llm-schema-rules";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 const DEFAULT_VENDOR: VendorId = "anthropic-tool";
 
@@ -134,7 +135,7 @@ export default function LlmSchemaValidator({ tool }: { tool: Tool & { categorySl
         <div className="grid md:grid-cols-2 gap-3">
           <div>
             <label className="label">JSON Schema</label>
-            <textarea
+            <AutoTextarea
               className="input font-mono text-xs"
               rows={14}
               value={schemaText}
@@ -147,7 +148,7 @@ export default function LlmSchemaValidator({ tool }: { tool: Tool & { categorySl
           </div>
           <div>
             <label className="label">Sample JSON to validate</label>
-            <textarea
+            <AutoTextarea
               className="input font-mono text-xs"
               rows={14}
               value={dataText}

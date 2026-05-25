@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, RefreshCw } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 // Tokenizer encoding tables are ~1.5MB. Loading them via static imports puts
 // them in the common chunk pulled by every tool page (a Next.js / webpack
@@ -235,7 +236,7 @@ export default function TokenCounter({ tool }: { tool: Tool & { categorySlug: st
       <div className="grid gap-4">
         <div>
           <label className="label">Input text</label>
-          <textarea
+          <AutoTextarea
             className="input font-mono text-sm"
             rows={10}
             value={text}

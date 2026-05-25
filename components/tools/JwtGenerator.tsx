@@ -34,11 +34,13 @@ export default function JwtGenerator({ tool }: { tool: Tool & { categorySlug: st
         { q: "Is my secret stored?", a: "No. Signing happens entirely in your browser via the Web Crypto API; nothing is uploaded." },
       ],
     }}>
-      <div className="grid lg:grid-cols-2 gap-3">
-        <div>
-          <label className="label">Payload (JSON)</label>
-          <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={payload} onChange={(e) => setPayload(e.target.value)} />
-          <div className="mt-2 grid sm:grid-cols-2 gap-2">
+      <div className="grid gap-3">
+        <div className="grid lg:grid-cols-2 gap-3">
+          <div>
+            <label className="label">Payload (JSON)</label>
+            <AutoTextarea className="input min-h-[280px] font-mono text-xs" value={payload} onChange={(e) => setPayload(e.target.value)} />
+          </div>
+          <div className="grid sm:grid-cols-2 gap-2 lg:self-end">
             <div><label className="label">Secret</label><input className="input font-mono" value={secret} onChange={(e) => setSecret(e.target.value)} /></div>
             <div><label className="label">Algorithm</label>
               <select className="input" value={alg} onChange={(e) => setAlg(e.target.value as Alg)}>
@@ -46,12 +48,14 @@ export default function JwtGenerator({ tool }: { tool: Tool & { categorySlug: st
               </select>
             </div>
           </div>
-          <button onClick={sign} className="mt-2 btn-primary min-tap">Sign</button>
+        </div>
+        <div>
+          <button onClick={sign} className="btn-primary min-tap">Sign</button>
           {err && <p role="alert" className="mt-2 text-sm text-red-600">{err}</p>}
         </div>
         <div>
           <label className="label">Signed token</label>
-          <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={token} readOnly />
+          <AutoTextarea className="input min-h-[280px] font-mono text-xs" value={token} readOnly />
           {token && <button onClick={() => navigator.clipboard.writeText(token)} className="mt-2 btn-ghost text-xs">Copy</button>}
         </div>
       </div>

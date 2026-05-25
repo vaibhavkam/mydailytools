@@ -149,7 +149,7 @@ export default function HashGenerator({ tool }: { tool: Tool & { categorySlug: s
       <div className="grid gap-4">
         <div>
           <label className="label" htmlFor="hash-in">Input text</label>
-          <AutoTextarea id="hash-in" className="input min-h-[100px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+          <AutoTextarea id="hash-in" className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
         </div>
         <div className="grid gap-2">
           {ALGOS.map((a) => (

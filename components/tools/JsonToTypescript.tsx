@@ -190,7 +190,7 @@ export default function JsonToTypescript({ tool }: { tool: Tool & { categorySlug
       <div className="grid lg:grid-cols-2 gap-3">
         <div>
           <label className="label">JSON sample</label>
-          <AutoTextarea className="input min-h-[260px] font-mono text-xs" value={json} onChange={(e) => setJson(e.target.value)} spellCheck={false} />
+          <AutoTextarea className="input min-h-[360px] font-mono text-xs" value={json} onChange={(e) => setJson(e.target.value)} spellCheck={false} />
           <div className="mt-2 flex gap-2 items-end">
             <div className="flex-1"><label className="label">Root type name</label><input className="input" value={name} onChange={(e) => setName(e.target.value)} /></div>
             <button onClick={generate} className="btn-primary min-tap">Generate</button>

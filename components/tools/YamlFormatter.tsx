@@ -52,19 +52,19 @@ meta:
       }}
     >
       <div className="grid gap-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <button onClick={format} className="btn-primary min-tap">Format</button>
-        </div>
-
         <div>
           <label className="label" htmlFor="yaml-in">Input YAML</label>
           <AutoTextarea
             id="yaml-in"
-            className="input font-mono text-xs min-h-[220px]"
+            className="input font-mono text-xs min-h-[320px]"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             spellCheck={false}
           />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <button onClick={format} className="btn-primary min-tap">Format</button>
         </div>
 
         {error && (
@@ -79,7 +79,7 @@ meta:
               <label className="label !mb-0" htmlFor="yaml-out">Formatted YAML</label>
               <button onClick={copy} className="btn-ghost text-xs">Copy</button>
             </div>
-            <AutoTextarea id="yaml-out" className="input font-mono text-xs min-h-[220px]" value={output} readOnly />
+            <AutoTextarea id="yaml-out" className="input font-mono text-xs min-h-[320px]" value={output} readOnly />
           </div>
         )}
       </div>

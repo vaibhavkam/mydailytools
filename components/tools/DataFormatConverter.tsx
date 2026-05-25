@@ -249,7 +249,7 @@ export default function DataFormatConverter({ tool }: { tool: Tool & { categoryS
           <div>
             <label className="label">{fromLabel} input</label>
             <AutoTextarea
-              className="input min-h-[280px] font-mono text-xs"
+              className="input min-h-[320px] font-mono text-xs"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               spellCheck={false}
@@ -277,7 +277,7 @@ export default function DataFormatConverter({ tool }: { tool: Tool & { categoryS
               </div>
             </div>
             <AutoTextarea
-              className="input min-h-[280px] font-mono text-xs mt-1.5"
+              className="input min-h-[320px] font-mono text-xs mt-1.5"
               value={output}
               readOnly
               spellCheck={false}

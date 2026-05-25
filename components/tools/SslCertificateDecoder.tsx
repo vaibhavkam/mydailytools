@@ -50,8 +50,10 @@ export default function SslCertificateDecoder({ tool }: { tool: Tool & { categor
       ],
     }}>
       <label className="label">PEM certificate</label>
-      <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={pem} onChange={(e) => setPem(e.target.value)} />
-      <button onClick={decode} className="mt-2 btn-primary min-tap">Decode</button>
+      <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={pem} onChange={(e) => setPem(e.target.value)} />
+      <div className="mt-3">
+        <button onClick={decode} className="btn-primary min-tap">Decode</button>
+      </div>
       {err && <p role="alert" className="mt-3 text-sm text-red-600">{err}</p>}
       {r && (
         <div className="mt-4 grid sm:grid-cols-2 gap-2 text-sm">

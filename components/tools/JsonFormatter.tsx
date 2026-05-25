@@ -45,6 +45,17 @@ export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: s
       }}
     >
       <div className="grid gap-4">
+        <div>
+          <label className="label" htmlFor="json-in">Input JSON</label>
+          <AutoTextarea
+            id="json-in"
+            className="input font-mono text-xs min-h-[320px]"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            spellCheck={false}
+          />
+        </div>
+
         <div className="flex flex-wrap items-center gap-2">
           <button onClick={() => format("pretty")} className="btn-primary min-tap">Format</button>
           <button onClick={() => format("minify")} className="btn-ghost min-tap">Minify</button>
@@ -55,17 +66,6 @@ export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: s
               <option value={4}>4 spaces</option>
             </select>
           </label>
-        </div>
-
-        <div>
-          <label className="label" htmlFor="json-in">Input JSON</label>
-          <AutoTextarea
-            id="json-in"
-            className="input font-mono text-xs min-h-[180px]"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            spellCheck={false}
-          />
         </div>
 
         {error && (
@@ -80,7 +80,7 @@ export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: s
               <label className="label !mb-0" htmlFor="json-out">Output</label>
               <button onClick={copy} className="btn-ghost text-xs">Copy</button>
             </div>
-            <AutoTextarea id="json-out" className="input font-mono text-xs min-h-[180px]" value={output} readOnly />
+            <AutoTextarea id="json-out" className="input font-mono text-xs min-h-[320px]" value={output} readOnly />
           </div>
         )}
       </div>
