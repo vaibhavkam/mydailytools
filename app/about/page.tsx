@@ -26,10 +26,12 @@ export default function AboutPage() {
           CloudFront, so there&apos;s no server to log requests, store form data, or
           slow you down.
         </p>
-        <h2>Who builds it</h2>
+        <h2>Built by one developer</h2>
         <p>
-          A small team of web developers who got tired of cluttered, ad-stuffed
-          alternatives. Have an idea for a tool? <a href="/contact/" className="text-brand-600 underline">Tell us</a>.
+          {SITE.name} is a solo project. I built it because I kept running into slow,
+          ad-heavy sites for simple everyday tasks. The site is ad-supported to keep it
+          free — ads are non-intrusive and never affect how the tools work.
+          Have an idea for a tool? <a href="/contact/" className="text-brand-600 underline">Tell us</a>.
         </p>
         <h2>Open standards</h2>
         <p>
