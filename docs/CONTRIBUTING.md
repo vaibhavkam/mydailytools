@@ -246,7 +246,7 @@ Example:
 ```
 Add JSON ↔ TOML converter
 
-Pure JS implementation; no new deps. Wired into Web & Developer
+Pure JS implementation; no new deps. Wired into Developer Tools
 category between yaml-to-json and xml-formatter.
 ```
 

@@ -26,7 +26,7 @@ export type Category = {
 export const CATEGORIES: Category[] = [
   {
     slug: "developer",
-    name: "Web & Developer",
+    name: "Developer Tools",
     blurb: "Tools every web developer needs.",
     icon: "Code2",
     tools: [

@@ -16,7 +16,7 @@ export function generateStaticParams() {
 // that fall well below the 150-char target, so each category gets its own copy.
 const CATEGORY_SEO: Record<string, { title: string; description: string }> = {
   developer: {
-    title: "Free Web & Developer Tools Online",
+    title: "Free Developer Tools Online",
     description: `${SITE.name} has 36 free tools for web developers — JSON formatter and validator, JWT decoder, regex tester, SQL formatter, Base64 encoder, URL parser, and more. No signup, runs in your browser.`,
   },
   text: {

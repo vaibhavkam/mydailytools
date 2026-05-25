@@ -125,7 +125,7 @@ Don't re-pitch these unless circumstances change:
 - **Per-tool OG images at build time** — overkill until traffic justifies it. Single OG image (`/public/og.png`) is fine for now.
 - **A massive blog dump** — Google penalizes AI-generated content patterns. Realistic pace is 1 post/week max, edited by hand. First post (`/blog/iso-8601-cheat-sheet/`) is live; ~5 more should be data-driven (target queries that show in Search Console after a few weeks).
 - **Image tools (color picker, resizer, format converter)** — explicitly skipped per Vaibhav. Don't suggest building these.
-- **Image-to-Base64 lives in Web & Developer**, not Image category. The Image category is empty by design.
+- **Image-to-Base64 lives in Developer Tools**, not Image category. The Image category is empty by design.
 - **Custom logo** — Vaibhav reviewed 22 alternatives and kept the original wrench-spark mark. Don't suggest redesigns.
 
 ---
