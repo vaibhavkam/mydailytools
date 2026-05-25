@@ -187,7 +187,13 @@ export default function ScientificCalculator({ tool }: { tool: Tool & { category
       <div className="rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--card))] overflow-hidden">
 
         {/* History display */}
-        <div className="min-h-[100px] max-h-[140px] overflow-y-auto px-4 pt-3 pb-1 font-mono text-sm space-y-0.5">
+        <div className="flex items-center justify-between px-4 pt-3">
+          <span className="text-[10px] uppercase tracking-widest text-[rgb(var(--fg-muted))]">History</span>
+          {history.length > 0 && (
+            <button onClick={() => setHistory([])} className="text-[10px] text-[rgb(var(--fg-muted))] hover:text-red-500 transition">Clear</button>
+          )}
+        </div>
+        <div className="min-h-[80px] max-h-[130px] overflow-y-auto px-4 pt-1 pb-1 font-mono text-sm space-y-0.5">
           {history.length === 0 && (
             <p className="text-[rgb(var(--fg-muted))] text-xs">History will appear here…</p>
           )}
