@@ -47,7 +47,8 @@ const today = new Date().toISOString().slice(0, 10);
 // examples) but not on code-only changes. See ADR-011.
 const TOOL_LASTMOD = "2026-05-25";
 
-const staticPaths = ["/", "/tools/", "/blog/", "/about/", "/contact/", "/support/", "/sitemap-html/", "/privacy/", "/terms/"];
+// sitemap-html is noindex — intentionally excluded from the sitemap.
+const staticPaths = ["/", "/tools/", "/blog/", "/about/", "/contact/", "/support/", "/privacy/", "/terms/"];
 const urls = [
   ...staticPaths.map((p) => ({ loc: SITE + p, lastmod: today, priority: p === "/" ? 1.0 : 0.7 })),
   ...catSlugs.map((s) => ({ loc: `${SITE}/${s}/`, lastmod: today, priority: 0.8 })),
