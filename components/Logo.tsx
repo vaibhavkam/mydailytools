@@ -22,7 +22,7 @@ export function Logo({ className = "" }: { className?: string }) {
         <circle cx="22" cy="10" r="1.6" fill="white" />
       </svg>
       <span className="font-semibold tracking-tight text-base sm:text-lg">
-        My<span className="bg-brand-gradient bg-clip-text text-transparent">Daily</span>Tools
+        My<span className="bg-brand-gradient bg-clip-text text-transparent">Daily</span>Tool
       </span>
     </Link>
   );
