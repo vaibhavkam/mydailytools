@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [input, setInput] = useState('{"hello":"world","items":[1,2,3]}');
@@ -58,7 +59,7 @@ export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: s
 
         <div>
           <label className="label" htmlFor="json-in">Input JSON</label>
-          <textarea
+          <AutoTextarea
             id="json-in"
             className="input font-mono text-xs min-h-[180px]"
             value={input}
@@ -79,7 +80,7 @@ export default function JsonFormatter({ tool }: { tool: Tool & { categorySlug: s
               <label className="label !mb-0" htmlFor="json-out">Output</label>
               <button onClick={copy} className="btn-ghost text-xs">Copy</button>
             </div>
-            <textarea id="json-out" className="input font-mono text-xs min-h-[180px]" value={output} readOnly />
+            <AutoTextarea id="json-out" className="input font-mono text-xs min-h-[180px]" value={output} readOnly />
           </div>
         )}
       </div>

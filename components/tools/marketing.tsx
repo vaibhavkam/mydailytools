@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { useLocale } from "@/lib/locale";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
 const pct = (n: number, d = 2) => Number.isFinite(n) ? `${n.toFixed(d)}%` : "—";
@@ -290,7 +291,7 @@ export function SerpPreview({ tool }: Props) {
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="sm:col-span-2"><label className="label">Title <span className={titleOver ? "text-amber-600" : "text-[rgb(var(--fg-muted))]"}>({title.length}/60)</span></label><input className="input" value={title} onChange={(e) => setTitle(e.target.value)} /></div>
         <div className="sm:col-span-2"><label className="label">URL</label><input className="input font-mono" value={url} onChange={(e) => setUrl(e.target.value)} /></div>
-        <div className="sm:col-span-2"><label className="label">Meta description <span className={descOver ? "text-amber-600" : "text-[rgb(var(--fg-muted))]"}>({desc.length}/160)</span></label><textarea className="input min-h-[80px]" value={desc} onChange={(e) => setDesc(e.target.value)} /></div>
+        <div className="sm:col-span-2"><label className="label">Meta description <span className={descOver ? "text-amber-600" : "text-[rgb(var(--fg-muted))]"}>({desc.length}/160)</span></label><AutoTextarea className="input min-h-[80px]" value={desc} onChange={(e) => setDesc(e.target.value)} /></div>
       </div>
       <div className="mt-4 rounded-2xl border border-[rgb(var(--border))] p-5 max-w-2xl bg-white dark:bg-slate-900">
         <div className="text-xs text-emerald-700 dark:text-emerald-400 truncate">{url}</div>

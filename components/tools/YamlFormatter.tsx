@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { parseYaml, toYaml } from "@/lib/data-formats";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function YamlFormatter({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [input, setInput] = useState(`name: MyDailyTool
@@ -57,7 +58,7 @@ meta:
 
         <div>
           <label className="label" htmlFor="yaml-in">Input YAML</label>
-          <textarea
+          <AutoTextarea
             id="yaml-in"
             className="input font-mono text-xs min-h-[220px]"
             value={input}
@@ -78,7 +79,7 @@ meta:
               <label className="label !mb-0" htmlFor="yaml-out">Formatted YAML</label>
               <button onClick={copy} className="btn-ghost text-xs">Copy</button>
             </div>
-            <textarea id="yaml-out" className="input font-mono text-xs min-h-[220px]" value={output} readOnly />
+            <AutoTextarea id="yaml-out" className="input font-mono text-xs min-h-[220px]" value={output} readOnly />
           </div>
         )}
       </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 // Minimal CSV parser: handles quoted fields, embedded commas, doubled quotes.
 function parseCsv(input: string): string[][] {
@@ -81,14 +82,14 @@ export default function JsonCsv({ tool }: { tool: Tool & { categorySlug: string;
       <div className="grid lg:grid-cols-2 gap-3">
         <div>
           <label className="label">JSON (array of objects)</label>
-          <textarea className="input min-h-[260px] font-mono text-xs" value={json} onChange={(e) => setJson(e.target.value)} spellCheck={false} />
+          <AutoTextarea className="input min-h-[260px] font-mono text-xs" value={json} onChange={(e) => setJson(e.target.value)} spellCheck={false} />
         </div>
         <div>
           <div className="flex items-center justify-between">
             <label className="label !mb-0">CSV</label>
             <button onClick={csvToJson} className="text-xs btn-ghost">CSV → JSON</button>
           </div>
-          <textarea className="input min-h-[260px] font-mono text-xs mt-1.5" value={csv} onChange={(e) => setCsv(e.target.value)} spellCheck={false} />
+          <AutoTextarea className="input min-h-[260px] font-mono text-xs mt-1.5" value={csv} onChange={(e) => setCsv(e.target.value)} spellCheck={false} />
         </div>
       </div>
       {err && <p role="alert" className="mt-3 text-sm text-red-600">{err}</p>}

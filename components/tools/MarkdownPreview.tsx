@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { marked } from "marked";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 const STARTER = `# MyDailyTool
 
@@ -49,7 +50,7 @@ export default function MarkdownPreview({ tool }: { tool: Tool & { categorySlug:
       faq: [{ q: "Are images and links rendered?", a: "Yes, but rendered inside a sandboxed area without scripts." }],
     }}>
       <div className="grid lg:grid-cols-2 gap-3">
-        <textarea className="input min-h-[440px] font-mono text-xs" value={src} onChange={(e) => setSrc(e.target.value)} />
+        <AutoTextarea className="input min-h-[440px] font-mono text-xs" value={src} onChange={(e) => setSrc(e.target.value)} />
         <div className="rounded-xl border border-[rgb(var(--border))] bg-[rgb(var(--bg-elevated))] p-4 overflow-auto min-h-[440px] markdown-body" dangerouslySetInnerHTML={{ __html: html }} />
       </div>
       <style jsx>{`

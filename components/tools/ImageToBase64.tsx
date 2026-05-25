@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Copy, Download, Upload } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function ImageToBase64({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [dataUri, setDataUri] = useState("");
@@ -60,7 +61,7 @@ export default function ImageToBase64({ tool }: { tool: Tool & { categorySlug: s
                   </button>
                 ))}
               </div>
-              <textarea className="input min-h-[200px] font-mono text-xs" value={output()} readOnly />
+              <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={output()} readOnly />
               <button onClick={() => navigator.clipboard.writeText(output())} className="mt-2 btn-ghost text-xs"><Copy className="h-3 w-3" /> Copy</button>
             </div>
           </div>

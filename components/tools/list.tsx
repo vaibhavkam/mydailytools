@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
 
@@ -66,15 +67,15 @@ export function CommaLines({ tool }: Props) {
       <div className="grid lg:grid-cols-2 gap-3">
         <div>
           <label className="label">Joined → Lines</label>
-          <textarea className="input min-h-[180px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+          <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
           <div className="flex items-center justify-between mt-2 mb-1"><span className="text-xs text-[rgb(var(--fg-muted))]">Result</span>{copyBtn(toLines)}</div>
-          <textarea readOnly className="input min-h-[140px] font-mono text-xs" value={toLines} />
+          <AutoTextarea readOnly className="input min-h-[140px] font-mono text-xs" value={toLines} />
         </div>
         <div>
           <label className="label">Lines → Joined</label>
-          <textarea className="input min-h-[180px] font-mono text-xs" value={linesIn} onChange={(e) => setLinesIn(e.target.value)} />
+          <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={linesIn} onChange={(e) => setLinesIn(e.target.value)} />
           <div className="flex items-center justify-between mt-2 mb-1"><span className="text-xs text-[rgb(var(--fg-muted))]">Result</span>{copyBtn(toJoined)}</div>
-          <textarea readOnly className="input min-h-[140px] font-mono text-xs" value={toJoined} />
+          <AutoTextarea readOnly className="input min-h-[140px] font-mono text-xs" value={toJoined} />
         </div>
       </div>
     </ToolPage>
@@ -123,8 +124,8 @@ export function ListSetOps({ tool }: Props) {
         <label className="flex items-center gap-2"><input type="checkbox" checked={caseSensitive} onChange={(e) => setCaseSensitive(e.target.checked)} className="accent-brand-600" /> Case sensitive</label>
       </div>
       <div className="grid lg:grid-cols-2 gap-3">
-        <div><label className="label">List A</label><textarea className="input min-h-[160px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} /></div>
-        <div><label className="label">List B</label><textarea className="input min-h-[160px] font-mono text-xs" value={b} onChange={(e) => setB(e.target.value)} /></div>
+        <div><label className="label">List A</label><AutoTextarea className="input min-h-[160px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} /></div>
+        <div><label className="label">List B</label><AutoTextarea className="input min-h-[160px] font-mono text-xs" value={b} onChange={(e) => setB(e.target.value)} /></div>
       </div>
       <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {[
@@ -142,7 +143,7 @@ export function ListSetOps({ tool }: Props) {
                 {copyBtn((list as string[]).join("\n"))}
               </div>
             </div>
-            <textarea readOnly className="input min-h-[100px] font-mono text-xs" value={(list as string[]).join("\n")} />
+            <AutoTextarea readOnly className="input min-h-[100px] font-mono text-xs" value={(list as string[]).join("\n")} />
           </div>
         ))}
       </div>
@@ -178,8 +179,8 @@ export function ListCompare({ tool }: Props) {
       ],
     }}>
       <div className="grid lg:grid-cols-2 gap-3">
-        <div><label className="label">List A</label><textarea className="input min-h-[160px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} /></div>
-        <div><label className="label">List B</label><textarea className="input min-h-[160px] font-mono text-xs" value={b} onChange={(e) => setB(e.target.value)} /></div>
+        <div><label className="label">List A</label><AutoTextarea className="input min-h-[160px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} /></div>
+        <div><label className="label">List B</label><AutoTextarea className="input min-h-[160px] font-mono text-xs" value={b} onChange={(e) => setB(e.target.value)} /></div>
       </div>
       <div className="mt-4 grid lg:grid-cols-3 gap-3">
         {[["In both", r.both, "border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20"],
@@ -190,7 +191,7 @@ export function ListCompare({ tool }: Props) {
               <div className="text-xs font-semibold">{label as string} <span className="opacity-60">({(list as string[]).length})</span></div>
               {copyBtn((list as string[]).join("\n"))}
             </div>
-            <textarea readOnly className="input min-h-[140px] font-mono text-xs" value={(list as string[]).join("\n")} />
+            <AutoTextarea readOnly className="input min-h-[140px] font-mono text-xs" value={(list as string[]).join("\n")} />
           </div>
         ))}
       </div>
@@ -228,7 +229,7 @@ export function ListStats({ tool }: Props) {
         { q: "How are blank lines handled?", a: "Blank lines are skipped before all calculations, so they do not inflate the total count or distort average lengths." },
       ],
     }}>
-      <textarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
       {r && (
         <>
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -334,7 +335,7 @@ export function NumberSequence({ tool }: Props) {
         <span className="text-xs text-[rgb(var(--fg-muted))]">{r ? `${r.length} items` : ""}</span>
         {r && copyBtn(out)}
       </div>
-      <textarea readOnly className="input min-h-[160px] font-mono text-xs mt-1" value={out} />
+      <AutoTextarea readOnly className="input min-h-[160px] font-mono text-xs mt-1" value={out} />
     </ToolPage>
   );
 }
@@ -371,11 +372,11 @@ export function ListJsonArray({ tool }: Props) {
       <div className="grid lg:grid-cols-2 gap-3">
         <div>
           <label className="label">Lines</label>
-          <textarea className="input min-h-[200px] font-mono text-xs" value={list} onChange={(e) => setList(e.target.value)} />
+          <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={list} onChange={(e) => setList(e.target.value)} />
         </div>
         <div>
           <div className="flex items-center justify-between"><label className="label !mb-0">JSON array</label><div className="flex items-center gap-2"><button onClick={fromJson} className="btn-ghost text-xs">JSON → List</button>{copyBtn(toJson)}</div></div>
-          <textarea className="input min-h-[200px] mt-1 font-mono text-xs" value={json || toJson} onChange={(e) => setJson(e.target.value)} />
+          <AutoTextarea className="input min-h-[200px] mt-1 font-mono text-xs" value={json || toJson} onChange={(e) => setJson(e.target.value)} />
           {err && <p role="alert" className="mt-2 text-sm text-red-600">{err}</p>}
         </div>
       </div>
@@ -413,8 +414,8 @@ export function PrefixSuffix({ tool }: Props) {
       </div>
       <label className="flex items-center gap-2 text-sm mb-2"><input type="checkbox" checked={skipBlank} onChange={(e) => setSkipBlank(e.target.checked)} className="accent-brand-600" /> Skip blank lines</label>
       <div className="grid lg:grid-cols-2 gap-3">
-        <textarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
-        <textarea readOnly className="input min-h-[200px] font-mono text-xs" value={out} />
+        <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+        <AutoTextarea readOnly className="input min-h-[200px] font-mono text-xs" value={out} />
       </div>
       <div className="mt-2">{copyBtn(out)}</div>
     </ToolPage>
@@ -460,8 +461,8 @@ export function ColumnPicker({ tool }: Props) {
         <label className="flex items-end gap-2 text-sm pb-2"><input type="checkbox" checked={hasHeader} onChange={(e) => setHasHeader(e.target.checked)} className="accent-brand-600" /> First row is header</label>
       </div>
       <div className="grid lg:grid-cols-2 gap-3">
-        <textarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
-        <textarea readOnly className="input min-h-[200px] font-mono text-xs" value={out} />
+        <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+        <AutoTextarea readOnly className="input min-h-[200px] font-mono text-xs" value={out} />
       </div>
       <div className="mt-2">{copyBtn(out)}</div>
     </ToolPage>
@@ -521,8 +522,8 @@ export function ListFilter({ tool }: Props) {
       </div>
       {err && <p role="alert" className="text-sm text-red-600 mb-2">{err}</p>}
       <div className="grid lg:grid-cols-2 gap-3">
-        <textarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
-        <textarea readOnly className="input min-h-[200px] font-mono text-xs" value={out} />
+        <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+        <AutoTextarea readOnly className="input min-h-[200px] font-mono text-xs" value={out} />
       </div>
       <div className="mt-2">{copyBtn(out)}</div>
     </ToolPage>

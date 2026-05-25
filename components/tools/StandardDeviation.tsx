@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function StandardDeviation({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [input, setInput] = useState("2, 4, 4, 4, 5, 5, 7, 9");
@@ -23,7 +24,7 @@ export default function StandardDeviation({ tool }: { tool: Tool & { categorySlu
       faq: [{ q: "Population vs sample?", a: "Use sample (N−1) when you have a subset of a larger group; use population (N) when your data is the entire group." }],
     }}>
       <label className="label" htmlFor="sd">Numbers</label>
-      <textarea id="sd" className="input min-h-[80px]" value={input} onChange={(e) => setInput(e.target.value)} />
+      <AutoTextarea id="sd" className="input min-h-[80px]" value={input} onChange={(e) => setInput(e.target.value)} />
       {r && (
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
           {[

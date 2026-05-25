@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function WordCounter({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [text, setText] = useState("");
@@ -48,7 +49,7 @@ export default function WordCounter({ tool }: { tool: Tool & { categorySlug: str
       }}
     >
       <div className="grid gap-4">
-        <textarea
+        <AutoTextarea
           className="input min-h-[220px]"
           placeholder="Paste or type your text here…"
           value={text}

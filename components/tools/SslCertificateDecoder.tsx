@@ -4,6 +4,7 @@ import { useState } from "react";
 import forge from "node-forge";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 const SAMPLE = `-----BEGIN CERTIFICATE-----
 MIIBlTCCATugAwIBAgIRANRBDX+EQX9ja3I9DAKLAUwwCgYIKoZIzj0EAwIwGjEY
@@ -49,7 +50,7 @@ export default function SslCertificateDecoder({ tool }: { tool: Tool & { categor
       ],
     }}>
       <label className="label">PEM certificate</label>
-      <textarea className="input min-h-[180px] font-mono text-xs" value={pem} onChange={(e) => setPem(e.target.value)} />
+      <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={pem} onChange={(e) => setPem(e.target.value)} />
       <button onClick={decode} className="mt-2 btn-primary min-tap">Decode</button>
       {err && <p role="alert" className="mt-3 text-sm text-red-600">{err}</p>}
       {r && (

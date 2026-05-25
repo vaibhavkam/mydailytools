@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
 
@@ -33,7 +34,7 @@ export function CaseConverter({ tool }: Props) {
         { q: "Can I convert multi-word phrases with punctuation?", a: "Yes. The converter strips punctuation and special characters, then applies the chosen casing to the remaining words." },
       ],
     }}>
-      <textarea className="input min-h-[80px]" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[80px]" value={text} onChange={(e) => setText(e.target.value)} />
       <ul className="mt-3 grid gap-1.5">
         {Object.entries(transforms).map(([k, v]) => (
           <li key={k} className="rounded-lg border border-[rgb(var(--border))] px-3 py-2 flex items-center gap-2">
@@ -68,7 +69,7 @@ export function CharacterCounter({ tool }: Props) {
         { q: "Does the word count include punctuation?", a: "Words are split on whitespace only, so 'hello,' counts as one word (including the comma). This matches how most word processors count." },
       ],
     }}>
-      <textarea className="input min-h-[160px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type or paste text…" />
+      <AutoTextarea className="input min-h-[160px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type or paste text…" />
       <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
         {Object.entries(stats).map(([k, v]) => (
           <div key={k} className="rounded-xl border border-[rgb(var(--border))] p-3 text-center">
@@ -98,7 +99,7 @@ export function LineCounter({ tool }: Props) {
         { q: "What is the difference between CRLF and LF line endings?", a: "LF (\\n) is used on Unix/Linux/macOS; CRLF (\\r\\n) is the Windows standard. This tool handles both, so paste from any operating system and the count will be accurate." },
       ],
     }}>
-      <textarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-3 grid grid-cols-2 gap-2">
         <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">Total lines</div><div className="text-2xl font-semibold tabular-nums">{lines.length}</div></div>
         <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">Non-empty</div><div className="text-2xl font-semibold tabular-nums">{nonEmpty}</div></div>
@@ -133,8 +134,8 @@ export function TextReverser({ tool }: Props) {
           <button key={m} onClick={() => setMode(m)} className={`min-tap rounded-xl px-3 py-2 text-sm capitalize ${mode === m ? "bg-brand-gradient text-white shadow-glow" : "btn-ghost"}`}>{m}</button>
         ))}
       </div>
-      <textarea className="input min-h-[100px]" value={text} onChange={(e) => setText(e.target.value)} />
-      <textarea className="input min-h-[100px] mt-3" value={reversed} readOnly />
+      <AutoTextarea className="input min-h-[100px]" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[100px] mt-3" value={reversed} readOnly />
     </ToolPage>
   );
 }
@@ -173,7 +174,7 @@ export function LoremIpsum({ tool }: Props) {
         <input type="number" className="input" min={1} max={50} value={count} onChange={(e) => setCount(Math.min(50, Math.max(1, Number(e.target.value))))} />
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={startWith} onChange={(e) => setStartWith(e.target.checked)} className="accent-brand-600" /> Start with &ldquo;Lorem ipsum&hellip;&rdquo;</label>
       </div>
-      <textarea readOnly value={out} className="input min-h-[260px]" />
+      <AutoTextarea readOnly value={out} className="input min-h-[260px]" />
       <button onClick={() => navigator.clipboard.writeText(out)} className="mt-2 btn-ghost text-xs">Copy</button>
     </ToolPage>
   );
@@ -217,7 +218,7 @@ export function FindReplace({ tool }: Props) {
         { q: "How do I do a case-insensitive find?", a: "Uncheck the Case sensitive option. This makes the search ignore letter case so 'apple', 'Apple', and 'APPLE' all match." },
       ],
     }}>
-      <textarea className="input min-h-[120px]" placeholder="Source text" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[120px]" placeholder="Source text" value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-3 grid sm:grid-cols-2 gap-3">
         <input className="input" placeholder="Find" value={find} onChange={(e) => setFind(e.target.value)} />
         <input className="input" placeholder="Replace with" value={replace} onChange={(e) => setReplace(e.target.value)} />
@@ -227,7 +228,7 @@ export function FindReplace({ tool }: Props) {
         <label className="flex items-center gap-2"><input type="checkbox" checked={caseSensitive} onChange={(e) => setCaseSensitive(e.target.checked)} className="accent-brand-600" /> Case sensitive</label>
       </div>
       {error && <p role="alert" className="mt-2 text-sm text-red-600">{error}</p>}
-      <textarea className="input min-h-[120px] mt-3" value={out} readOnly />
+      <AutoTextarea className="input min-h-[120px] mt-3" value={out} readOnly />
     </ToolPage>
   );
 }
@@ -267,8 +268,8 @@ export function TextDiff({ tool }: Props) {
       ],
     }}>
       <div className="grid sm:grid-cols-2 gap-3">
-        <textarea className="input min-h-[180px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} placeholder="Original" />
-        <textarea className="input min-h-[180px] font-mono text-xs" value={b} onChange={(e) => setB(e.target.value)} placeholder="Modified" />
+        <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={a} onChange={(e) => setA(e.target.value)} placeholder="Original" />
+        <AutoTextarea className="input min-h-[180px] font-mono text-xs" value={b} onChange={(e) => setB(e.target.value)} placeholder="Modified" />
       </div>
       <div className="mt-3 rounded-xl border border-[rgb(var(--border))] font-mono text-xs overflow-x-auto">
         {diff.map((d, k) => (
@@ -309,13 +310,13 @@ export function RemoveDuplicates({ tool }: Props) {
         { q: "How do I remove duplicate words (not lines)?", a: "Put each word on its own line first — for example by replacing spaces with newlines in a text editor — then paste the result here." },
       ],
     }}>
-      <textarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} placeholder="One item per line…" />
+      <AutoTextarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} placeholder="One item per line…" />
       <div className="mt-2 flex gap-3 text-sm">
         <label className="flex items-center gap-2"><input type="checkbox" checked={trim} onChange={(e) => setTrim(e.target.checked)} className="accent-brand-600" /> Trim whitespace</label>
         <label className="flex items-center gap-2"><input type="checkbox" checked={caseSensitive} onChange={(e) => setCaseSensitive(e.target.checked)} className="accent-brand-600" /> Case sensitive</label>
         <span className="ml-auto text-[rgb(var(--fg-muted))]">{out.removed} duplicates removed</span>
       </div>
-      <textarea className="input min-h-[160px] mt-3 font-mono text-xs" value={out.text} readOnly />
+      <AutoTextarea className="input min-h-[160px] mt-3 font-mono text-xs" value={out.text} readOnly />
     </ToolPage>
   );
 }
@@ -351,8 +352,8 @@ export function SortLines({ tool }: Props) {
           <button key={m} onClick={() => setMode(m)} className={`min-tap rounded-xl px-3 py-2 text-sm capitalize ${mode === m ? "bg-brand-gradient text-white shadow-glow" : "btn-ghost"}`}>{m === "asc" ? "A → Z" : m === "desc" ? "Z → A" : m}</button>
         ))}
       </div>
-      <textarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
-      <textarea className="input min-h-[160px] mt-3 font-mono text-xs" value={out} readOnly />
+      <AutoTextarea className="input min-h-[160px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[160px] mt-3 font-mono text-xs" value={out} readOnly />
     </ToolPage>
   );
 }

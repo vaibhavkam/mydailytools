@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { format as sqlFormat } from "sql-formatter";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 const DIALECTS = ["sql", "postgresql", "mysql", "mariadb", "sqlite", "bigquery", "redshift", "snowflake", "tsql", "trino", "spark", "db2"] as const;
 type Dialect = typeof DIALECTS[number];
@@ -44,8 +45,8 @@ export default function SqlFormatter({ tool }: { tool: Tool & { categorySlug: st
         <label className="flex items-end gap-2 text-sm pb-2"><input type="checkbox" checked={uppercase} onChange={(e) => setUppercase(e.target.checked)} className="accent-brand-600" /> Uppercase keywords</label>
       </div>
       <div className="grid lg:grid-cols-2 gap-3">
-        <textarea className="input min-h-[300px] font-mono text-xs" value={src} onChange={(e) => setSrc(e.target.value)} spellCheck={false} />
-        <textarea className="input min-h-[300px] font-mono text-xs" value={out} readOnly />
+        <AutoTextarea className="input min-h-[300px] font-mono text-xs" value={src} onChange={(e) => setSrc(e.target.value)} spellCheck={false} />
+        <AutoTextarea className="input min-h-[300px] font-mono text-xs" value={out} readOnly />
       </div>
     </ToolPage>
   );

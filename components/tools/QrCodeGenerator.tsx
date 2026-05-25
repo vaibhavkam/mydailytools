@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import { Download } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Level = "L" | "M" | "Q" | "H";
 
@@ -47,7 +48,7 @@ export default function QrCodeGenerator({ tool }: { tool: Tool & { categorySlug:
     }}>
       <div className="grid lg:grid-cols-[1fr_auto] gap-6 items-start">
         <div className="grid gap-3">
-          <div><label className="label">Content</label><textarea className="input min-h-[100px]" value={text} onChange={(e) => setText(e.target.value)} /></div>
+          <div><label className="label">Content</label><AutoTextarea className="input min-h-[100px]" value={text} onChange={(e) => setText(e.target.value)} /></div>
           <div className="grid sm:grid-cols-2 gap-3">
             <div><label className="label">Error correction</label>
               <select className="input" value={level} onChange={(e) => setLevel(e.target.value as Level)}>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function UrlEncoderDecoder({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [text, setText] = useState("https://example.com/search?q=hello world&lang=en");
@@ -39,7 +40,7 @@ export default function UrlEncoderDecoder({ tool }: { tool: Tool & { categorySlu
       <div className="grid gap-6">
         <section>
           <h3 className="font-semibold mb-2">Encode</h3>
-          <textarea className="input min-h-[80px]" value={text} onChange={(e) => setText(e.target.value)} />
+          <AutoTextarea className="input min-h-[80px]" value={text} onChange={(e) => setText(e.target.value)} />
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <select className="input !w-auto !py-1.5" value={mode} onChange={(e) => setMode(e.target.value as any)}>
               <option value="component">encodeURIComponent</option>
@@ -48,17 +49,17 @@ export default function UrlEncoderDecoder({ tool }: { tool: Tool & { categorySlu
             <button onClick={doEncode} className="btn-primary min-tap">Encode →</button>
             {out && <button onClick={() => navigator.clipboard.writeText(out)} className="btn-ghost text-xs">Copy</button>}
           </div>
-          {out && <textarea readOnly value={out} className="input min-h-[80px] font-mono text-xs mt-2" />}
+          {out && <AutoTextarea readOnly value={out} className="input min-h-[80px] font-mono text-xs mt-2" />}
         </section>
 
         <section>
           <h3 className="font-semibold mb-2">Decode</h3>
-          <textarea className="input min-h-[80px] font-mono text-xs" value={encIn} onChange={(e) => setEncIn(e.target.value)} />
+          <AutoTextarea className="input min-h-[80px] font-mono text-xs" value={encIn} onChange={(e) => setEncIn(e.target.value)} />
           <div className="mt-2 flex gap-2">
             <button onClick={doDecode} className="btn-primary min-tap">Decode →</button>
             {decoded && <button onClick={() => navigator.clipboard.writeText(decoded)} className="btn-ghost text-xs">Copy</button>}
           </div>
-          {decoded && <textarea readOnly value={decoded} className="input min-h-[80px] mt-2" />}
+          {decoded && <AutoTextarea readOnly value={decoded} className="input min-h-[80px] mt-2" />}
           {error && <p role="alert" className="mt-2 text-sm text-red-600">{error}</p>}
         </section>
       </div>

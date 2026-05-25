@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SignJWT } from "jose";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Alg = "HS256" | "HS384" | "HS512";
 
@@ -36,7 +37,7 @@ export default function JwtGenerator({ tool }: { tool: Tool & { categorySlug: st
       <div className="grid lg:grid-cols-2 gap-3">
         <div>
           <label className="label">Payload (JSON)</label>
-          <textarea className="input min-h-[200px] font-mono text-xs" value={payload} onChange={(e) => setPayload(e.target.value)} />
+          <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={payload} onChange={(e) => setPayload(e.target.value)} />
           <div className="mt-2 grid sm:grid-cols-2 gap-2">
             <div><label className="label">Secret</label><input className="input font-mono" value={secret} onChange={(e) => setSecret(e.target.value)} /></div>
             <div><label className="label">Algorithm</label>
@@ -50,7 +51,7 @@ export default function JwtGenerator({ tool }: { tool: Tool & { categorySlug: st
         </div>
         <div>
           <label className="label">Signed token</label>
-          <textarea className="input min-h-[200px] font-mono text-xs" value={token} readOnly />
+          <AutoTextarea className="input min-h-[200px] font-mono text-xs" value={token} readOnly />
           {token && <button onClick={() => navigator.clipboard.writeText(token)} className="mt-2 btn-ghost text-xs">Copy</button>}
         </div>
       </div>

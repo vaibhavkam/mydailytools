@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { useLocale } from "@/lib/locale";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 type Props = { tool: Tool & { categorySlug: string; categoryName: string } };
 const pct = (n: number, d = 2) => Number.isFinite(n) ? `${n.toFixed(d)}%` : "—";
@@ -58,7 +59,7 @@ export function NpvIrr({ tool }: Props) {
       ],
     }}>
       <label className="label">Cash flows (period 0 first)</label>
-      <textarea className="input min-h-[80px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
+      <AutoTextarea className="input min-h-[80px] font-mono text-xs" value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-3"><label className="label">Discount rate (%)</label><input className="input" value={rate} onChange={(e) => setRate(e.target.value)} /></div>
       {r && (
         <div className="mt-4 grid sm:grid-cols-2 gap-2">
@@ -386,7 +387,7 @@ export function Sharpe({ tool }: Props) {
       ],
     }}>
       <label className="label">Returns (%)</label>
-      <textarea className="input min-h-[80px] font-mono text-xs" value={returns} onChange={(e) => setReturns(e.target.value)} />
+      <AutoTextarea className="input min-h-[80px] font-mono text-xs" value={returns} onChange={(e) => setReturns(e.target.value)} />
       <div className="mt-3 grid sm:grid-cols-2 gap-3">
         <div><label className="label">Risk-free rate (annual %)</label><input className="input" value={rf} onChange={(e) => setRf(e.target.value)} /></div>
         <div><label className="label">Periods per year</label>

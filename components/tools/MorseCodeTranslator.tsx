@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 const MORSE: Record<string, string> = {
   A: ".-", B: "-...", C: "-.-.", D: "-..", E: ".", F: "..-.", G: "--.", H: "....", I: "..", J: ".---", K: "-.-",
@@ -38,13 +39,13 @@ export default function MorseCodeTranslator({ tool }: { tool: Tool & { categoryS
       <div className="grid sm:grid-cols-2 gap-3">
         <div>
           <label className="label">Text</label>
-          <textarea className="input min-h-[140px]" value={text} onChange={(e) => setText(e.target.value)} />
-          <textarea readOnly value={morse} className="input min-h-[100px] font-mono text-xs mt-2" />
+          <AutoTextarea className="input min-h-[140px]" value={text} onChange={(e) => setText(e.target.value)} />
+          <AutoTextarea readOnly value={morse} className="input min-h-[100px] font-mono text-xs mt-2" />
         </div>
         <div>
           <label className="label">Morse</label>
-          <textarea className="input min-h-[140px] font-mono text-xs" value={m} onChange={(e) => setM(e.target.value)} />
-          <textarea readOnly value={decoded} className="input min-h-[100px] mt-2" />
+          <AutoTextarea className="input min-h-[140px] font-mono text-xs" value={m} onChange={(e) => setM(e.target.value)} />
+          <AutoTextarea readOnly value={decoded} className="input min-h-[100px] mt-2" />
         </div>
       </div>
     </ToolPage>

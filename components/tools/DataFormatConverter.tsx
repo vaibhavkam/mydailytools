@@ -5,6 +5,7 @@ import { Copy, ArrowLeftRight, Download } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { type Format, SAMPLE_BY_FORMAT, getParser, getSerializer } from "@/lib/data-formats";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 const FORMAT_LABELS: Record<Format, string> = {
   json: "JSON",
@@ -247,7 +248,7 @@ export default function DataFormatConverter({ tool }: { tool: Tool & { categoryS
         <div className="grid lg:grid-cols-[1fr_auto_1fr] items-center gap-3">
           <div>
             <label className="label">{fromLabel} input</label>
-            <textarea
+            <AutoTextarea
               className="input min-h-[280px] font-mono text-xs"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -275,7 +276,7 @@ export default function DataFormatConverter({ tool }: { tool: Tool & { categoryS
                 </button>
               </div>
             </div>
-            <textarea
+            <AutoTextarea
               className="input min-h-[280px] font-mono text-xs mt-1.5"
               value={output}
               readOnly

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Copy } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 // ---------------------------------------------------------------------------
 // Curl parser
@@ -406,7 +407,7 @@ export default function CurlToCode({ tool }: { tool: Tool & { categorySlug: stri
       <div className="grid gap-4">
         <div>
           <label className="label" htmlFor="curl-in">curl command</label>
-          <textarea
+          <AutoTextarea
             id="curl-in"
             className="input font-mono text-xs min-h-[180px]"
             value={curl}

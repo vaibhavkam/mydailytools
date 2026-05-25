@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Copy, Plus, Minus, ArrowRight, Equal } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 // Semantic JSON diff: compares values by path, ignoring key order. Returns a
 // flat list of changes so we can render them clearly. Recursive but bounded
@@ -298,7 +299,7 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
         <div className="grid lg:grid-cols-2 gap-3">
           <div>
             <label className="label" htmlFor="json-left">Left (before / expected)</label>
-            <textarea
+            <AutoTextarea
               id="json-left"
               className="input min-h-[260px] font-mono text-xs"
               value={left}
@@ -308,7 +309,7 @@ export default function JsonDiff({ tool }: { tool: Tool & { categorySlug: string
           </div>
           <div>
             <label className="label" htmlFor="json-right">Right (after / actual)</label>
-            <textarea
+            <AutoTextarea
               id="json-right"
               className="input min-h-[260px] font-mono text-xs"
               value={right}

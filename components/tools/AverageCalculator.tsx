@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
+import { AutoTextarea } from "@/components/AutoTextarea";
 
 export default function AverageCalculator({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [input, setInput] = useState("5, 10, 12, 15, 20, 20, 25");
@@ -35,7 +36,7 @@ export default function AverageCalculator({ tool }: { tool: Tool & { categorySlu
       ],
     }}>
       <label className="label" htmlFor="avg">Numbers</label>
-      <textarea id="avg" className="input min-h-[80px]" value={input} onChange={(e) => setInput(e.target.value)} />
+      <AutoTextarea id="avg" className="input min-h-[80px]" value={input} onChange={(e) => setInput(e.target.value)} />
       {r && (
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
           {[
