@@ -28,7 +28,7 @@ export default function AboutPage() {
         </p>
         <h2>Built by one developer</h2>
         <p>
-          {SITE.name} is a solo project by <a href="https://www.linkedin.com/in/vaibhavkamble/" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">Vaibhav Kamble</a>, a software
+          {SITE.name} is a solo project by <a href="https://vaibhavkamble.dev/" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">Vaibhav Kamble</a>, a software
           engineer with 15+ years of software development experience. I built it because I kept running into slow, ad-heavy
           sites for simple everyday tasks. The site is ad-supported to keep it free —
           ads are non-intrusive and never affect how the tools work.
