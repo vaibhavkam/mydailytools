@@ -93,6 +93,8 @@ export default function CurrencyConverter({ tool }: { tool: Tool & { categorySlu
         { q: "How current are these rates?", a: "Built into the site at build time, refreshed daily via a cron-triggered redeploy. The 'Refresh' button fetches in real time from Frankfurter (api.frankfurter.dev — free, no key)." },
         { q: "Are these tradeable rates?", a: "No. ECB reference rates are mid-market — actual broker spreads will be wider. For trading, use your bank or broker's quote." },
         { q: "Why do crypto rates look stale?", a: "Frankfurter only covers fiat. Crypto rates ship as build-time fallbacks. Use a real exchange for crypto." },
+        { q: "Which currencies are supported?", a: "30+ world currencies including USD, EUR, GBP, JPY, INR, CAD, AUD, CHF, CNY, MXN, and more. All fiat rates come from the European Central Bank via Frankfurter." },
+        { q: "How do I convert USD to EUR?", a: "Select USD as the source currency, EUR as the target, enter your amount, and the result updates instantly. You can also click Refresh to pull the latest ECB rate before converting." },
       ],
     }}>
       <div className="rounded-xl border border-emerald-300 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/30 px-3 py-2 text-xs text-emerald-800 dark:text-emerald-200 mb-3 flex items-center justify-between gap-3">

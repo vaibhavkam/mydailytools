@@ -1,7 +1,7 @@
 {
-  "asOf": "2026-05-22",
+  "asOf": "2026-06-01",
   "source": "frankfurter.dev",
-  "fetchedAt": "2026-05-25T05:53:05.869Z",
+  "fetchedAt": "2026-06-01T18:47:05.585Z",
   "rates": {
     "USD": {
       "name": "US Dollar",
@@ -10,122 +10,122 @@
     },
     "EUR": {
       "name": "Euro",
-      "perUSD": 0.86244,
+      "perUSD": 0.85866,
       "live": true
     },
     "GBP": {
       "name": "British Pound",
-      "perUSD": 0.7453,
+      "perUSD": 0.74268,
       "live": true
     },
     "JPY": {
       "name": "Japanese Yen",
-      "perUSD": 159.15,
+      "perUSD": 159.49,
       "live": true
     },
     "CHF": {
       "name": "Swiss Franc",
-      "perUSD": 0.78646,
+      "perUSD": 0.78379,
       "live": true
     },
     "CAD": {
       "name": "Canadian Dollar",
-      "perUSD": 1.3801,
+      "perUSD": 1.383,
       "live": true
     },
     "AUD": {
       "name": "Australian Dollar",
-      "perUSD": 1.4043,
+      "perUSD": 1.394,
       "live": true
     },
     "NZD": {
       "name": "New Zealand Dollar",
-      "perUSD": 1.7091,
+      "perUSD": 1.6794,
       "live": true
     },
     "CNY": {
       "name": "Chinese Yuan",
-      "perUSD": 6.7953,
+      "perUSD": 6.7651,
       "live": true
     },
     "HKD": {
       "name": "Hong Kong Dollar",
-      "perUSD": 7.8366,
+      "perUSD": 7.8371,
       "live": true
     },
     "SGD": {
       "name": "Singapore Dollar",
-      "perUSD": 1.2804,
+      "perUSD": 1.2778,
       "live": true
     },
     "KRW": {
       "name": "South Korean Won",
-      "perUSD": 1517.55,
+      "perUSD": 1508.64,
       "live": true
     },
     "INR": {
       "name": "Indian Rupee",
-      "perUSD": 95.7,
+      "perUSD": 94.99,
       "live": true
     },
     "IDR": {
       "name": "Indonesian Rupiah",
-      "perUSD": 17695,
+      "perUSD": 17835,
       "live": true
     },
     "MYR": {
       "name": "Malaysian Ringgit",
-      "perUSD": 3.968,
+      "perUSD": 3.965,
       "live": true
     },
     "THB": {
       "name": "Thai Baht",
-      "perUSD": 32.665,
+      "perUSD": 32.555,
       "live": true
     },
     "PHP": {
       "name": "Philippine Peso",
-      "perUSD": 61.621,
+      "perUSD": 61.752,
       "live": true
     },
     "SEK": {
       "name": "Swedish Krona",
-      "perUSD": 9.3743,
+      "perUSD": 9.2641,
       "live": true
     },
     "NOK": {
       "name": "Norwegian Krone",
-      "perUSD": 9.2536,
+      "perUSD": 9.2637,
       "live": true
     },
     "DKK": {
       "name": "Danish Krone",
-      "perUSD": 6.4451,
+      "perUSD": 6.4174,
       "live": true
     },
     "ISK": {
       "name": "Icelandic Króna",
-      "perUSD": 123.85,
+      "perUSD": 123.48,
       "live": true
     },
     "PLN": {
       "name": "Polish Złoty",
-      "perUSD": 3.6585,
+      "perUSD": 3.6347,
       "live": true
     },
     "CZK": {
       "name": "Czech Koruna",
-      "perUSD": 20.948,
+      "perUSD": 20.853,
       "live": true
     },
     "HUF": {
       "name": "Hungarian Forint",
-      "perUSD": 309.69,
+      "perUSD": 304.65,
       "live": true
     },
     "RON": {
       "name": "Romanian Leu",
-      "perUSD": 4.527,
+      "perUSD": 4.5106,
       "live": true
     },
     "BGN": {
@@ -135,27 +135,27 @@
     },
     "TRY": {
       "name": "Turkish Lira",
-      "perUSD": 45.715,
+      "perUSD": 45.894,
       "live": true
     },
     "MXN": {
       "name": "Mexican Peso",
-      "perUSD": 17.3385,
+      "perUSD": 17.327,
       "live": true
     },
     "BRL": {
       "name": "Brazilian Real",
-      "perUSD": 5.0164,
+      "perUSD": 5.0245,
       "live": true
     },
     "ILS": {
       "name": "Israeli Shekel",
-      "perUSD": 2.8951,
+      "perUSD": 2.8155,
       "live": true
     },
     "ZAR": {
       "name": "South African Rand",
-      "perUSD": 16.4765,
+      "perUSD": 16.2536,
       "live": true
     },
     "TWD": {

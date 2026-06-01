@@ -44,8 +44,8 @@ export const POSTS: Post[] = [
   },
   {
     slug: "iso-8601-cheat-sheet",
-    title: "ISO 8601 Date & Time Format Cheat Sheet (2026)",
-    description: "A practical reference for ISO 8601 — date formats, time (including 24:00 end-of-day), timezone offsets, durations, and intervals — with copy-pasteable examples.",
+    title: "ISO 8601 Cheat Sheet: Valid Times, 24:00, & Formats",
+    description: "Is 18:00 a valid ISO 8601 time? Is 24:00 legal? Quick answers + full cheat sheet for dates, times, offsets, durations, and intervals with copy-paste examples.",
     date: "2026-05-03",
     tags: ["dates", "developer", "reference", "iso 8601", "timestamp"],
     relatedTools: ["unix-timestamp-converter", "timezone-converter", "date-calculator", "days-between-dates"],
