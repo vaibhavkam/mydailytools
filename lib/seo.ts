@@ -5,17 +5,24 @@ type BuildMetaArgs = {
   title: string;
   description: string;
   path: string; // absolute path starting with /
+  // `keywords` is accepted for call-site compatibility but intentionally NOT
+  // emitted as a <meta name="keywords"> tag — Google ignores it and it leaks
+  // our targeting to competitors. The per-tool `keywords` array still lives in
+  // lib/tools.ts and drives related-tool scoring; it just no longer renders.
   keywords?: string[];
+  // Alt text for the OG card. Defaults to the brand name; pass the page/tool
+  // name so the single shared og.png is at least labelled per page.
+  ogImageAlt?: string;
 };
 
 // Centralized metadata builder so every page gets consistent OG/Twitter/canonical.
-export function buildMetadata({ title, description, path, keywords }: BuildMetaArgs): Metadata {
+export function buildMetadata({ title, description, path, ogImageAlt }: BuildMetaArgs): Metadata {
   const url = `${SITE.url}${path}`;
   const fullTitle = title === SITE.name ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
+  const imageAlt = ogImageAlt ?? SITE.name;
   return {
     title: fullTitle,
     description,
-    keywords,
     alternates: {
       canonical: url,
       // English-only today, but declaring hreflang explicitly is a Google signal.
@@ -29,7 +36,7 @@ export function buildMetadata({ title, description, path, keywords }: BuildMetaA
       siteName: SITE.name,
       title: fullTitle,
       description,
-      images: [{ url: `${SITE.url}/og.png`, width: 1200, height: 630, alt: SITE.name }],
+      images: [{ url: `${SITE.url}/og.png`, width: 1200, height: 630, alt: imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
@@ -42,14 +49,19 @@ export function buildMetadata({ title, description, path, keywords }: BuildMetaA
 }
 
 // JSON-LD WebApplication schema for tool pages.
-export function toolJsonLd(args: { name: string; description: string; url: string }) {
+export function toolJsonLd(args: {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory?: string;
+}) {
   return {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: args.name,
     description: args.description,
     url: args.url,
-    applicationCategory: "UtilityApplication",
+    applicationCategory: args.applicationCategory ?? "UtilityApplication",
     operatingSystem: "Any (browser)",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     isAccessibleForFree: true,

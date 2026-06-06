@@ -183,16 +183,19 @@ export function DaysBetween({ tool }: Props) {
     const x = new Date(a), y = new Date(b);
     if (Number.isNaN(x.getTime()) || Number.isNaN(y.getTime())) return null;
     const ms = Math.abs(y.getTime() - x.getTime());
-    return { days: Math.floor(ms / 86400000), weeks: Math.floor(ms / (86400000 * 7)) };
+    const days = Math.floor(ms / 86400000);
+    // Exclusive = gap between the two dates (neither endpoint counted).
+    // Inclusive = counts both the start and end date, so it's exclusive + 1.
+    return { days, daysInclusive: days + 1, weeks: Math.floor(ms / (86400000 * 7)) };
   }, [a, b]);
   return (
     <ToolPage tool={tool} content={{
       howTo: "Pick two dates — the gap is shown in days and weeks.",
       formula: "Absolute difference in milliseconds, divided by 86,400,000.",
-      examples: "Jan 1 to Dec 31 = 365 days (or 366 in a leap year).",
+      examples: "Jan 1 to Dec 31 = 365 days exclusive, 366 inclusive (or one more in a leap year).",
       faq: [
         { q: "Does the order of the two dates matter?", a: "No — the tool always returns the absolute difference, so Date A can be before or after Date B." },
-        { q: "Are the start and end dates themselves counted?", a: "The calculation counts the gap between midnight on each date, so neither boundary day is included. Add 1 if you need inclusive counting." },
+        { q: "What is the difference between the exclusive and inclusive count?", a: "Exclusive counts the gap between the two dates and includes neither endpoint — this is the standard 'days between' answer. Inclusive counts both the start and end date as well, so it is always one more. Use inclusive when both days 'count' (e.g. a hotel stay or a billed date range)." },
         { q: "How many days are in a week for the weeks calculation?", a: "Exactly 7. Partial weeks are truncated — 13 days shows 1 week, not 2." },
       ],
     }}>
@@ -201,8 +204,9 @@ export function DaysBetween({ tool }: Props) {
         <div><label className="label">Date B</label><input type="date" className="input" value={b} onChange={(e) => setB(e.target.value)} /></div>
       </div>
       {r && (
-        <div className="mt-4 grid sm:grid-cols-2 gap-2">
-          <div className="rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-3 text-center"><div className="text-xs text-brand-700 dark:text-brand-300">Days</div><div className="text-3xl font-bold tabular-nums">{r.days}</div></div>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 p-3 text-center"><div className="text-xs text-brand-700 dark:text-brand-300">Days (exclusive)</div><div className="text-3xl font-bold tabular-nums">{r.days}</div></div>
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">Days (inclusive)</div><div className="text-3xl font-bold tabular-nums">{r.daysInclusive}</div></div>
           <div className="rounded-xl border border-[rgb(var(--border))] p-3 text-center"><div className="text-xs text-[rgb(var(--fg-muted))]">Weeks</div><div className="text-3xl font-bold tabular-nums">{r.weeks}</div></div>
         </div>
       )}

@@ -108,6 +108,16 @@ This matters in:
 - **Calendar events that run "all day":** `start=2026-05-03T00:00:00Z` and `end=2026-05-04T00:00:00Z` is the standard convention; some systems wrongly use `end=2026-05-03T23:59:59Z` and lose the last second.
 - **Cron jobs:** `00:00` triggers at midnight at the start of the date; this is almost always what people mean.
 
+### What about 12:00 — is that noon or midnight?
+
+In ISO 8601 there is no ambiguity, because it's a 24-hour clock with no AM/PM:
+
+- `12:00` = **noon** (midday)
+- `00:00` = **midnight** at the start of the day
+- `24:00` = **midnight** at the end of the day
+
+The 12-hour-clock confusion — where "12:00 AM" means midnight and "12:00 PM" means noon, which trips up almost everyone — simply doesn't exist in ISO 8601. `12:00` is always the middle of the day.
+
 ## The timezone — the part everybody gets wrong
 
 A timestamp without a timezone is ambiguous. ISO 8601 gives you three ways to specify it:
@@ -191,6 +201,7 @@ Most APIs don't use these. They show up in finance, logistics, and academic cont
 ## What ISO 8601 does *not* specify
 
 - **Quarter notation** (`2026-Q2`). Common but not part of the standard.
+- **Year `0000` is valid** — ISO 8601 uses astronomical year numbering, where `0000` represents 1 BC and `-0001` represents 2 BC. Most application code rejects it, but the standard itself permits four-digit years including `0000`. Years beyond four digits require an explicit `+`/`-` sign by agreement (`+10000-01-01`).
 - **Time without a date**. `16:30:00Z` alone is technically valid ISO 8601 but most systems reject it.
 - **Relative dates** like "yesterday" or "next Tuesday". Not ISO 8601's job.
 - **Time periods like "2 weekdays"** that depend on calendar context. ISO durations are absolute.
@@ -218,7 +229,7 @@ Bookmark this:
 4. **In SQL, use `TIMESTAMPTZ` (Postgres) or equivalent.** It stores as UTC internally and converts on read.
 5. **For filenames and sortable identifiers**, use the compact form: `20260503T163000Z`. Lexicographic sort = chronological sort.
 
-If you ever need to convert between formats, the [Unix Timestamp Converter](/tools/unix-timestamp-converter/) and [Date Calculator](/tools/date-calculator/) on this site handle the common cases.
+If you ever need to convert between formats, the [Unix Timestamp Converter](/tools/unix-timestamp-converter/) and [Date Calculator](/tools/date-calculator/) on this site handle the common cases. To see one instant across UTC and local time zones — handling the offset and DST rules described above — use the [Time Zone Converter](/tools/timezone-converter/).
 
 ## When ISO 8601 isn't enough
 
