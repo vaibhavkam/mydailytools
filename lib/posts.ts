@@ -16,6 +16,15 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "capacitors-series-parallel",
+    title: "Capacitors in Series vs Parallel: Formulas & Calculator",
+    description: "Learn how series and parallel capacitors work, when to use each, and how to calculate total capacitance — with formulas, worked examples, and an RC time constant explainer.",
+    date: "2026-06-02",
+    tags: ["electronics", "capacitor", "circuit", "reference", "electrical"],
+    relatedTools: ["capacitance-calculator", "ohms-law-calculator", "power-calculator"],
+    readingTimeMin: 7,
+  },
+  {
     slug: "llm-token-counting-guide",
     title: "LLM Token Counting: GPT, Claude, Llama & Gemini Explained",
     description: "A practical guide to LLM tokens — how they work, why each model counts differently, real cost calculations at scale, and how to count tokens before sending a request.",
@@ -45,7 +54,7 @@ export const POSTS: Post[] = [
   {
     slug: "iso-8601-cheat-sheet",
     title: "ISO 8601 Cheat Sheet: Valid Times, 24:00, & Formats",
-    description: "Is 18:00 a valid ISO 8601 time? Is 24:00 legal? Quick answers + full cheat sheet for dates, times, offsets, durations, and intervals with copy-paste examples.",
+    description: "Is 24:00 valid in ISO 8601? Is 18:00? When 00:00 means start vs end of day — quick answers plus a full cheat sheet for dates, times, offsets, and durations.",
     date: "2026-05-03",
     tags: ["dates", "developer", "reference", "iso 8601", "timestamp"],
     relatedTools: ["unix-timestamp-converter", "timezone-converter", "date-calculator", "days-between-dates"],

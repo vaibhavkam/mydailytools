@@ -1,0 +1,194 @@
+import { BlogPost } from "@/components/BlogPost";
+import { findPost } from "@/lib/posts";
+import { buildMetadata } from "@/lib/seo";
+
+export const post = findPost("capacitors-series-parallel");
+
+export const metadata = buildMetadata({
+  title: post.title,
+  description: post.description,
+  path: `/blog/${post.slug}/`,
+  keywords: post.tags,
+});
+
+export default function Layout({ children }) {
+  return <BlogPost post={post}>{children}</BlogPost>;
+}
+
+Capacitors store electrical charge. When you have more than one in a circuit, the way you connect them — series or parallel — changes the total capacitance dramatically, and getting it wrong means your circuit behaves nothing like you expect.
+
+This post covers the formulas, the intuition behind them, worked examples, and the RC time constant that shows up whenever a capacitor charges or discharges through a resistor.
+
+If you just want the numbers, use the [Capacitance Calculator](/tools/capacitance-calculator/) — it handles parallel, series, and RC time constant in one step.
+
+## What a capacitor actually does
+
+A capacitor stores energy in an electric field between two conductive plates separated by an insulator (the dielectric). The capacitance **C** (in farads) tells you how much charge **Q** it stores per volt **V**:
+
+```
+Q = C × V
+```
+
+A 100 µF capacitor at 5 V stores 500 µC of charge. That same capacitor at 10 V stores 1000 µC — double the voltage, double the charge.
+
+Most capacitors you'll encounter in circuits are in the picofarad (pF), nanofarad (nF), or microfarad (µF) range. Farads themselves are enormous — a 1 F supercapacitor is a chunky component you'd use for energy storage, not signal filtering.
+
+## Capacitors in parallel
+
+Wiring capacitors in parallel connects all their positive terminals together and all their negative terminals together. They share the same voltage.
+
+**Formula:**
+
+```
+C_total = C₁ + C₂ + C₃ + … + Cₙ
+```
+
+Parallel capacitance is just addition.
+
+**Why?** Each capacitor contributes its own plate area to the combined structure. More plate area means more charge stored at the same voltage — which is the definition of higher capacitance.
+
+**Example:**
+
+You have three capacitors: 10 µF, 22 µF, and 47 µF, wired in parallel.
+
+```
+C_total = 10 + 22 + 47 = 79 µF
+```
+
+The result is always larger than the largest single capacitor.
+
+**When to use parallel:**
+- Decoupling and bypass capacitors on a power rail (stack several to cover different frequency ranges)
+- When you need more capacitance than a single component provides
+- Power supply filtering, where you want to reduce ripple
+
+A common technique is paralleling a large electrolytic (e.g. 100 µF) with a small ceramic (e.g. 100 nF). The electrolytic handles low-frequency ripple; the ceramic handles high-frequency noise. Together they cover a much wider frequency range than either alone.
+
+## Capacitors in series
+
+Wiring capacitors in series puts them end-to-end so the charge path runs through each one sequentially. They carry the same charge but split the voltage between them.
+
+**Formula:**
+
+```
+1/C_total = 1/C₁ + 1/C₂ + 1/C₃ + … + 1/Cₙ
+```
+
+Rearranged to solve for C_total:
+
+```
+C_total = 1 / (1/C₁ + 1/C₂ + … + 1/Cₙ)
+```
+
+For the special case of just two capacitors:
+
+```
+C_total = (C₁ × C₂) / (C₁ + C₂)
+```
+
+**Why?** In series, the charge that accumulates on one capacitor's plate induces an equal charge on the adjacent plate of the next capacitor. The total charge stored is limited by the smallest capacitor in the chain — so the total capacitance is always less than the smallest value.
+
+**Example:**
+
+Same three capacitors — 10 µF, 22 µF, and 47 µF — wired in series.
+
+```
+1/C_total = 1/10 + 1/22 + 1/47
+          = 0.1 + 0.04545 + 0.02128
+          = 0.16673
+
+C_total = 1 / 0.16673 ≈ 5.998 µF
+```
+
+The result (~6 µF) is less than the smallest capacitor (10 µF).
+
+**When to use series:**
+- Voltage division: series capacitors split voltage in inverse proportion to their capacitance
+- Increasing voltage rating: two 16 V capacitors in series can handle up to 32 V (though the voltage splits unevenly if they aren't identical)
+- Reducing capacitance when you need a value smaller than what's in your parts bin
+
+A caution on voltage rating: if you put two different capacitors in series to raise the voltage rating, the voltage splits inversely to capacitance. A 10 µF and a 100 µF in series at 100 V: the 10 µF sees ~91 V and the 100 µF sees ~9 V. Use matched values if you're relying on the series connection for voltage tolerance.
+
+## Side-by-side comparison
+
+| Property | Parallel | Series |
+|---|---|---|
+| Formula | C₁ + C₂ + … | 1 / (1/C₁ + 1/C₂ + …) |
+| Result vs smallest | Always larger | Always smaller |
+| Voltage across each | Same (shared) | Splits between them |
+| Charge on each | Different | Same |
+| Use case | More capacitance, filtering | Less capacitance, voltage splitting |
+
+## The RC time constant (τ)
+
+Whenever a capacitor charges or discharges through a resistor, the rate is governed by the RC time constant:
+
+```
+τ = R × C
+```
+
+Where:
+- **R** is resistance in ohms (Ω)
+- **C** is capacitance in farads (F)
+- **τ** (tau) is the time constant in seconds
+
+After one time constant τ, the capacitor reaches **~63.2%** of its final voltage when charging (or drops to **~36.8%** of its starting voltage when discharging). After 5τ it's considered fully charged or discharged (>99%).
+
+**Example:**
+
+A 100 µF capacitor charging through a 10 kΩ resistor:
+
+```
+τ = 10,000 × 0.0001 = 1 second
+```
+
+After 1 s → 63% charged  
+After 5 s → >99% charged
+
+**Practical uses of RC time constants:**
+- **Debouncing buttons** — an RC filter smooths out mechanical contact bounce
+- **Filter cutoff frequency** — f_c = 1 / (2π × R × C)
+- **Timer circuits** — 555 timer-based delays use RC charging directly
+- **Audio tone controls** — RC networks shape frequency response in equalizers
+
+## Worked example: decoupling a microcontroller
+
+You're designing a board with a microcontroller running at 3.3 V. You want decoupling capacitors on the power pin.
+
+**Parallel combination:**
+
+- 100 µF electrolytic (bulk storage, low ESR needed)
+- 100 nF ceramic (high-frequency bypass)
+- 10 nF ceramic (very high-frequency noise)
+
+```
+C_total = 100 µF + 0.1 µF + 0.01 µF ≈ 100.11 µF
+```
+
+The dominant value is the large electrolytic, but the ceramics handle frequencies the electrolytic can't respond to fast enough.
+
+**RC time constant check:**
+
+If the power trace has ~1 Ω of resistance, how long before the bulk cap charges up at startup?
+
+```
+τ = 1 Ω × 100 µF = 0.0001 s = 100 µs
+```
+
+That's well within the power-on reset time of most microcontrollers (typically 1–10 ms), so the cap is charged before the chip starts running.
+
+## Quick reference
+
+| Combination | 10 µF + 22 µF + 47 µF result |
+|---|---|
+| Parallel | 79 µF |
+| Series | ≈ 6.0 µF |
+
+| RC pair | τ |
+|---|---|
+| 10 kΩ + 100 µF | 1.0 s |
+| 1 kΩ + 100 nF | 100 µs |
+| 10 kΩ + 10 nF | 100 µs |
+| 100 Ω + 1 µF | 100 µs |
+
+Use the [Capacitance Calculator](/tools/capacitance-calculator/) to run any combination instantly — enter your values in µF, get parallel total, series equivalent, and the RC time constant for a given resistance.

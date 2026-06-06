@@ -38,8 +38,12 @@ export function ToolPage({
     .sort((a, b) => scoreRelevance(b) - scoreRelevance(a))
     .slice(0, 6);
 
+  // Developer-category tools are DeveloperApplication; everything else stays
+  // the generic UtilityApplication default.
+  const appCategory = cat.slug === "developer" ? "DeveloperApplication" : undefined;
+
   const jsonLd = [
-    toolJsonLd({ name: tool.title, description: tool.description, url }),
+    toolJsonLd({ name: tool.title, description: tool.description, url, applicationCategory: appCategory }),
     breadcrumbJsonLd([
       { name: "Home", url: SITE.url + "/" },
       { name: cat.name, url: `${SITE.url}/${cat.slug}/` },
