@@ -125,6 +125,21 @@ export function ToolPage({
             ))}
           </ul>
         </section>
+
+        {cat.slug === "datetime" && (
+          <section className="mt-12">
+            <h2 className="text-xl font-semibold mb-3">Related reading</h2>
+            <Link
+              href="/blog/iso-8601-cheat-sheet/"
+              className="card p-4 block hover:border-brand-500/40 transition"
+            >
+              <div className="font-medium text-sm">ISO 8601 date &amp; time format cheat sheet</div>
+              <div className="text-xs text-[rgb(var(--fg-muted))]">
+                Valid times, the 24:00 edge case, offsets, durations, and intervals — explained.
+              </div>
+            </Link>
+          </section>
+        )}
       </article>
     </div>
   );
