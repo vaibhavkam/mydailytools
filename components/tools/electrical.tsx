@@ -218,9 +218,9 @@ export function CapacitanceCalculator({ tool }: Props) {
       </div>
       {r && (
         <div className="mt-4 grid grid-cols-3 gap-2">
-          <div className="rounded-xl border border-[rgb(var(--border))] p-3"><div className="text-xs text-[rgb(var(--fg-muted))]">Parallel</div><div className="text-lg font-semibold">{r.parallel.toFixed(2)} µF</div></div>
-          <div className="rounded-xl border border-[rgb(var(--border))] p-3"><div className="text-xs text-[rgb(var(--fg-muted))]">Series</div><div className="text-lg font-semibold">{r.series.toFixed(4)} µF</div></div>
-          <div className="rounded-xl border border-[rgb(var(--border))] p-3"><div className="text-xs text-[rgb(var(--fg-muted))]">τ = RC</div><div className="text-lg font-semibold">{(r.tau * 1000).toFixed(2)} ms</div></div>
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3"><div className="text-xs text-[rgb(var(--fg-muted))]">Parallel</div><div className="text-lg font-semibold">{r.parallel.toFixed(2)} µF</div><div className="mt-1 text-[11px] text-[rgb(var(--fg-muted))]">C = ΣCᵢ</div></div>
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3"><div className="text-xs text-[rgb(var(--fg-muted))]">Series</div><div className="text-lg font-semibold">{r.series.toFixed(4)} µF</div><div className="mt-1 text-[11px] text-[rgb(var(--fg-muted))]">1/C = Σ(1/Cᵢ)</div></div>
+          <div className="rounded-xl border border-[rgb(var(--border))] p-3"><div className="text-xs text-[rgb(var(--fg-muted))]">τ = RC</div><div className="text-lg font-semibold">{(r.tau * 1000).toFixed(2)} ms</div><div className="mt-1 text-[11px] text-[rgb(var(--fg-muted))]">τ = R × C</div></div>
         </div>
       )}
     </ToolPage>

@@ -1,6 +1,6 @@
 import { BlogPost } from "@/components/BlogPost";
 import { findPost } from "@/lib/posts";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, faqJsonLd } from "@/lib/seo";
 
 export const post = findPost("iso-8601-cheat-sheet");
 
@@ -10,6 +10,25 @@ export const metadata = buildMetadata({
   path: `/blog/${post.slug}/`,
   keywords: post.tags,
 });
+
+export const faqs = [
+  {
+    q: "Is 24:00 a valid ISO 8601 time?",
+    a: "Yes. ISO 8601 allows 24:00:00 to denote midnight at the end of a day — the same instant as 00:00:00 of the following day. The ISO 8601-1:2019 revision deprecates it in favor of 00:00, and parsers such as JavaScript's Date and RFC 3339 reject it, so avoid emitting 24:00 in new code.",
+  },
+  {
+    q: "What's the difference between 00:00 and 24:00 in ISO 8601?",
+    a: "On a given date, 00:00 is the first instant (the start of that day) and 24:00 is the last instant (the end of that day). They are 24 hours apart: 2026-05-03T24:00 is the same moment as 2026-05-04T00:00, not the start of May 3rd.",
+  },
+  {
+    q: "Is 18:00 a valid ISO 8601 hh:mm time?",
+    a: "Yes. ISO 8601 uses a 24-hour clock with a zero-padded hour, so 18:00 is valid and equals 6:00 PM. The 12-hour form “6:00 PM” is not ISO 8601.",
+  },
+  {
+    q: "How does ISO 8601 represent midnight?",
+    a: "With two notations: 00:00 (or 00:00:00) is midnight at the start of a day, and 24:00 (or 24:00:00) is midnight at the end of a day, equal to 00:00 of the next day. There is no AM/PM, so 12:00 always means noon.",
+  },
+];
 
 export default function Layout({ children }) {
   return <BlogPost post={post}>{children}</BlogPost>;
@@ -164,6 +183,8 @@ Rules:
 - Order matters: `P1Y2M3D` (years, months, days). You can't write `P3D2M1Y`.
 - Weeks (`W`) can't be combined with other units.
 
+A duration describes a fixed length of time, but it won't tell you the resulting calendar date. When you need to [add or subtract days](/tools/date-calculator/) from a specific date — accounting for month lengths and leap years — reach for a date calculator instead.
+
 ## Intervals
 
 An interval is a range with a start and end. Three formats:
@@ -174,7 +195,7 @@ An interval is a range with a start and end. Three formats:
 P1D/2026-05-04T00:00:00Z                       duration + end
 ```
 
-The slash separator is the giveaway you're looking at an interval, not a single timestamp.
+The slash separator is the giveaway you're looking at an interval, not a single timestamp. When you just need the length of an interval rather than its notation, computing the number of [days between two dates](/tools/days-between-dates/) is often all you're after.
 
 ## Repeating intervals
 
@@ -240,3 +261,19 @@ For the rare cases where you need something it can't express:
 - **Calendar systems other than Gregorian** — ISO 8601 is Gregorian-only.
 
 For everyday work — API timestamps, log files, database columns — ISO 8601 is enough. Memorize the basic format, always include the timezone, and you'll dodge 90% of the date-handling bugs that bite production systems.
+
+## Frequently asked questions
+
+<dl className="space-y-5">
+  {faqs.map(({ q, a }) => (
+    <div key={q}>
+      <dt className="font-semibold">{q}</dt>
+      <dd className="mt-1">{a}</dd>
+    </div>
+  ))}
+</dl>
+
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqs)) }}
+/>
