@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { marked } from "marked";
+import { useEffect, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { AutoTextarea } from "@/components/AutoTextarea";
@@ -37,9 +36,18 @@ function greet(name: string) {
 
 export default function MarkdownPreview({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [src, setSrc] = useState(STARTER);
-  const html = useMemo(() => {
-    marked.setOptions({ gfm: true, breaks: false });
-    return marked.parse(src, { async: false }) as string;
+  const [html, setHtml] = useState("");
+  useEffect(() => {
+    let cancelled = false;
+    // Lazy-load marked so it doesn't get promoted into the shared chunk
+    // loaded by every tool page (see CLAUDE.md bundle-size note).
+    (async () => {
+      const { marked } = await import("marked");
+      marked.setOptions({ gfm: true, breaks: false });
+      const rendered = marked.parse(src, { async: false }) as string;
+      if (!cancelled) setHtml(rendered);
+    })();
+    return () => { cancelled = true; };
   }, [src]);
 
   return (
