@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import JsBarcode from "jsbarcode";
 import { Download } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
@@ -18,13 +17,20 @@ export default function BarcodeGenerator({ tool }: { tool: Tool & { categorySlug
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
-    try {
-      JsBarcode(ref.current, text, { format, width, height, displayValue: true, background: "transparent" });
-      setError(null);
-    } catch (e: any) {
-      setError(e.message);
-    }
+    let cancelled = false;
+    // Lazy-load jsbarcode so it doesn't get promoted into the shared chunk
+    // loaded by every tool page (see CLAUDE.md bundle-size note).
+    (async () => {
+      const { default: JsBarcode } = await import("jsbarcode");
+      if (cancelled || !ref.current) return;
+      try {
+        JsBarcode(ref.current, text, { format, width, height, displayValue: true, background: "transparent" });
+        setError(null);
+      } catch (e: any) {
+        setError(e.message);
+      }
+    })();
+    return () => { cancelled = true; };
   }, [text, format, width, height]);
 
   function download() {

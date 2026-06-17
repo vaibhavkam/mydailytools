@@ -53,7 +53,7 @@ export const POSTS: Post[] = [
   },
   {
     slug: "iso-8601-cheat-sheet",
-    title: "ISO 8601 Cheat Sheet: Valid Times, 24:00, & Formats",
+    title: "ISO 8601 Cheat Sheet: Is 24:00 a Valid Time?",
     description: "Is 24:00 valid in ISO 8601? Is 18:00? When 00:00 means start vs end of day — quick answers plus a full cheat sheet for dates, times, offsets, and durations.",
     date: "2026-05-03",
     tags: ["dates", "developer", "reference", "iso 8601", "timestamp"],
@@ -64,6 +64,13 @@ export const POSTS: Post[] = [
 
 export function findPost(slug: string) {
   return POSTS.find((p) => p.slug === slug);
+}
+
+// Reverse index: given a tool slug, return the posts that list it in
+// `relatedTools`. Used to render a "Related reading" block on tool pages so
+// every tool with a relevant post links to it (not just date/time tools).
+export function findPostsForTool(toolSlug: string) {
+  return POSTS.filter((p) => p.relatedTools.includes(toolSlug));
 }
 
 // Sorted newest first — used by the index page.

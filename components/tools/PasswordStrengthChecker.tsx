@@ -1,27 +1,44 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import zxcvbn from "zxcvbn";
+import { useEffect, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 
 const SCORE_LABEL = ["Very weak", "Weak", "Fair", "Strong", "Very strong"];
 const SCORE_COLOR = ["bg-red-500", "bg-orange-500", "bg-amber-500", "bg-emerald-500", "bg-brand-600"];
 
+type Result = {
+  score: number;
+  label: string;
+  color: string;
+  crackTimes: import("zxcvbn").ZXCVBNAttackTime;
+  feedback: string;
+  guesses: number;
+};
+
 export default function PasswordStrengthChecker({ tool }: { tool: Tool & { categorySlug: string; categoryName: string } }) {
   const [pw, setPw] = useState("");
   const [show, setShow] = useState(false);
-  const r = useMemo(() => {
-    if (!pw) return null;
-    const z = zxcvbn(pw);
-    return {
-      score: z.score,
-      label: SCORE_LABEL[z.score],
-      color: SCORE_COLOR[z.score],
-      crackTimes: z.crack_times_display,
-      feedback: z.feedback.warning || (z.feedback.suggestions || []).join(" "),
-      guesses: z.guesses,
-    };
+  const [r, setR] = useState<Result | null>(null);
+  useEffect(() => {
+    if (!pw) { setR(null); return; }
+    let cancelled = false;
+    // Lazy-load zxcvbn (~770 KB dictionary) so it doesn't get promoted into the
+    // shared chunk loaded by every tool page (see CLAUDE.md bundle-size note).
+    (async () => {
+      const { default: zxcvbn } = await import("zxcvbn");
+      if (cancelled) return;
+      const z = zxcvbn(pw);
+      setR({
+        score: z.score,
+        label: SCORE_LABEL[z.score],
+        color: SCORE_COLOR[z.score],
+        crackTimes: z.crack_times_display,
+        feedback: z.feedback.warning || (z.feedback.suggestions || []).join(" "),
+        guesses: z.guesses,
+      });
+    })();
+    return () => { cancelled = true; };
   }, [pw]);
 
   return (

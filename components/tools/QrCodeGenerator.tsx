@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import QRCode from "qrcode";
 import { Download } from "lucide-react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
@@ -18,13 +17,21 @@ export default function QrCodeGenerator({ tool }: { tool: Tool & { categorySlug:
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!ref.current || !text) return;
-    QRCode.toCanvas(ref.current, text, {
-      errorCorrectionLevel: level,
-      width: size,
-      color: { dark: fg, light: bg },
-      margin: 2,
-    }).catch(() => {});
+    if (!text) return;
+    let cancelled = false;
+    // Lazy-load qrcode so it doesn't get promoted into the shared chunk
+    // loaded by every tool page (see CLAUDE.md bundle-size note).
+    (async () => {
+      const { default: QRCode } = await import("qrcode");
+      if (cancelled || !ref.current) return;
+      QRCode.toCanvas(ref.current, text, {
+        errorCorrectionLevel: level,
+        width: size,
+        color: { dark: fg, light: bg },
+        margin: 2,
+      }).catch(() => {});
+    })();
+    return () => { cancelled = true; };
   }, [text, level, size, fg, bg]);
 
   function download() {

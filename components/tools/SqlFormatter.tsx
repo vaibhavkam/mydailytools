@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { format as sqlFormat } from "sql-formatter";
+import { useEffect, useState } from "react";
 import { ToolPage } from "../ToolPage";
 import type { Tool } from "@/lib/tools";
 import { AutoTextarea } from "@/components/AutoTextarea";
@@ -15,10 +14,21 @@ export default function SqlFormatter({ tool }: { tool: Tool & { categorySlug: st
   const [tabWidth, setTabWidth] = useState(2);
   const [uppercase, setUppercase] = useState(true);
 
-  const out = useMemo(() => {
-    try {
-      return sqlFormat(src, { language: dialect, tabWidth, keywordCase: uppercase ? "upper" : "preserve" });
-    } catch (e: any) { return e.message || "Failed to format"; }
+  const [out, setOut] = useState("");
+  useEffect(() => {
+    let cancelled = false;
+    // Lazy-load sql-formatter so it doesn't get promoted into the shared chunk
+    // loaded by every tool page (see CLAUDE.md bundle-size note).
+    (async () => {
+      try {
+        const { format: sqlFormat } = await import("sql-formatter");
+        const formatted = sqlFormat(src, { language: dialect, tabWidth, keywordCase: uppercase ? "upper" : "preserve" });
+        if (!cancelled) setOut(formatted);
+      } catch (e: any) {
+        if (!cancelled) setOut(e.message || "Failed to format");
+      }
+    })();
+    return () => { cancelled = true; };
   }, [src, dialect, tabWidth, uppercase]);
 
   return (
