@@ -5,6 +5,7 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { Sidebar } from "./Sidebar";
 import { RecentTracker } from "./RecentTracker";
 import { breadcrumbJsonLd, faqJsonLd, toolJsonLd } from "@/lib/seo";
+import { findPostsForTool } from "@/lib/posts";
 
 export type ToolContent = {
   howTo?: string;
@@ -37,6 +38,10 @@ export function ToolPage({
     .filter((t) => t.slug !== tool.slug)
     .sort((a, b) => scoreRelevance(b) - scoreRelevance(a))
     .slice(0, 6);
+
+  // Blog posts that reference this tool — drives tool→blog internal links for
+  // every tool with a relevant post (e.g. capacitor tool → capacitor post).
+  const relatedPosts = findPostsForTool(tool.slug);
 
   // Developer-category tools are DeveloperApplication; everything else stays
   // the generic UtilityApplication default.
@@ -126,18 +131,22 @@ export function ToolPage({
           </ul>
         </section>
 
-        {cat.slug === "datetime" && (
+        {relatedPosts.length > 0 && (
           <section className="mt-12">
             <h2 className="text-xl font-semibold mb-3">Related reading</h2>
-            <Link
-              href="/blog/iso-8601-cheat-sheet/"
-              className="card p-4 block hover:border-brand-500/40 transition"
-            >
-              <div className="font-medium text-sm">ISO 8601 date &amp; time format cheat sheet</div>
-              <div className="text-xs text-[rgb(var(--fg-muted))]">
-                Valid times, the 24:00 edge case, offsets, durations, and intervals — explained.
-              </div>
-            </Link>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {relatedPosts.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/blog/${p.slug}/`}
+                    className="card p-4 block hover:border-brand-500/40 transition"
+                  >
+                    <div className="font-medium text-sm">{p.title}</div>
+                    <div className="mt-1 text-xs text-[rgb(var(--fg-muted))] line-clamp-2">{p.description}</div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
       </article>

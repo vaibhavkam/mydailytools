@@ -21,6 +21,9 @@ export function buildMetadata({ title, description, path, ogImageAlt }: BuildMet
   const fullTitle = title === SITE.name ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
   const imageAlt = ogImageAlt ?? SITE.name;
   return {
+    // Absolute base so any relative OG/canonical URL resolves to the canonical
+    // (non-www) host rather than localhost during static export.
+    metadataBase: new URL(SITE.url),
     title: fullTitle,
     description,
     alternates: {
@@ -48,7 +51,8 @@ export function buildMetadata({ title, description, path, ogImageAlt }: BuildMet
   };
 }
 
-// JSON-LD WebApplication schema for tool pages.
+// JSON-LD SoftwareApplication schema for tool pages (the type Google documents
+// for app rich results; WebApplication is a valid subtype but less recognized).
 export function toolJsonLd(args: {
   name: string;
   description: string;
@@ -57,7 +61,7 @@ export function toolJsonLd(args: {
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
+    "@type": "SoftwareApplication",
     name: args.name,
     description: args.description,
     url: args.url,
