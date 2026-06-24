@@ -57,7 +57,7 @@ export const POSTS: Post[] = [
     description: "Is 24:00 valid in ISO 8601? Is 18:00? When 00:00 means start vs end of day — quick answers plus a full cheat sheet for dates, times, offsets, and durations.",
     date: "2026-05-03",
     tags: ["dates", "developer", "reference", "iso 8601", "timestamp"],
-    relatedTools: ["unix-timestamp-converter", "timezone-converter", "date-calculator", "days-between-dates"],
+    relatedTools: ["unix-timestamp-converter", "timezone-converter", "date-calculator", "days-between-dates", "week-number", "age-calculator", "time-converter"],
     readingTimeMin: 7,
   },
 ];
