@@ -150,13 +150,15 @@ Note: this matches `999.999.999.999` which isn't a valid IP. Add range checks in
 \d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])
 ```
 
-Validates month range (01–12) and day range (01–31). Doesn't catch month-specific day limits (e.g., April 31) — that needs code.
+Validates month range (01–12) and day range (01–31). Doesn't catch month-specific day limits (e.g., April 31) — that needs code. This `YYYY-MM-DD` layout is the [ISO 8601 date format](/blog/iso-8601-cheat-sheet/); the cheat sheet covers the edge cases regex can't, like time zones, durations, and whether `24:00` is a valid time.
 
 ### Time (HH:MM or HH:MM:SS)
 
 ```
 (?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?
 ```
+
+This matches a 24-hour [ISO 8601 time](/blog/iso-8601-cheat-sheet/) — note ISO 8601 has no AM/PM and requires a zero-padded hour.
 
 ### US phone number (flexible)
 

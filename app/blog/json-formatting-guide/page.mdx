@@ -38,6 +38,7 @@ JSON has six data types. Every valid JSON document is exactly one of these:
 - **Strings must use double quotes.** Single-quoted strings (`'hello'`) are invalid.
 - **Numbers have limits.** JSON itself doesn't restrict number size, but parsers typically use 64-bit IEEE 754 floats. Integers larger than 2^53 − 1 lose precision — use strings for large IDs.
 - **No undefined.** `undefined` is a JavaScript concept; it doesn't exist in JSON. `JSON.stringify` silently drops object keys with `undefined` values.
+- **No native date type.** Dates aren't one of the six types, so they're stored as strings — by convention in the [ISO 8601 format](/blog/iso-8601-cheat-sheet/) (e.g. `"2026-05-03T16:30:00Z"`), which sorts lexicographically and parses unambiguously across languages.
 
 ## Pretty-printing (indentation)
 
