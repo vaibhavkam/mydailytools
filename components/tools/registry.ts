@@ -15,7 +15,6 @@ const REGISTRY: Record<string, ComponentType<ToolProps>> = {
   "word-counter": dynamic(() => import("./WordCounter")),
 
   // Wave 1
-  "bmi-calculator": dynamic(() => import("./BmiCalculator")),
   "tip-calculator": dynamic(() => import("./TipCalculator")),
   "loan-calculator": dynamic(() => import("./LoanCalculator")),
   "age-calculator": dynamic(() => import("./AgeCalculator")),
@@ -152,18 +151,6 @@ const REGISTRY: Record<string, ComponentType<ToolProps>> = {
   "color-palette-from-image": dynamic(() => import("./design").then((m) => ({ default: m.ImagePalette }))),
 
   // Health pack
-  "bsa-calculator": dynamic(() => import("./health").then((m) => ({ default: m.Bsa }))),
-  "egfr-calculator": dynamic(() => import("./health").then((m) => ({ default: m.Egfr }))),
-  "creatinine-clearance": dynamic(() => import("./health").then((m) => ({ default: m.CreatinineClearance }))),
-  "meld-score": dynamic(() => import("./health").then((m) => ({ default: m.Meld }))),
-  "chads-vasc": dynamic(() => import("./health").then((m) => ({ default: m.Chads }))),
-  "wells-pe-score": dynamic(() => import("./health").then((m) => ({ default: m.WellsPe }))),
-  "anion-gap": dynamic(() => import("./health").then((m) => ({ default: m.AnionGap }))),
-  "pediatric-dosing": dynamic(() => import("./health").then((m) => ({ default: m.PediatricDose }))),
-  "iv-drip-rate": dynamic(() => import("./health").then((m) => ({ default: m.IvDrip }))),
-  "due-date-calculator": dynamic(() => import("./health").then((m) => ({ default: m.DueDate }))),
-  "heart-rate-zones": dynamic(() => import("./health").then((m) => ({ default: m.HrZones }))),
-  "ideal-body-weight": dynamic(() => import("./health").then((m) => ({ default: m.IdealWeight }))),
 
   // Marketing/SEO pack
   "cpm-cpc-calculator": dynamic(() => import("./marketing").then((m) => ({ default: m.CpmCpcCtr }))),

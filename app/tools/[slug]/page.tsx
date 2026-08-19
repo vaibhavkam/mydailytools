@@ -31,6 +31,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
     path: `/tools/${tool.slug}/`,
     keywords: tool.keywords,
     ogImageAlt: tool.title,
+    noindex: !tool.indexed,
   });
 }
 

@@ -18,12 +18,23 @@ export type Category = {
   blurb: string; // short category description
   icon: string; // lucide-react icon name
   tools: Tool[];
+  // Whether this category and its tools are exposed to search engines. 206 tools
+  // rendered from one shared template read as mass-produced content: GSC showed
+  // 219 URLs submitted / 0 indexed and impressions collapsing 545 -> 8. Only the
+  // clusters we can genuinely defend stay indexed; the rest stay live and usable
+  // but out of the index. See seo-ops/reports/2026-08-18-workplan.md.
+  indexed: boolean;
 };
+
+// Categories currently exposed to search. The only demand signal GSC ever
+// recorded on this domain (yaml-to-csv, image-to-base64, xml-to-csv) was all
+// developer tooling, which is also where this portfolio has proven competence.
+const INDEXED_CATEGORIES = new Set(["developer", "pdf", "text"]);
 
 // Category and per-category tool order is intentional and reflects expected
 // usage frequency / search demand: daily-use up top, specialist tools at the
 // bottom. Re-rank when traffic data shows a clear winner.
-export const CATEGORIES: Category[] = [
+const RAW_CATEGORIES: Omit<Category, "indexed">[] = [
   {
     slug: "developer",
     name: "Developer Tools",
@@ -339,32 +350,6 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
-    slug: "health",
-    name: "Health & Medical",
-    blurb: "Clinical formulas, dosing, and physiology calculators.",
-    icon: "HeartPulse",
-    tools: [
-      // Body metrics cluster
-      { slug: "bmi-calculator", title: "BMI Calculator", description: "Calculate Body Mass Index (BMI) in metric (kg/cm) or imperial (lbs/in). Instantly shows your BMI value and weight category — underweight, normal, overweight, or obese.", keywords: ["bmi calculator", "body mass index", "bmi chart", "calculate bmi"], status: "live" },
-      { slug: "bsa-calculator", title: "Body Surface Area (BSA)", description: "Calculate body surface area using the Mosteller and DuBois formulas. Used clinically for chemotherapy dosing, burn assessment, and cardiac output calculations.", keywords: ["bsa calculator", "body surface area", "mosteller formula", "dubois formula"], status: "live" },
-      { slug: "ideal-body-weight", title: "Ideal Body Weight", description: "Calculate ideal body weight using the Devine, Robinson, and Hamwi formulas in metric and imperial units. Used in clinical dosing and nutritional assessment.", keywords: ["ideal body weight", "devine formula", "ibw calculator", "ideal weight calculator"], status: "live" },
-      { slug: "heart-rate-zones", title: "Target Heart Rate Zones", description: "Calculate heart rate training zones using the Karvonen formula from your age and resting heart rate. Shows 5 zones from light aerobic to maximum effort for exercise planning.", keywords: ["target heart rate", "karvonen formula", "heart rate zones", "max heart rate calculator"], status: "live" },
-      // Renal cluster
-      { slug: "egfr-calculator", title: "eGFR Calculator", description: "Calculate estimated glomerular filtration rate (eGFR) using the CKD-EPI 2021 equation. Used to stage chronic kidney disease from serum creatinine, age, and sex.", keywords: ["egfr calculator", "ckd-epi", "kidney function calculator", "creatinine egfr"], status: "live" },
-      { slug: "creatinine-clearance", title: "Creatinine Clearance", description: "Calculate creatinine clearance using the Cockcroft-Gault equation with optional adjusted body weight. Widely used for drug dose adjustments in renal impairment.", keywords: ["creatinine clearance", "cockcroft gault", "cockcroft gault calculator", "renal function calculator"], status: "live" },
-      // Obstetrics
-      { slug: "due-date-calculator", title: "Pregnancy Due Date", description: "Calculate estimated due date (EDD) and current gestational age using Naegele's rule from last menstrual period. Shows trimester and key milestone dates.", keywords: ["pregnancy due date", "gestational age", "due date calculator", "edd calculator"], status: "live" },
-      // Dosing cluster
-      { slug: "pediatric-dosing", title: "Pediatric Dose (mg/kg)", description: "Convert weight-based mg/kg doses to total dose in mg or mL. Includes maximum dose safety checks — useful for nurses, pharmacists, and physicians calculating pediatric drug doses.", keywords: ["pediatric dose", "mg per kg dosing", "pediatric dosing calculator", "weight based dosing"], status: "live" },
-      { slug: "iv-drip-rate", title: "IV Drip Rate", description: "Calculate IV drip rate in drops per minute and flow rate in mL/hr for any infusion. Enter volume, time, and drop factor — essential for nursing and pharmacy calculations.", keywords: ["iv drip rate calculator", "iv flow rate", "drops per minute", "infusion rate calculator"], status: "live" },
-      // Clinical scores cluster
-      { slug: "anion-gap", title: "Anion Gap Calculator", description: "Calculate the anion gap from sodium, chloride, and bicarbonate, with optional albumin correction. Used to diagnose and classify metabolic acidosis in clinical settings.", keywords: ["anion gap calculator", "albumin corrected anion gap", "metabolic acidosis", "anion gap formula"], status: "live" },
-      { slug: "chads-vasc", title: "CHA₂DS₂-VASc Score", description: "Calculate the CHA₂DS₂-VASc stroke risk score for patients with atrial fibrillation. Shows score, annual stroke risk percentage, and anticoagulation threshold guidance.", keywords: ["cha2ds2-vasc", "stroke risk score", "afib stroke risk", "anticoagulation score"], status: "live" },
-      { slug: "meld-score", title: "MELD Score", description: "Calculate the Model for End-Stage Liver Disease (MELD) score from bilirubin, creatinine, and INR. Used to prioritize liver transplant candidates by disease severity and 90-day mortality risk.", keywords: ["meld score", "liver disease score", "meld calculator", "liver transplant score"], status: "live" },
-      { slug: "wells-pe-score", title: "Wells PE Score", description: "Calculate the Wells clinical prediction score for pulmonary embolism probability. Stratifies patients into low, intermediate, and high pre-test probability to guide imaging decisions.", keywords: ["wells pe score", "pulmonary embolism risk", "wells criteria pe", "pe probability score"], status: "live" },
-    ],
-  },
-  {
     slug: "pdf",
     name: "PDF Tools",
     blurb: "Merge, split, convert, and edit PDF files — all in your browser.",
@@ -416,8 +401,18 @@ export const SLUG_REDIRECTS: Record<string, string> = {
 };
 
 // Flat list for sitemap, search, and routing.
-export const ALL_TOOLS: (Tool & { categorySlug: string; categoryName: string })[] =
-  CATEGORIES.flatMap((c) => c.tools.map((t) => ({ ...t, categorySlug: c.slug, categoryName: c.name })));
+export const CATEGORIES: Category[] = RAW_CATEGORIES.map((c) => ({
+  ...c,
+  indexed: INDEXED_CATEGORIES.has(c.slug),
+}));
+
+export const ALL_TOOLS: (Tool & {
+  categorySlug: string;
+  categoryName: string;
+  indexed: boolean;
+})[] = CATEGORIES.flatMap((c) =>
+  c.tools.map((t) => ({ ...t, categorySlug: c.slug, categoryName: c.name, indexed: c.indexed })),
+);
 
 export function findTool(slug: string) {
   return ALL_TOOLS.find((t) => t.slug === slug);
