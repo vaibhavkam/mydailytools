@@ -70,10 +70,6 @@ const CATEGORY_SEO: Record<string, { title: string; description: (n: number) => 
     title: "Free Marketing & SEO Tools Online",
     description: (n) => `${SITE.name} has ${n} free marketing tools — SERP snippet preview, UTM link builder, CPM/CPC/CTR calculator, ROAS calculator, A/B test significance, conversion rate, and LTV/CAC.`,
   },
-  health: {
-    title: "Free Health & Medical Calculators Online",
-    description: (n) => `${SITE.name} has ${n} free medical calculators — BMI, eGFR, creatinine clearance, MELD score, CHA₂DS₂-VASc, Wells PE score, pediatric dosing, IV drip rate, and more. No signup.`,
-  },
   electrical: {
     title: "Free Electrical & Electronics Calculators",
     description: (n) => `${SITE.name} has ${n} free electrical calculators — Ohm's law, watts to amps, voltage divider, resistor color code, capacitance, decibel, AWG wire size, and more. No signup.`,
@@ -94,6 +90,7 @@ export function generateMetadata({ params }: { params: { category: string } }) {
     path: `/${cat.slug}/`,
     keywords: [cat.name.toLowerCase(), ...cat.tools.slice(0, 5).flatMap((t) => t.keywords)],
     ogImageAlt: seo?.title ?? `${cat.name} Tools`,
+    noindex: !cat.indexed,
   });
 }
 

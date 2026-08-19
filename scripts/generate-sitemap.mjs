@@ -17,12 +17,31 @@ function readSlugs() {
   // don't want in the sitemap (they emit redirect pages, not real content).
   const cutoff = src.indexOf("SLUG_REDIRECTS");
   const head = cutoff > 0 ? src.slice(0, cutoff) : src;
-  const toolSlugs = [...head.matchAll(/slug:\s*"([a-z0-9-]+)"/g)].map((m) => m[1]);
+  // Only categories listed in INDEXED_CATEGORIES are exposed to search; the rest
+  // are noindex, so emitting them here would contradict the page-level robots tag.
+  const indexed = new Set(
+    [...(head.match(/const INDEXED_CATEGORIES = new Set\(\[([^\]]*)\]\)/s)?.[1] ?? "")
+      .matchAll(/"([a-z0-9-]+)"/g)].map((m) => m[1]),
+  );
+  if (indexed.size === 0) throw new Error("INDEXED_CATEGORIES not found in lib/tools.ts");
+
   // Category slugs are the slugs at the top of each Category object.
   // Extract by scanning for the pattern of `{ slug: "x", name: "..."`
   // followed by `tools:` (not `description:`).
   const catSlugs = [...head.matchAll(/{\s*slug:\s*"([a-z0-9-]+)",\s*name:[^}]*tools:/gs)].map((m) => m[1]);
-  return { toolSlugs: [...new Set(toolSlugs.filter((s) => !catSlugs.includes(s)))], catSlugs };
+
+  // Walk each category block so tools inherit their category's indexed flag.
+  const toolSlugs = [];
+  for (let i = 0; i < catSlugs.length; i++) {
+    const startIdx = head.indexOf(`slug: "${catSlugs[i]}"`);
+    const endIdx = i + 1 < catSlugs.length ? head.indexOf(`slug: "${catSlugs[i + 1]}"`) : head.length;
+    if (!indexed.has(catSlugs[i])) continue;
+    for (const m of head.slice(startIdx, endIdx).matchAll(/\{ slug: "([a-z0-9-]+)"/g)) toolSlugs.push(m[1]);
+  }
+  return {
+    toolSlugs: [...new Set(toolSlugs.filter((s) => !catSlugs.includes(s)))],
+    catSlugs: catSlugs.filter((s) => indexed.has(s)),
+  };
 }
 
 function readPosts() {
@@ -45,7 +64,7 @@ const today = new Date().toISOString().slice(0, 10);
 // added, so build date is appropriate.
 // Tool pages share a frozen lastmod that you bump on content changes (FAQs, descriptions,
 // examples) but not on code-only changes. See ADR-011.
-const TOOL_LASTMOD = "2026-06-17";
+const TOOL_LASTMOD = "2026-08-19";
 
 // sitemap-html is noindex — intentionally excluded from the sitemap.
 const staticPaths = ["/", "/tools/", "/blog/", "/about/", "/contact/", "/support/", "/privacy/", "/terms/"];

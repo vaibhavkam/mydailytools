@@ -13,10 +13,13 @@ type BuildMetaArgs = {
   // Alt text for the OG card. Defaults to the brand name; pass the page/tool
   // name so the single shared og.png is at least labelled per page.
   ogImageAlt?: string;
+  // Keep the page out of the index while leaving it reachable and followable.
+  // Used for the tool categories we no longer expose to search.
+  noindex?: boolean;
 };
 
 // Centralized metadata builder so every page gets consistent OG/Twitter/canonical.
-export function buildMetadata({ title, description, path, ogImageAlt }: BuildMetaArgs): Metadata {
+export function buildMetadata({ title, description, path, ogImageAlt, noindex = false }: BuildMetaArgs): Metadata {
   const url = `${SITE.url}${path}`;
   const fullTitle = title === SITE.name ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
   const imageAlt = ogImageAlt ?? SITE.name;
@@ -47,7 +50,9 @@ export function buildMetadata({ title, description, path, ogImageAlt }: BuildMet
       description,
       images: [`${SITE.url}/og.png`],
     },
-    robots: { index: true, follow: true, "max-image-preview": "large" } as any,
+    robots: noindex
+      ? { index: false, follow: true }
+      : ({ index: true, follow: true, "max-image-preview": "large" } as any),
   };
 }
 
