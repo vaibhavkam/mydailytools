@@ -71,7 +71,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
     if (q) return matches;
     if (recent.length) return recent.map((t) => ({ kind: "tool", slug: t.slug, title: t.title, categoryName: t.categoryName, categorySlug: t.categorySlug, keywords: t.keywords, description: t.description } satisfies Item));
     // Fallback: a curated handful when there's no recent.
-    const featured = ["json-formatter", "percentage-calculator", "regex-tester", "wcag-contrast-checker", "uuid-generator", "qr-code-generator"];
+    const featured = ["json-to-typescript", "percentage-calculator", "regex-tester", "wcag-contrast-checker", "uuid-generator", "qr-code-generator"];
     return featured.map((s) => ALL_ITEMS.find((i) => i.kind === "tool" && i.slug === s)).filter((i): i is Item => Boolean(i));
   }, [q, matches, recent]);
 

@@ -129,68 +129,6 @@ console.log(add(2, 3));`);
   );
 }
 
-// XML Formatter
-export function XmlFormatter({ tool }: Props) {
-  const [xml, setXml] = useState(`<root><item id="1">A</item><item id="2">B</item></root>`);
-  const [output, setOutput] = useState("");
-  const [error, setError] = useState<string | null>(null);
-
-  function format() {
-    try {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(xml, "application/xml");
-      const err = doc.querySelector("parsererror");
-      if (err) { setError(err.textContent || "Parse error"); setOutput(""); return; }
-      setOutput(prettyXml(xml));
-      setError(null);
-    } catch (e: any) { setError(e.message); setOutput(""); }
-  }
-
-  return (
-    <ToolPage tool={tool} content={{
-      howTo: "Paste XML into the input box and press Format to pretty-print and validate. Errors point to the first parse failure.",
-      formula: "Validation: DOMParser. Pretty-print: insert newlines and 2-space indent at each tag boundary, preserving text content.",
-      examples: '<root><a>1</a></root> formats with each tag on its own line.',
-      faq: [
-        { q: "What XML dialects does this support?", a: "Any well-formed XML — RSS, SVG, XHTML, SOAP, and custom schemas all work as long as the syntax is valid." },
-        { q: "Why does the formatter show an error on my file?", a: "XML is strict: every tag must be closed, attribute values must be quoted, and special characters like & must be escaped as &amp;. The error message points to the first violation." },
-        { q: "Does this validate against a schema (XSD/DTD)?", a: "No — it checks well-formedness only, not schema validity. For full XSD validation you need a server-side tool." },
-        { q: "Is my XML sent to a server?", a: "No. Parsing and formatting happen entirely in your browser using the built-in DOMParser API." },
-      ],
-    }}>
-      <div className="grid gap-4">
-        <div>
-          <label className="label">Input XML</label>
-          <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={xml} onChange={(e) => setXml(e.target.value)} spellCheck={false} />
-        </div>
-        <div className="flex gap-2">
-          <button onClick={format} className="btn-primary min-tap">Format</button>
-        </div>
-        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-        {output && (
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="label !mb-0">Formatted XML</label>
-              <button onClick={() => safeCopy(output)} className="btn-ghost text-xs">Copy</button>
-            </div>
-            <AutoTextarea className="input min-h-[320px] font-mono text-xs" value={output} readOnly />
-          </div>
-        )}
-      </div>
-    </ToolPage>
-  );
-}
-function prettyXml(input: string) {
-  const tokens = input.replace(/>\s*</g, ">\n<").split(/\n/);
-  let depth = 0, out: string[] = [];
-  for (const tok of tokens) {
-    if (/^<\/[^>]+>/.test(tok)) depth--;
-    out.push("  ".repeat(Math.max(0, depth)) + tok);
-    if (/^<[^!?\/][^>]*[^\/]>$/.test(tok) && !/^<[^>]+\/>$/.test(tok)) depth++;
-  }
-  return out.join("\n");
-}
-
 // HTML Entities Encoder/Decoder
 export function HtmlEntities({ tool }: Props) {
   const [text, setText] = useState(`<div class="x">Hello & 'world'</div>`);

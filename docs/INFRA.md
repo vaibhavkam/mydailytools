@@ -61,7 +61,7 @@ graph TB
 | S3 bucket | `mydailytool.com` | us-east-1 | Private. Public-access blocked. |
 | OAC | `E2NP89M7BAG2EU` | global | Origin Access Control linking CloudFront → S3 |
 | CloudFront distribution | `E2XXH01ZE4SICS` | global | Domain: `d3l6mdjszodgcz.cloudfront.net` |
-| CloudFront Function | `mydailytool-rewrite` | global | Rewrites directory paths to `index.html` |
+| CloudFront Function | `mydailytool-rewrite` | global | Rewrites directory paths to `index.html` and 301s the 13 JSON/XML/YAML tool URLs consolidated into the -indent sites. Source: `infra/cloudfront-viewer-request.js` |
 | IAM OIDC provider | `arn:aws:iam::314138869784:oidc-provider/token.actions.githubusercontent.com` | global | For GitHub Actions; one-per-account |
 | IAM role | `mydailytool-github-deploy` | global | Trust scoped to `vaibhavkam/mydailytools:ref:refs/heads/main` |
 | AWS account | `314138869784` | — | Personal, dedicated IAM user `mydailytool-deployer` |
@@ -119,6 +119,41 @@ Custom error pages: 403 and 404 → `/404.html` (HTTP 404).
 8. `aws cloudfront create-invalidation` for `/`, `*.html`, `sitemap.xml`, `robots.txt`
 
 Total time: ~90 seconds when warm cache; ~3 min on cold cache.
+
+### Updating the CloudFront Function
+
+The viewer-request function is **not** deployed by the workflow. Its source of truth is
+`infra/cloudfront-viewer-request.js` (directory → `index.html` rewrite, plus the 301 map for
+the tool URLs consolidated into json/xml/yaml-indent.com on 2026-10-11). To ship a change:
+
+```bash
+# 1. Confirm what is live before overwriting it (compare with the repo file)
+aws cloudfront describe-function --name mydailytool-rewrite --stage LIVE \
+  --query "FunctionSummary.FunctionMetadata.FunctionARN" --output text
+aws cloudfront get-function --name mydailytool-rewrite --stage LIVE /tmp/live-function.js
+diff /tmp/live-function.js infra/cloudfront-viewer-request.js
+
+# 2. Update the DEVELOPMENT stage (needs the current ETag)
+ETAG=$(aws cloudfront describe-function --name mydailytool-rewrite --query ETag --output text)
+aws cloudfront update-function --name mydailytool-rewrite --if-match "$ETAG" \
+  --function-config Comment="index.html rewrite + consolidated-tool 301s",Runtime=cloudfront-js-2.0 \
+  --function-code fileb://infra/cloudfront-viewer-request.js
+
+# 3. Smoke-test before publishing (expect statusCode 301 + location)
+ETAG=$(aws cloudfront describe-function --name mydailytool-rewrite --query ETag --output text)
+aws cloudfront test-function --name mydailytool-rewrite --if-match "$ETAG" --stage DEVELOPMENT \
+  --event-object fileb://<(printf '{"version":"1.0","context":{"eventType":"viewer-request"},"viewer":{"ip":"1.1.1.1"},"request":{"method":"GET","uri":"/tools/json-formatter/","headers":{}}}')
+
+# 4. Publish to LIVE (the association on E2XXH01ZE4SICS picks it up within minutes)
+ETAG=$(aws cloudfront describe-function --name mydailytool-rewrite --query ETag --output text)
+aws cloudfront publish-function --name mydailytool-rewrite --if-match "$ETAG"
+
+# 5. Verify
+curl -sI https://mydailytool.com/tools/json-formatter/ | grep -i "^HTTP\|^location"
+```
+
+Until step 4 runs, those URLs still redirect via the noindex meta-refresh page the build
+emits for every `SLUG_REDIRECTS` entry — slower and not a true 301, but not broken.
 
 ### Daily cron
 

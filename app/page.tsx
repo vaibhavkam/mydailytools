@@ -13,8 +13,8 @@ export const metadata = buildMetadata({
 });
 
 const FEATURED_SLUGS = [
-  "json-formatter",
-  "json-diff",
+  "json-to-typescript",
+  "token-counter",
   "regex-tester",
   "url-encoder-decoder",
   "text-diff",
