@@ -30,7 +30,7 @@ export const POSTS: Post[] = [
     description: "A practical guide to LLM tokens — how they work, why each model counts differently, real cost calculations at scale, and how to count tokens before sending a request.",
     date: "2026-05-22",
     tags: ["llm", "ai", "tokens", "developer", "reference"],
-    relatedTools: ["token-counter", "llm-schema-validator", "json-formatter"],
+    relatedTools: ["token-counter", "llm-schema-validator", "json-to-typescript"],
     readingTimeMin: 9,
   },
   {
@@ -39,7 +39,7 @@ export const POSTS: Post[] = [
     description: "A practical regex reference — character classes, quantifiers, anchors, groups, and lookaheads — with ready-to-use patterns for emails, URLs, dates, and more.",
     date: "2026-05-08",
     tags: ["regex", "developer", "reference"],
-    relatedTools: ["regex-tester", "find-and-replace", "url-encoder-decoder", "json-formatter"],
+    relatedTools: ["regex-tester", "find-and-replace", "url-encoder-decoder", "string-escape"],
     readingTimeMin: 8,
   },
   {
@@ -48,7 +48,7 @@ export const POSTS: Post[] = [
     description: "Everything you need to know about JSON formatting — indentation rules, minification for production, common validation errors, and how to convert between JSON and other formats.",
     date: "2026-05-06",
     tags: ["json", "developer", "reference"],
-    relatedTools: ["json-formatter", "json-to-csv", "yaml-to-json", "json-to-typescript"],
+    relatedTools: ["json-to-typescript", "csv-to-json", "string-escape", "llm-schema-validator"],
     readingTimeMin: 6,
   },
   {

@@ -50,7 +50,7 @@ Cause possibilities, in order of likelihood:
 
 1. **The tool doesn't exist.** Check `lib/tools.ts` — is `foo` in the registry?
 2. **Build skipped that route.** Run `npm run build` locally; check `out/tools/foo/index.html` exists.
-3. **CloudFront Function broken.** The `mydailytool-rewrite` function rewrites `/foo/` → `/foo/index.html`. If detached or buggy, S3 returns 403, CloudFront converts to 404.
+3. **CloudFront Function broken.** The `mydailytool-rewrite` function (source: `infra/cloudfront-viewer-request.js`) rewrites `/foo/` → `/foo/index.html` and 301s the consolidated JSON/XML/YAML tool URLs. If detached or buggy, S3 returns 403, CloudFront converts to 404.
 
 Verify the function:
 

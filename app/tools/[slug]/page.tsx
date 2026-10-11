@@ -15,7 +15,7 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }) {
   const target = SLUG_REDIRECTS[params.slug];
   if (target) {
-    const dest = `${SITE.url}/tools/${target}/`;
+    const dest = target.startsWith("http") ? target : `${SITE.url}/tools/${target}/`;
     return {
       title: "Redirecting…",
       robots: { index: false, follow: true } as any,
@@ -42,7 +42,7 @@ export default function ToolDetailPage({ params }: { params: { slug: string } })
     // Static export can't issue a server redirect, so emit a tiny meta-refresh
     // document. The metadata above sets the http-equiv refresh header; this body
     // is the visible fallback if the browser ignores it.
-    const dest = `/tools/${target}/`;
+    const dest = target.startsWith("http") ? target : `/tools/${target}/`;
     return (
       <div className="text-center py-24">
         <p className="text-sm text-[rgb(var(--fg-muted))]">This tool has moved.</p>

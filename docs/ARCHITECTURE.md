@@ -152,7 +152,7 @@ No backend, no cookie, no tracking on tool inputs — just a slug list in the us
 
 ### 7. CloudFront Function for directory-style URLs
 
-The site has URLs like `/tools/json-formatter/` (trailing slash). On S3, that path doesn't auto-resolve to `index.html` when accessed via the REST endpoint (which OAC requires). A CloudFront Function (`mydailytool-rewrite`) intercepts requests and rewrites:
+The site has URLs like `/tools/csv-to-json/` (trailing slash). On S3, that path doesn't auto-resolve to `index.html` when accessed via the REST endpoint (which OAC requires). A CloudFront Function (`mydailytool-rewrite`) intercepts requests and rewrites:
 - `/foo/` → `/foo/index.html`
 - `/foo` (no extension) → `/foo/index.html`
 

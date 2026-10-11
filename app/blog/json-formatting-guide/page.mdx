@@ -146,7 +146,7 @@ line2"}             ← invalid (literal newline)
 {"note": "line1\nline2"}  ← valid
 ```
 
-The fastest way to validate: paste into a JSON formatter like the [JSON Formatter](/tools/json-formatter/) on this site — it highlights the exact character where parsing fails.
+The fastest way to validate: paste into a JSON formatter like [JSON Indent](https://json-indent.com/) — it highlights the exact line and column where parsing fails.
 
 ## Converting between JSON and other formats
 
@@ -169,7 +169,7 @@ Alice,30
 Bob,25
 ```
 
-Nested objects and arrays don't map cleanly to CSV — you need to decide whether to flatten, stringify, or exclude them. Use the [JSON ↔ CSV Converter](/tools/json-to-csv/) to handle the common cases automatically.
+Nested objects and arrays don't map cleanly to CSV — you need to decide whether to flatten, stringify, or exclude them. Use the [JSON Converter](https://json-indent.com/converter.html) to handle the common cases automatically, or the [CSV to JSON Converter](/tools/csv-to-json/) for the reverse direction.
 
 ### JSON to YAML
 
@@ -183,7 +183,7 @@ roles:
   - editor
 ```
 
-The main difference: YAML uses indentation instead of braces and brackets, and strings don't need quotes unless they contain special characters. Use the [YAML ↔ JSON Converter](/tools/yaml-to-json/) to go in either direction.
+The main difference: YAML uses indentation instead of braces and brackets, and strings don't need quotes unless they contain special characters. Use the [YAML Converter](https://yaml-indent.com/converter.html) for YAML to JSON and the [JSON Converter](https://json-indent.com/converter.html) for the reverse.
 
 ### JSON to TypeScript
 

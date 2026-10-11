@@ -97,7 +97,7 @@ If account differs, stop and ask — never deploy to the wrong account.
 | S3 bucket | `mydailytool.com` (us-east-1) |
 | CloudFront distribution | `E2XXH01ZE4SICS` |
 | CloudFront domain | `d3l6mdjszodgcz.cloudfront.net` |
-| CloudFront Function | `mydailytool-rewrite` |
+| CloudFront Function | `mydailytool-rewrite` — source `infra/cloudfront-viewer-request.js`, deployed by CLI (docs/INFRA.md), not by the workflow |
 | OAC | `E2NP89M7BAG2EU` |
 | ACM cert | `arn:aws:acm:us-east-1:314138869784:certificate/3fe25fd4-afe4-48d8-83b6-ad7bf9c56b24` |
 | Route 53 hosted zone | `Z103251236216CH9RQVL3` |
